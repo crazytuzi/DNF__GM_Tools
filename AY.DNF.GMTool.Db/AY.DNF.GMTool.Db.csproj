@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DbModels\taiwan_cain\" />
+    <Folder Include="DbModels\d_taiwain\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TiaoTiaoCode.BasicDbCore" Version="1.0.20240122" />
+  </ItemGroup>
+
+</Project>

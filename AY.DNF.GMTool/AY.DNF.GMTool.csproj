@@ -5,6 +5,18 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Fonts\iconfont.ttf" />
+    <None Remove="Assets\Images\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HandyControl" Version="3.4.0" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AY.DNF.GMTool.Db\AY.DNF.GMTool.Db.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\iconfont.ttf" />
+    <Resource Include="Assets\Images\Logo.png" />
   </ItemGroup>
 </Project>

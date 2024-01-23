@@ -29,10 +29,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+        <StackPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
             <GroupBox Header="D币">
                 <StackPanel
                     HorizontalAlignment="Center"
@@ -59,12 +63,19 @@
                     <TextBox Width="50" Text="{Binding DPoint, Mode=TwoWay}" />
                 </StackPanel>
             </GroupBox>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
             <Button Command="{Binding StartCommand}" Content="开始" />
             <Button Command="{Binding StopCommand}" Content="停止" />
         </StackPanel>
 
         <TextBlock
-            Grid.Row="1"
+            Grid.Row="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="16"
@@ -72,7 +83,7 @@
             Text="{Binding RunInfo}" />
 
         <ListBox
-            Grid.Row="2"
+            Grid.Row="3"
             ItemsSource="{Binding RunLogs}"
             ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBox.ItemTemplate>

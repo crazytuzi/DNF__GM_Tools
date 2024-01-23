@@ -30,7 +30,7 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
             set { SetProperty(ref _isUseDCoin, value); }
         }
 
-        private bool _isUseDPoint;
+        private bool _isUseDPoint = true;
         /// <summary>
         /// 是否启用D点
         /// </summary>

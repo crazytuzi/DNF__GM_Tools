@@ -4,9 +4,12 @@ using AY.DNF.GMTool.Db.Services;
 using AY.DNF.GMTool.Models;
 using HandyControl.Controls;
 using Prism.Commands;
+using Prism.Modularity;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,6 +19,9 @@ namespace AY.DNF.GMTool.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+        IModuleManager _moduleMng;
+        IRegionManager _regionMng;
+
         Task _timeTask;
         CancellationTokenSource _timeTaskCancelTokenSource;
 
@@ -122,6 +128,7 @@ namespace AY.DNF.GMTool.ViewModels
         ICommand _connectCommand;
         ICommand _searchAccountCommand;
         ICommand _disconnectCommand;
+        ICommand _gmToolCommand;
 
         /// <summary>
         /// 连接命令
@@ -139,10 +146,18 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         public ICommand DisconnectCommand => _disconnectCommand ??= new DelegateCommand(DoDisconnectCommand);
 
+        /// <summary>
+        /// GM工具菜单
+        /// </summary>
+        public ICommand GMToolCommand => _gmToolCommand ??= new DelegateCommand<string>(DoGMToolCommand);
+
         #endregion
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IModuleManager moduleManager, IRegionManager regionManager)
         {
+            _moduleMng = moduleManager;
+            _regionMng = regionManager;
+
             _timeTaskCancelTokenSource = new CancellationTokenSource();
             var ct = _timeTaskCancelTokenSource.Token;
 
@@ -210,5 +225,24 @@ namespace AY.DNF.GMTool.ViewModels
             _timeTaskCancelTokenSource.Cancel();
         }
 
+        /// <summary>
+        /// GM工具菜单
+        /// </summary>
+        void DoGMToolCommand(string menu)
+        {
+            var moudelName = $"{menu}Module";
+            if (!_moduleMng.ModuleExists(moudelName) || _moduleMng.GetModuleState(moudelName) != ModuleState.Initialized)
+                _moduleMng.LoadModule(moudelName);
+
+
+            var module = _moduleMng.Modules.FirstOrDefault(t => t.ModuleName == moudelName);
+            if (module == null) return;
+
+            //_regionMng.RequestNavigate("ContentRegion", "BubbleTimerModule");
+            _regionMng.RequestNavigate("ContentRegion", module.ModuleName);
+            //_regionMng.RequestNavigate("ContentRegion", "BubbleTimerPage");
+        }
+
     }
 }
+

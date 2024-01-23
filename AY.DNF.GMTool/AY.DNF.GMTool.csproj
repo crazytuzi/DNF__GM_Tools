@@ -19,4 +19,9 @@
     <Resource Include="Assets\Fonts\iconfont.ttf" />
     <Resource Include="Assets\Images\Logo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

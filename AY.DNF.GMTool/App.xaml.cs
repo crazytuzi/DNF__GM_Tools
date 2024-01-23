@@ -1,5 +1,6 @@
 ﻿using AY.DNF.GMTool.Views;
 using Prism.Ioc;
+using Prism.Modularity;
 using System.Windows;
 
 namespace AY.DNF.GMTool
@@ -17,6 +18,11 @@ namespace AY.DNF.GMTool
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
 
+        }
+
+        protected override IModuleCatalog CreateModuleCatalog()
+        {
+            return new ConfigurationModuleCatalog();
         }
     }
 }

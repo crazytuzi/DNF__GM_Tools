@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool", "AY.DNF.GMT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.Db", "AY.DNF.GMTool.Db\AY.DNF.GMTool.Db.csproj", "{4B70CF5A-06F4-41A4-89A3-7F974DFEB857}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.BubbleTimer", "AY.DNF.GMTool.BubbleTimer\AY.DNF.GMTool.BubbleTimer.csproj", "{AC80DDEF-8114-4438-BD4D-30F22F3502D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.SuperTool", "AY.DNF.GMTool.SuperTool\AY.DNF.GMTool.SuperTool.csproj", "{EF4D85D1-80AD-4EEA-B47A-431BF102445C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{4B70CF5A-06F4-41A4-89A3-7F974DFEB857}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B70CF5A-06F4-41A4-89A3-7F974DFEB857}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B70CF5A-06F4-41A4-89A3-7F974DFEB857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC80DDEF-8114-4438-BD4D-30F22F3502D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC80DDEF-8114-4438-BD4D-30F22F3502D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC80DDEF-8114-4438-BD4D-30F22F3502D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC80DDEF-8114-4438-BD4D-30F22F3502D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF4D85D1-80AD-4EEA-B47A-431BF102445C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF4D85D1-80AD-4EEA-B47A-431BF102445C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF4D85D1-80AD-4EEA-B47A-431BF102445C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF4D85D1-80AD-4EEA-B47A-431BF102445C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

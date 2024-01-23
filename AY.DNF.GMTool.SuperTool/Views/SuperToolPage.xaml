@@ -1,0 +1,19 @@
+﻿<UserControl
+    x:Class="AY.DNF.GMTool.SuperTool.Views.SuperToolPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:AY.DNF.GMTool.SuperTool.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:Width="800"
+    d:Height="450"
+    mc:Ignorable="d">
+    <Grid>
+        <TextBlock
+            Width="200"
+            Height="50"
+            Foreground="White"
+            Background="Black"
+            Text="超级功能" />
+    </Grid>
+</UserControl>

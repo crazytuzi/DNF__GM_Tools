@@ -132,7 +132,7 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
             var ct = _cancellationTokenSource.Token;
             _intervalTask = new Task(() =>
             {
-                var service = new BillingService();
+                var service = new BubbleService();
                 DateTime? lastCoin = null, lastPoint = null;
                 while (!ct.IsCancellationRequested)
                 {

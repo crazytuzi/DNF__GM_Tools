@@ -9,6 +9,7 @@ namespace AY.DNF.GMTool.Db
         static SqlSugarScope? _dTaiwan;
         static SqlSugarScope? _taiwanCain;
         static SqlSugarScope? _taiwanBillinig;
+        static SqlSugarScope? _taiwanCain2nd;
 
         /// <summary>
         /// 用户信息库
@@ -25,6 +26,8 @@ namespace AY.DNF.GMTool.Db
         /// D币 D点
         /// </summary>
         public static SqlSugarScope TaiwanBilling => _taiwanBillinig!;
+
+        public static SqlSugarScope TaiwanCain2nd => _taiwanCain2nd!;
 
         #endregion
 
@@ -58,6 +61,14 @@ namespace AY.DNF.GMTool.Db
                 DbType = DbType.MySql,
                 ConfigId = "taiwan_billing",
                 ConnectionString = $"Server={server};Port={port};Database=taiwan_billing;Uid={userName};Pwd={pwd};Charset=utf8;",
+                IsAutoCloseConnection = true,
+            });
+
+            _taiwanCain = new SqlSugarScope(new ConnectionConfig
+            {
+                DbType = DbType.MySql,
+                ConfigId = "taiwan_cain_2nd",
+                ConnectionString = $"Server={server};Port={port};Database=taiwan_cain;Uid={userName};Pwd={pwd};Charset=utf8;",
                 IsAutoCloseConnection = true,
             });
         }

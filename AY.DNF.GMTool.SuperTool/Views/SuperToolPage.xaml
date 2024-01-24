@@ -5,15 +5,126 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:AY.DNF.GMTool.SuperTool.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:Width="800"
     d:Height="450"
+    d:Width="800"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="3" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Margin" Value="3" />
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Margin" Value="3" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Margin" Value="3" />
+        </Style>
+
+
+    </UserControl.Resources>
+
     <Grid>
-        <TextBlock
-            Width="200"
-            Height="50"
-            Foreground="White"
-            Background="Black"
-            Text="超级功能" />
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <UniformGrid Columns="2">
+            <GroupBox Header="充值">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="类型" />
+                    <ComboBox
+                        Grid.Column="1"
+                        Width="80"
+                        ItemsSource="{Binding RechargeTypes}" />
+
+                    <TextBlock Grid.Row="1" Text="数量" />
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding RechargeCount, Mode=TwoWay}"
+                        Visibility="{Binding InputCountVisibility}" />
+
+                    <ComboBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="80"
+                        ItemsSource="{Binding PVPGradeTypes}"
+                        Visibility="{Binding PVPVisibility}" />
+
+                    <Button
+                        Grid.RowSpan="2"
+                        Grid.Column="2"
+                        Content="充值" />
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="转职">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox ItemsSource="{Binding JobTypes}" />
+                    <ComboBox Grid.Row="1" ItemsSource="{Binding GrowTypes}" />
+                    <Button
+                        Grid.RowSpan="2"
+                        Grid.Column="1"
+                        Content="转职" />
+                </Grid>
+            </GroupBox>
+        </UniformGrid>
+
+        <UniformGrid Grid.Row="1" Columns="2">
+            <GroupBox Header="VIP">
+                <StackPanel>
+                    <Button Content="设置VIP" />
+                    <Button Content="撤消VIP" />
+                    <Button Content="撤消选定角色VIP" />
+                </StackPanel>
+            </GroupBox>
+
+            <UniformGrid Columns="4">
+                <Button Content="清理背包" />
+                <Button Content="清理时装" />
+                <Button Content="清理宠物" />
+                <Button Content="开左右槽" />
+                <Button Content="无限负重" />
+                <Button Content="副职满级" />
+                <Button Content="全力地狱" />
+            </UniformGrid>
+        </UniformGrid>
     </Grid>
 </UserControl>

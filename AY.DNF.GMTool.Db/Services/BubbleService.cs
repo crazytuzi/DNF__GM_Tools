@@ -1,6 +1,9 @@
 ﻿namespace AY.DNF.GMTool.Db.Services
 {
-    public class BillingService
+    /// <summary>
+    /// 泡点服务
+    /// </summary>
+    public class BubbleService
     {
         public int SendDPoint(int count)
         {

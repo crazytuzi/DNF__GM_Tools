@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AY.DNF.GMTool.SuperTool.Views
+namespace AY.DNF.GMTool.SuperTool.ViewModels
 {
-    class SuperToolPageViewModel
+    internal class SuperToolPageViewModel
     {
     }
 }

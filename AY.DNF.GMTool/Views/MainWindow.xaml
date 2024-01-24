@@ -191,47 +191,54 @@
                     Orientation="Horizontal">
                     <TextBlock Width="100">
                         <Run Text="角色编号 " />
-                        <Run Text="{Binding MemberInfo.CharacNo}" />
+                        <Run Text="{Binding CurMemberInfo.CharacNo}" />
                     </TextBlock>
                     <TextBlock Width="100">
                         <Run Text="用色名 " />
-                        <Run Text="{Binding MemberInfo.CharacName}" />
+                        <Run Text="{Binding CurMemberInfo.CharacName}" />
                     </TextBlock>
                     <TextBlock Width="100">
-                        <Run Text="D等级 " />
-                        <Run Text="{Binding MemberInfo.Level}" />
+                        <Run Text="等级 " />
+                        <Run Text="{Binding CurMemberInfo.Level}" />
                     </TextBlock>
                     <TextBlock Width="100">
                         <Run Text="职业 " />
-                        <Run Text="{Binding MemberInfo.Job}" />
+                        <Run Text="{Binding CurMemberInfo.Job}" />
                     </TextBlock>
                     <TextBlock Width="100">
                         <Run Text="副职业 " />
-                        <Run Text="{Binding MemberInfo.ExJob}" />
+                        <Run Text="{Binding CurMemberInfo.ExpertJob}" />
                     </TextBlock>
-                    <TextBlock Width="100">
+                    <TextBlock Width="150">
                         <Run Text="金币 " />
-                        <Run Text="{Binding MemberInfo.GoldCoin}" />
+                        <Run Text="{Binding CurMemberInfo.Money}" />
                     </TextBlock>
                     <TextBlock Width="100">
                         <Run Text="VIP角色 " />
-                        <Run Text="{Binding MemberInfo.VIP}" />
+                        <Run Text="{Binding CurMemberInfo.VIP}" />
                     </TextBlock>
-                    <TextBlock Width="100">
+                    <TextBlock Width="200">
                         <Run Text="最近下线 " />
-                        <Run Text="{Binding MemberInfo.LastTime}" />
+                        <Run Text="{Binding CurMemberInfo.LastPlayTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     </TextBlock>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
 
         <DataGrid
+            Name="gridMember"
             Grid.Row="2"
             AutoGenerateColumns="False"
             Background="Transparent"
             HorizontalGridLinesBrush="#33000000"
             ItemsSource="{Binding MemberInfos}"
             VerticalGridLinesBrush="#33000000">
+
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="SelectionChanged">
+                    <hc:EventToCommand Command="{Binding RowClickCommand}" CommandParameter="{Binding SelectedValue, ElementName=gridMember}" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
 
             <DataGrid.Columns>
                 <DataGridTextColumn
@@ -285,12 +292,12 @@
                     </Style>
                 </StackPanel.Resources>
 
-                <RadioButton Content="超级功能" />
-                <RadioButton Content="邮件功能" />
                 <RadioButton
                     Command="{Binding GMToolCommand}"
                     CommandParameter="SuperTool"
-                    Content="活动管理" />
+                    Content="超级功能" />
+                <RadioButton Content="邮件功能" />
+                <RadioButton Content="活动管理" />
                 <RadioButton
                     Command="{Binding GMToolCommand}"
                     CommandParameter="BubbleTimer"

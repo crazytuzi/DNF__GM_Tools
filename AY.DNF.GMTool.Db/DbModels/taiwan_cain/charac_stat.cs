@@ -62,7 +62,7 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain
 		/// 
 		/// </summary>
 		[SugarColumn(ColumnName = "last_play_time" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
-		public DateTime LastPlayTime { get; set; }
+		public object? LastPlayTime { get; set; }
 
 		/// <summary>
 		/// 
@@ -70,11 +70,11 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain
 		[SugarColumn(ColumnName = "forbidden_to_play" , ColumnDataType = "char", Length = 1, ColumnDescription = "")]
 		public string ForbiddenToPlay { get; set; } = string.Empty;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[SugarColumn(ColumnName = "forbidden_due_to" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
-		public DateTime ForbiddenDueTo { get; set; }
+		///// <summary>
+		///// 
+		///// </summary>
+		//[SugarColumn(ColumnName = "forbidden_due_to" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
+		//public object? ForbiddenDueTo { get; set; }
 
 		/// <summary>
 		/// 
@@ -274,11 +274,11 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain
 		[SugarColumn(ColumnName = "member_bonus_fatigue" , ColumnDataType = "tinyint", DefaultValue = "0", ColumnDescription = "")]
 		public long MemberBonusFatigue { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[SugarColumn(ColumnName = "birthday_effect_time" , ColumnDataType = "datetime", IsNullable = true, DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
-		public DateTime? BirthdayEffectTime { get; set; }
+		///// <summary>
+		///// 
+		///// </summary>
+		//[SugarColumn(ColumnName = "birthday_effect_time" , ColumnDataType = "datetime", IsNullable = true, DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
+		//public DateTime? BirthdayEffectTime { get; set; }
 
 		/// <summary>
 		/// 
@@ -310,11 +310,11 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain
 		[SugarColumn(ColumnName = "growth_power_reward" , ColumnDataType = "tinyint", DefaultValue = "0", ColumnDescription = "")]
 		public long GrowthPowerReward { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[SugarColumn(ColumnName = "chaos_respon_time" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
-		public DateTime ChaosResponTime { get; set; }
+		///// <summary>
+		///// 
+		///// </summary>
+		//[SugarColumn(ColumnName = "chaos_respon_time" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
+		//public DateTime ChaosResponTime { get; set; }
 
 		/// <summary>
 		/// 

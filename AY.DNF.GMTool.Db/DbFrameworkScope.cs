@@ -64,11 +64,11 @@ namespace AY.DNF.GMTool.Db
                 IsAutoCloseConnection = true,
             });
 
-            _taiwanCain = new SqlSugarScope(new ConnectionConfig
+            _taiwanCain2nd = new SqlSugarScope(new ConnectionConfig
             {
                 DbType = DbType.MySql,
                 ConfigId = "taiwan_cain_2nd",
-                ConnectionString = $"Server={server};Port={port};Database=taiwan_cain;Uid={userName};Pwd={pwd};Charset=utf8;",
+                ConnectionString = $"Server={server};Port={port};Database=taiwan_cain_2nd;Uid={userName};Pwd={pwd};Charset=utf8;",
                 IsAutoCloseConnection = true,
             });
         }

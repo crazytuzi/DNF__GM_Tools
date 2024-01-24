@@ -196,11 +196,11 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain
 		[SugarColumn(ColumnName = "create_time" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
 		public DateTime CreateTime { get; set; }
 
-		///// <summary>
-		///// 
-		///// </summary>
-		//[SugarColumn(ColumnName = "last_play_time" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
-		//public object LastPlayTime { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		[SugarColumn(ColumnName = "last_play_time", ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
+		public object LastPlayTime { get; set; }
 
 		/// <summary>
 		/// 
@@ -208,11 +208,11 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain
 		[SugarColumn(ColumnName = "dungeon_clear_point" , ColumnDataType = "int", DefaultValue = "0", ColumnDescription = "")]
 		public int DungeonClearPoint { get; set; }
 
-		///// <summary>
-		///// 
-		///// </summary>
-		//[SugarColumn(ColumnName = "delete_time" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
-		//public DateTime DeleteTime { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		[SugarColumn(ColumnName = "delete_time", ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
+		public object DeleteTime { get; set; }
 
 		/// <summary>
 		/// 

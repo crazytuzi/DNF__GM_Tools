@@ -3,7 +3,7 @@
     /// <summary>
     /// 职业
     /// </summary>
-    public enum EnumJobType
+    public enum JobType
     {
         鬼剑士 = 0,
         女格斗 = 1,

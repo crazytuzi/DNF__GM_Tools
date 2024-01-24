@@ -1,6 +1,6 @@
 ﻿namespace AY.DNF.GMTool.Enums
 {
-    public enum EnumGrowJobType
+    public enum GrowJobType
     {
         未转职 = 0,
         街霸 = 3,

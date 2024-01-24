@@ -1,6 +1,7 @@
 ﻿using AY.DNF.GMTool.Db;
 using AY.DNF.GMTool.Db.Models;
 using AY.DNF.GMTool.Db.Services;
+using AY.DNF.GMTool.Enums;
 using AY.DNF.GMTool.Models;
 using HandyControl.Controls;
 using Prism.Commands;
@@ -119,6 +120,14 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _loginInfo, value); }
         }
 
+        private CurMemberInfoModel _curMemberInfo;
+
+        public CurMemberInfoModel CurMemberInfo
+        {
+            get { return _curMemberInfo; }
+            set { SetProperty(ref _curMemberInfo, value); }
+        }
+
         public ObservableCollection<SimpleMemberInfoModel> MemberInfos { get; set; } = new ObservableCollection<SimpleMemberInfoModel>();
 
         #endregion
@@ -151,7 +160,13 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         public ICommand GMToolCommand => _gmToolCommand ??= new DelegateCommand<string>(DoGMToolCommand);
 
+        ICommand _rowClickCommand;
+
+        public ICommand RowClickCommand => _rowClickCommand ??= new DelegateCommand<SimpleMemberInfoModel>(DoRowClickCommand);
+
+
         #endregion
+
 
         public MainWindowViewModel(IModuleManager moduleManager, IRegionManager regionManager)
         {
@@ -238,11 +253,36 @@ namespace AY.DNF.GMTool.ViewModels
             var module = _moduleMng.Modules.FirstOrDefault(t => t.ModuleName == moudelName);
             if (module == null) return;
 
-            //_regionMng.RequestNavigate("ContentRegion", "BubbleTimerModule");
             _regionMng.RequestNavigate("ContentRegion", module.ModuleName);
-            //_regionMng.RequestNavigate("ContentRegion", "BubbleTimerPage");
         }
 
+        /// <summary>
+        /// 角色列表点击事件
+        /// </summary>
+        async void DoRowClickCommand(SimpleMemberInfoModel memberInfo)
+        {
+            var detailInfo = await new MemberService().GetDetailMemberInfo(memberInfo.CharacNo);
+            if (detailInfo == null)
+            {
+                CurMemberInfo = default;
+                return;
+            }
+
+            CurMemberInfo = new CurMemberInfoModel
+            {
+                CharacNo = detailInfo.CharacNo.ToString(),
+                CharacName = detailInfo.CharacName.ToString(),
+                ExpertJob = ((ExpertJobType)Enum.Parse(typeof(ExpertJobType), detailInfo.ExpertJob.ToString())).ToString(),
+                LastPlayTime = detailInfo.LastPlayTime,
+                Level=detailInfo.Level,
+                Money=detailInfo.Money,
+                VIP=detailInfo.VIP
+            };
+            var jobArr = detailInfo.Job.Split("_", StringSplitOptions.RemoveEmptyEntries);
+            CurMemberInfo.Job = ((JobType)Enum.Parse(typeof(JobType), jobArr[0])).ToString();
+            if(jobArr.Length>1)
+                CurMemberInfo.Job= jobArr[1];
+        }
     }
 }
 

@@ -39,7 +39,7 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
         ICommand _expertJobFullCommand;
 
-        public ICommand ExpertJobFullCommand => _expertJobFullCommand ??= new DelegateCommand(DoExpertJobFullCommand);
+        public ICommand ExpertJobFullCommand => _expertJobFullCommand ??= new DelegateCommand<int>(DoExpertJobFullCommand);
 
         #endregion
 

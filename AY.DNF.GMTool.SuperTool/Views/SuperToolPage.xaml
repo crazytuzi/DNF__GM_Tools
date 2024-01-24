@@ -142,6 +142,10 @@
                     CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Content="无限负重" />
                 <Button
+                    Command="{Binding MaxEquipLevelCommand}"
+                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Content="解除装备权限" />
+                <Button
                     Command="{Binding ExpertJobFullCommand}"
                     CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Content="副职满级" />

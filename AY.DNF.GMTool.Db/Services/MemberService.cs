@@ -92,12 +92,30 @@ where delete_flag!=1 ";
                                 .ExecuteCommandAsync() > 0;
         }
 
+        /// <summary>
+        /// 副职满级
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <returns></returns>
         public async Task<bool> ExpertJobFull(int characNo)
         {
             return await DbFrameworkScope.TaiwanCain.Updateable<CharacStat>()
                               .SetColumns(t => t.ExpertJobExp == 99999999)
                               .Where(t => t.CharacNo == characNo)
                               .ExecuteCommandAsync() > 0;
+        }
+
+        /// <summary>
+        /// 解除装备等级上限
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <returns></returns>
+        public async Task<bool> MaxEquipLevel(int characNo)
+        {
+            return await DbFrameworkScope.TaiwanCain.Updateable<CharacManageInfo>()
+                             .SetColumns(t => t.MaxEquipLevel == 255)
+                             .Where(t => t.CharacNo == characNo)
+                             .ExecuteCommandAsync() > 0;
         }
     }
 }

@@ -38,8 +38,16 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         public ICommand OpenLeftAndRightCommand => _openLeftAndRightCommand ??= new DelegateCommand<int>(DoOpenLeftAndRightCommand);
 
         ICommand _expertJobFullCommand;
-
+        /// <summary>
+        /// 副职满级
+        /// </summary>
         public ICommand ExpertJobFullCommand => _expertJobFullCommand ??= new DelegateCommand<int>(DoExpertJobFullCommand);
+
+        ICommand _maxEquipLevelCommand;
+        /// <summary>
+        /// 解除装备上限
+        /// </summary>
+        public ICommand MaxEquipLevelCommand => _maxEquipLevelCommand ??= new DelegateCommand<int>(DoMaxEquipLevelCommand);
 
         #endregion
 
@@ -73,5 +81,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"副职满级{(b ? "成功" : "失败")}";
         }
 
+        async void DoMaxEquipLevelCommand(int characNo)
+        {
+            var b = await new MemberService().MaxEquipLevel(characNo);
+            OperateMsg = $"解除装备权限{(b ? "成功" : "失败")}";
+        }
     }
 }

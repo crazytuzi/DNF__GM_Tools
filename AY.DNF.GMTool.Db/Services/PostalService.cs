@@ -1,5 +1,7 @@
 ﻿using AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd;
 using System;
+using System.Data;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Db.Services
@@ -29,16 +31,19 @@ namespace AY.DNF.GMTool.Db.Services
             {
                 DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
 
-                var letter = new Letter
-                {
-                    CharacNo = characNo,
-                    SendCharacNo = 0,
-                    SendCharacName = "GM",
-                    LetterText = letterText,
-                    RegDate = DateTime.Now,
-                    Stat = 1
-                };
-                var letterId = await DbFrameworkScope.TaiwanCain2nd.Insertable<Letter>(letter).ExecuteReturnIdentityAsync();
+                //var letter = new Letter
+                //{
+                //    CharacNo = characNo,
+                //    SendCharacNo = 0,
+                //    SendCharacName = "GM",
+                //    LetterText = Encoding.UTF8.GetString(Encoding.GetEncoding("latin1").GetBytes(letterText)),
+                //    RegDate = DateTime.Now,
+                //    Stat = 1
+                //};
+                //var letterId = await DbFrameworkScope.TaiwanCain2nd.Insertable<Letter>(letter).ExecuteReturnIdentityAsync();
+                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"set charset latin1;insert into letter(charac_no,send_charac_no,send_charac_name,letter_text,reg_date,stat) values({characNo},0,'GM','{letterText}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}',1);");
+                var dt = await DbFrameworkScope.TaiwanCain2nd.Ado.GetDataTableAsync("SELECT LAST_INSERT_ID()");
+                var letterId = int.Parse(dt.Rows[0][0].ToString());
 
                 //DbFrameworkScope.TaiwanCain2nd.SqlQueryable("insert into postal(letter_id,count,upgrade,seperate_upgrade,amplify_option,amplify_value,occ_time,send_charac_no,send_charac_name)")
                 var postal = new Postal
@@ -48,7 +53,7 @@ namespace AY.DNF.GMTool.Db.Services
                     SendCharacName = "GM",
                     ReceiveCharacNo = characNo,
                     ItemId = itemId,
-                    AddInfo = count,                    
+                    AddInfo = count,
                     Upgrade = strengthen,
                     AmplifyOption = red,
                     AmplifyValue = redValue,

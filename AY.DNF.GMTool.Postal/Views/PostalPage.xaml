@@ -180,13 +180,11 @@
                     <ComboBox
                         Width="80"
                         Margin="3"
+                        DisplayMemberPath="Key"
                         IsEditable="False"
-                        SelectedItem="{Binding SelectedRed}">
-                        <ComboBoxItem IsSelected="True">力量</ComboBoxItem>
-                        <ComboBoxItem>智力</ComboBoxItem>
-                        <ComboBoxItem>体力</ComboBoxItem>
-                        <ComboBoxItem>精神</ComboBoxItem>
-                    </ComboBox>
+                        ItemsSource="{Binding Reds}"
+                        SelectedValue="{Binding SelectedRed}"
+                        SelectedValuePath="Value" />
                     <TextBox
                         Width="50"
                         Margin="3"

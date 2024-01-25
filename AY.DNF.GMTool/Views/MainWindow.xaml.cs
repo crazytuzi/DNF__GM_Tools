@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 
 namespace AY.DNF.GMTool.Views
 {
@@ -22,7 +23,10 @@ namespace AY.DNF.GMTool.Views
 
         private void MinClick(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Minimized;
+            //WindowState = WindowState.Minimized;
+            var path = "D:\\99Game\\DNF GM\\Script.pvf";
+            var bytes =File.ReadAllBytes(path);
+            
         }
     }
 }

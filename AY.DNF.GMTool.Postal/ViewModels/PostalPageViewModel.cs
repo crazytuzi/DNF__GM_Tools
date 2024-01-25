@@ -3,7 +3,9 @@ using AY.DNF.GMTool.Postal.Models;
 using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace AY.DNF.GMTool.Postal.ViewModels
@@ -96,9 +98,9 @@ namespace AY.DNF.GMTool.Postal.ViewModels
             set { SetProperty(ref _isRed, value); }
         }
 
-        private string? _selectedRed;
+        private int _selectedRed = 3;
 
-        public string? SelectedRed
+        public int SelectedRed
         {
             get { return _selectedRed; }
             set { SetProperty(ref _selectedRed, value); }
@@ -118,6 +120,20 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         {
             get { return _isPackaged; }
             set { SetProperty(ref _isPackaged, value); }
+        }
+
+        private ObservableCollection<KeyValuePair<string, int>> _reds = new ObservableCollection<KeyValuePair<string, int>>
+        {
+            new KeyValuePair<string, int>("力量",3),
+            new KeyValuePair<string, int>("智力",4),
+            new KeyValuePair<string, int>("体力",1),
+            new KeyValuePair<string, int>("精神",2),
+        };
+
+        public ObservableCollection<KeyValuePair<string, int>> Reds
+        {
+            get { return _reds; }
+            set { SetProperty(ref _reds, value); }
         }
 
         #endregion
@@ -154,8 +170,19 @@ namespace AY.DNF.GMTool.Postal.ViewModels
 
         }
 
-        void DoSearchCommand()
+        async void DoSearchCommand()
         {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                Items.Clear();
+                return;
+            }
+            var list = await new LocalItemsService().SearchItems(SearchText);
+            Items.AddRange(list.Select(t => new ItemModel
+            {
+                ItemId = t.ItemId,
+                ItemName = t.ItemName
+            }));
         }
 
         async void DoSendCommand(string characNo)
@@ -165,20 +192,13 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 Growl.Error("请选择游戏角色");
                 return;
             }
-            int red = 0, redValue = 0;
+
+            var redValue = 0;
             if (IsRed)
             {
-                red = SelectedRed switch
-                {
-                    "力量" => 3,
-                    "智力" => 4,
-                    "体力" => 1,
-                    "精神" => 2,
-                    _ => 0
-                };
                 redValue = RedValue;
             }
-            var b = await new PostalService().SendPostal(int.Parse(characNo), LetterContent!, SelectedItemId, Count, Forge, Strengthen, red, redValue, IsPackaged);
+            var b = await new PostalService().SendPostal(int.Parse(characNo), LetterContent!, SelectedItemId, Count, Forge, Strengthen, SelectedRed, redValue, IsPackaged);
             Msg = $"发送邮件{(b ? "成功" : "失败")}";
         }
 

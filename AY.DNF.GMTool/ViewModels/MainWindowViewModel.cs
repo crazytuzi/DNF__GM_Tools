@@ -11,6 +11,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -252,7 +253,7 @@ namespace AY.DNF.GMTool.ViewModels
             OpenEnabled = false;
             ConnectedForEnabled = true;
 
-            WriteCfg();
+            WriteCfg();            
         }
 
         /// <summary>

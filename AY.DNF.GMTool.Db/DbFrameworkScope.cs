@@ -1,4 +1,6 @@
 ﻿using SqlSugar;
+using System;
+using System.IO;
 
 namespace AY.DNF.GMTool.Db
 {
@@ -10,6 +12,7 @@ namespace AY.DNF.GMTool.Db
         static SqlSugarScope? _taiwanCain;
         static SqlSugarScope? _taiwanBillinig;
         static SqlSugarScope? _taiwanCain2nd;
+        static SqlSugarScope? _localDb;
 
         /// <summary>
         /// 用户信息库
@@ -27,7 +30,15 @@ namespace AY.DNF.GMTool.Db
         /// </summary>
         public static SqlSugarScope TaiwanBilling => _taiwanBillinig!;
 
+        /// <summary>
+        /// 邮件 背包
+        /// </summary>
         public static SqlSugarScope TaiwanCain2nd => _taiwanCain2nd!;
+
+        /// <summary>
+        /// 本地数据
+        /// </summary>
+        public static SqlSugarScope LocalDb => _localDb!;
 
         #endregion
 
@@ -74,10 +85,19 @@ namespace AY.DNF.GMTool.Db
                     IsAutoCloseConnection = true,
                 });
 
+                _localDb = new SqlSugarScope(new ConnectionConfig
+                {
+                    DbType = DbType.Access,
+                    ConfigId = "local",
+                    ConnectionString = $"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LocalData", "DNF.mdb")}",
+                    IsAutoCloseConnection = true
+                });
+
                 _dTaiwan.Ado.CheckConnection();
                 _taiwanCain.Ado.CheckConnection();
                 _taiwanBillinig.Ado.CheckConnection();
                 _taiwanCain2nd.Ado.CheckConnection();
+                _localDb.Ado.CheckConnection();
 
                 return true;
             }

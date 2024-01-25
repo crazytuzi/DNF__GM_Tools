@@ -71,7 +71,7 @@
             Grid.Column="1"
             HorizontalAlignment="Left"
             VerticalAlignment="Center">
-            <TextBlock                
+            <TextBlock
                 FontSize="16"
                 Foreground="Orange"
                 Text="{Binding Title}" />
@@ -79,7 +79,7 @@
                 Margin="0,2,0,0"
                 HorizontalAlignment="Center"
                 FontSize="10"
-                Foreground="LightGray"
+                Foreground="LightCoral"
                 Text="{Binding Version}" />
         </StackPanel>
 
@@ -91,12 +91,12 @@
             Background="Transparent"
             WindowChrome.IsHitTestVisibleInChrome="True">
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Content="&#xe624;" Style="{StaticResource ControlButtonStyle}" />
-                <Button Content="&#xe600;" Style="{StaticResource ControlButtonStyle}" />
+                <Button Content="&#xe624;" Style="{StaticResource ControlButtonStyle}" Click="MinClick"/>
+                <Button Content="&#xe600;" Style="{StaticResource ControlButtonStyle}" Click="MaxClick"/>
                 <Button
                     Background="DarkRed"
                     Content="&#xe609;"
-                    Style="{StaticResource ControlButtonStyle}" />
+                    Style="{StaticResource ControlButtonStyle}" Command="{Binding AppCloseCommand}"/>
             </StackPanel>
         </Border>
 

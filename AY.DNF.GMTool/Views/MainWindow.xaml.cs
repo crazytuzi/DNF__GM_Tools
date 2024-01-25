@@ -11,5 +11,18 @@ namespace AY.DNF.GMTool.Views
         {
             InitializeComponent();
         }
+
+        private void MaxClick(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+                WindowState = WindowState.Normal;
+            else
+                WindowState = WindowState.Maximized;
+        }
+
+        private void MinClick(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
     }
 }

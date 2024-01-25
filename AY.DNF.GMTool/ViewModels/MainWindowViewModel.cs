@@ -13,8 +13,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -35,6 +37,14 @@ namespace AY.DNF.GMTool.ViewModels
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
+        }
+
+        private string _version = "0.0.20240125";
+
+        public string Version
+        {
+            get { return _version; }
+            set { SetProperty(ref _version, value); }
         }
 
         private DateTime _sysTime;
@@ -90,7 +100,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _userName, value); }
         }
 
-        private int _port ;
+        private int _port;
         /// <summary>
         /// 连接端口
         /// </summary>
@@ -178,6 +188,24 @@ namespace AY.DNF.GMTool.ViewModels
 
 
         #endregion
+
+        ICommand _appCloseCommand;
+
+        public ICommand AppCloseCommand => _appCloseCommand ??= new DelegateCommand(() =>
+        {
+            _timeTaskCancelTokenSource.Cancel();
+
+            if (DbFrameworkScope.TaiwanCain2nd != null)
+                DbFrameworkScope.TaiwanCain2nd.Close();
+            if (DbFrameworkScope.TaiwanCain != null)
+                DbFrameworkScope.TaiwanCain.Close();
+            if (DbFrameworkScope.DTaiwan != null)
+                DbFrameworkScope.DTaiwan.Close();
+            if (DbFrameworkScope.TaiwanBilling != null)
+                DbFrameworkScope.TaiwanBilling.Close();
+
+            Application.Current.Shutdown();
+        });
 
 
         public MainWindowViewModel(IModuleManager moduleManager, IRegionManager regionManager)

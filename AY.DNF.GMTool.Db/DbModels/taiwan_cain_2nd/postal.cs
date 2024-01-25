@@ -55,8 +55,8 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd
 		/// <summary>
 		/// 
 		/// </summary>
-		[SugarColumn(ColumnName = "endurance" , ColumnDataType = "smallint", DefaultValue = "0", ColumnDescription = "")]
-		public short Endurance { get; set; }
+		[SugarColumn(ColumnName = "endurance", ColumnDataType = "smallint", DefaultValue = "0", ColumnDescription = "")]
+		public short Endurance { get; set; } 
 
 		/// <summary>
 		/// 
@@ -79,8 +79,8 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd
 		/// <summary>
 		/// 
 		/// </summary>
-		[SugarColumn(ColumnName = "gold" , ColumnDataType = "int", DefaultValue = "0", ColumnDescription = "")]
-		public int Gold { get; set; }
+		[SugarColumn(ColumnName = "gold", ColumnDataType = "int", DefaultValue = "0", ColumnDescription = "")]
+		public int Gold { get; set; } 
 
 		/// <summary>
 		/// 
@@ -163,8 +163,8 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd
 		/// <summary>
 		/// 
 		/// </summary>
-		[SugarColumn(ColumnName = "random_option" , ColumnDataType = "varbinary", ColumnDescription = "")]
-		public byte[] RandomOption { get; set; }
+		[SugarColumn(ColumnName = "random_option", ColumnDataType = "varbinary", ColumnDescription = "")]
+		public byte[] RandomOption { get; set; } = new byte[0];
 
 		/// <summary>
 		/// 
@@ -181,8 +181,8 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd
 		/// <summary>
 		/// 
 		/// </summary>
-		[SugarColumn(ColumnName = "item_guid" , ColumnDataType = "varbinary", ColumnDescription = "")]
-		public byte[] ItemGuid { get; set; }
+		[SugarColumn(ColumnName = "item_guid", ColumnDataType = "varbinary", ColumnDescription = "")]
+		public byte[] ItemGuid { get; set; } = new byte[0];
 
 	}
 }

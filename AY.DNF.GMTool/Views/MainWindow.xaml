@@ -7,7 +7,8 @@
     Title="{Binding Title}"
     Width="1280"
     Height="768"
-    prism:ViewModelLocator.AutoWireViewModel="True">
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    WindowStartupLocation="CenterScreen">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CornerRadius="15" GlassFrameThickness="-1" />
@@ -296,7 +297,10 @@
                     Command="{Binding GMToolCommand}"
                     CommandParameter="SuperTool"
                     Content="超级功能" />
-                <RadioButton Content="邮件功能" />
+                <RadioButton
+                    Command="{Binding GMToolCommand}"
+                    CommandParameter="Postal"
+                    Content="邮件功能" />
                 <RadioButton Content="活动管理" />
                 <RadioButton
                     Command="{Binding GMToolCommand}"

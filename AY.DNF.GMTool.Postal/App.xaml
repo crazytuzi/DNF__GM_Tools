@@ -1,8 +1,8 @@
-﻿<Application x:Class="AY.DNF.GMTool.BubbleTimer.App"
+﻿<Application x:Class="AY.DNF.GMTool.Postal.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AY.DNF.GMTool.BubbleTimer"
-             StartupUri="Views/BubbleTimerPage.xaml">
+             xmlns:local="clr-namespace:AY.DNF.GMTool.Postal"
+             StartupUri="Views/PostalPage.xaml">
     <Application.Resources>
          
     </Application.Resources>

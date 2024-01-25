@@ -1,4 +1,4 @@
-﻿namespace AY.DNF.GMTool.SuperTool
+﻿namespace AY.DNF.GMTool.SuperTool.Enums
 {
     public enum PVPGradeType
     {

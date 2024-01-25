@@ -16,12 +16,14 @@ namespace AY.DNF.GMTool.Db.Services
         /// <param name="count"></param>
         /// <param name="dType">0-D币 1-D点</param>
         /// <returns></returns>
-        public async Task<bool> RechargeD(string account, int count, byte dType)
+        public async Task<bool> RechargeD(int characNo, int count, byte dType)
         {
+            var account = await DbFrameworkScope.TaiwanCain.Queryable<CharacInfo>().Where(t => t.CharacNo == characNo).FirstAsync();
+
             if (dType == 0)
-                return await DbFrameworkScope.TaiwanBilling.Updateable<CashCera>().SetColumns(t => t.Cera == t.Cera + count).Where(t => t.Account == account).ExecuteCommandAsync() > 0;
+                return await DbFrameworkScope.TaiwanBilling.Updateable<CashCera>().SetColumns(t => t.Cera == t.Cera + count).Where(t => t.Account == account.MId.ToString()).ExecuteCommandAsync() > 0;
             else if (dType == 1)
-                return await DbFrameworkScope.TaiwanBilling.Updateable<CashCeraPoint>().SetColumns(t => t.CeraPoint == t.CeraPoint + count).Where(t => t.Account == account).ExecuteCommandAsync() > 0;
+                return await DbFrameworkScope.TaiwanBilling.Updateable<CashCeraPoint>().SetColumns(t => t.CeraPoint == t.CeraPoint + count).Where(t => t.Account == account.MId.ToString()).ExecuteCommandAsync() > 0;
             else return false;
         }
 

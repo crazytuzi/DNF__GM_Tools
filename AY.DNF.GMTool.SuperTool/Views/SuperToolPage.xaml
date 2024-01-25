@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:AY.DNF.GMTool.SuperTool.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:Height="450"
@@ -62,7 +63,17 @@
                     <ComboBox
                         Grid.Column="1"
                         Width="80"
-                        ItemsSource="{Binding RechargeTypes}" />
+                        VerticalContentAlignment="Center"
+                        DisplayMemberPath="Key"
+                        ItemsSource="{Binding RechargeTypes}"
+                        SelectedValue="{Binding SelectedRecharge}"
+                        SelectedValuePath="Value">
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="SelectionChanged">
+                                <hc:EventToCommand Command="{Binding RechargeChangedCommand}" />
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
+                    </ComboBox>
 
                     <TextBlock Grid.Row="1" Text="数量" />
                     <TextBox
@@ -75,12 +86,18 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Width="80"
+                        VerticalContentAlignment="Center"
+                        DisplayMemberPath="Key"
                         ItemsSource="{Binding PVPGradeTypes}"
+                        SelectedValue="{Binding SelectedPVPGrade}"
+                        SelectedValuePath="Value"
                         Visibility="{Binding PVPVisibility}" />
 
                     <Button
                         Grid.RowSpan="2"
                         Grid.Column="2"
+                        Command="{Binding RechargeCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                         Content="充值" />
                 </Grid>
             </GroupBox>
@@ -107,12 +124,29 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <ComboBox ItemsSource="{Binding JobTypes}" />
-                    <ComboBox Grid.Row="1" ItemsSource="{Binding GrowTypes}" />
+                    <ComboBox
+                        DisplayMemberPath="Key"
+                        ItemsSource="{Binding JobTypes}"
+                        SelectedValue="{Binding SelectedJob}"
+                        SelectedValuePath="Value">
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="SelectionChanged">
+                                <hc:EventToCommand Command="{Binding JobChangedCommand}" />
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
+                    </ComboBox>
+                    <ComboBox
+                        Grid.Row="1"
+                        DisplayMemberPath="Key"
+                        ItemsSource="{Binding GrowTypes}"
+                        SelectedValue="{Binding SelectedGrowJob}"
+                        SelectedValuePath="Value" />
                     <Button
                         Grid.RowSpan="2"
                         Grid.Column="1"
-                        Content="转职" />
+                        Content="转职"
+                          CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Command="{Binding ChangedJobCommand}"/>
                 </Grid>
             </GroupBox>
         </UniformGrid>
@@ -120,9 +154,18 @@
         <UniformGrid Grid.Row="1" Columns="2">
             <GroupBox Header="VIP">
                 <StackPanel>
-                    <Button Content="设置VIP" />
-                    <Button Content="撤消VIP" />
-                    <Button Content="撤消选定角色VIP" />
+                    <Button
+                        Command="{Binding SetVIPCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="设置VIP" />
+                    <Button
+                        Command="{Binding UnsetVIPCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="撤消VIP" />
+                    <Button
+                        Command="{Binding UnsetMemberVIPCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="撤消选定角色VIP" />
                 </StackPanel>
             </GroupBox>
 
@@ -131,8 +174,8 @@
                     Command="{Binding ClearBagCommand}"
                     CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Content="清理背包" />
-                <Button Content="清理时装" />
-                <Button Content="清理宠物" />
+                <!--<Button Content="清理时装" />
+                <Button Content="清理宠物" />-->
                 <Button
                     Command="{Binding OpenLeftAndRightCommand}"
                     CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"

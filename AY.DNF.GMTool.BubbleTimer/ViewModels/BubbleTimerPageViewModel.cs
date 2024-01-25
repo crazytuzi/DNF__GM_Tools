@@ -1,5 +1,6 @@
 ﻿using AY.DNF.GMTool.BubbleTimer.Models;
 using AY.DNF.GMTool.Db.Services;
+using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
@@ -122,7 +123,7 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
         {
             if (!IsUseDCoin && !IsUseDPoint)
             {
-                MessageBox.Show("未启用任何发放");
+                Growl.Warning("未启用任何发放");
                 return;
             }
 

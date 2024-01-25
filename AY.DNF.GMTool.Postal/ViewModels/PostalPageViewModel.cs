@@ -1,5 +1,6 @@
 ﻿using AY.DNF.GMTool.Db.Services;
 using AY.DNF.GMTool.Postal.Models;
+using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
@@ -159,6 +160,11 @@ namespace AY.DNF.GMTool.Postal.ViewModels
 
         async void DoSendCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
             int red = 0, redValue = 0;
             if (IsRed)
             {
@@ -172,21 +178,36 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 };
                 redValue = RedValue;
             }
-            var b = await new PostalService().SendPostal(int.Parse(characNo), LetterContent!, SelectedItemId, Count, Forge, Strengthen, red, redValue);
+            var b = await new PostalService().SendPostal(int.Parse(characNo), LetterContent!, SelectedItemId, Count, Forge, Strengthen, red, redValue, IsPackaged);
             Msg = $"发送邮件{(b ? "成功" : "失败")}";
         }
 
 
         void DoSendAllCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
         }
 
         void DoDeleteCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
         }
 
         void DoDeleteAllCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd;
 using System;
-using System.Data;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Db.Services
@@ -19,7 +17,7 @@ namespace AY.DNF.GMTool.Db.Services
         /// <param name="red">3-力量 4-智力 1-体力 2-精神</param>
         /// <param name="redValue"></param>
         /// <returns></returns>
-        public async Task<bool> SendPostal(int characNo, string letterText, int itemId, int count, int forge, int strengthen, int red, int redValue)
+        public async Task<bool> SendPostal(int characNo, string letterText, int itemId, int count, int forge, int strengthen, int red, int redValue, bool isPackaged)
         {
             // add_info => count
             // upgrade => strengthen
@@ -59,6 +57,7 @@ namespace AY.DNF.GMTool.Db.Services
                     AmplifyValue = redValue,
                     LetterId = letterId,
                     SeperateUpgrade = forge,
+                    SealFlag = isPackaged ? 1 : 0
                 };
 
                 var postalId = await DbFrameworkScope.TaiwanCain2nd.Insertable<Postal>(postal).ExecuteReturnIdentityAsync();

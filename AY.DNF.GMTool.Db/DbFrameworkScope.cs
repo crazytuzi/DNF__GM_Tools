@@ -38,39 +38,53 @@ namespace AY.DNF.GMTool.Db
         /// <param name="userName"></param>
         /// <param name="pwd"></param>
         /// <param name="port"></param>
-        public static void Init(string server, string userName, string pwd, int port)
+        public static bool Init(string server, string userName, string pwd, int port)
         {
-            _dTaiwan = new SqlSugarScope(new ConnectionConfig
+            try
             {
-                DbType = DbType.MySql,
-                ConfigId = "d_taiwan",
-                ConnectionString = $"Server={server};Port={port};Database=d_taiwan;Uid={userName};Pwd={pwd};Charset=utf8;",
-                IsAutoCloseConnection = true,
-            });
+                _dTaiwan = new SqlSugarScope(new ConnectionConfig
+                {
+                    DbType = DbType.MySql,
+                    ConfigId = "d_taiwan",
+                    ConnectionString = $"Server={server};Port={port};Database=d_taiwan;Uid={userName};Pwd={pwd};Charset=utf8;",
+                    IsAutoCloseConnection = true,
+                });
 
-            _taiwanCain = new SqlSugarScope(new ConnectionConfig
-            {
-                DbType = DbType.MySql,
-                ConfigId = "taiwan_cain",
-                ConnectionString = $"Server={server};Port={port};Database=taiwan_cain;Uid={userName};Pwd={pwd};Charset=utf8;",
-                IsAutoCloseConnection = true,
-            });
+                _taiwanCain = new SqlSugarScope(new ConnectionConfig
+                {
+                    DbType = DbType.MySql,
+                    ConfigId = "taiwan_cain",
+                    ConnectionString = $"Server={server};Port={port};Database=taiwan_cain;Uid={userName};Pwd={pwd};Charset=utf8;",
+                    IsAutoCloseConnection = true,
+                });
 
-            _taiwanBillinig = new SqlSugarScope(new ConnectionConfig
-            {
-                DbType = DbType.MySql,
-                ConfigId = "taiwan_billing",
-                ConnectionString = $"Server={server};Port={port};Database=taiwan_billing;Uid={userName};Pwd={pwd};Charset=utf8;",
-                IsAutoCloseConnection = true,
-            });
+                _taiwanBillinig = new SqlSugarScope(new ConnectionConfig
+                {
+                    DbType = DbType.MySql,
+                    ConfigId = "taiwan_billing",
+                    ConnectionString = $"Server={server};Port={port};Database=taiwan_billing;Uid={userName};Pwd={pwd};Charset=utf8;",
+                    IsAutoCloseConnection = true,
+                });
 
-            _taiwanCain2nd = new SqlSugarScope(new ConnectionConfig
+                _taiwanCain2nd = new SqlSugarScope(new ConnectionConfig
+                {
+                    DbType = DbType.MySql,
+                    ConfigId = "taiwan_cain_2nd",
+                    ConnectionString = $"Server={server};Port={port};Database=taiwan_cain_2nd;Uid={userName};Pwd={pwd};Charset=utf8;",
+                    IsAutoCloseConnection = true,
+                });
+
+                _dTaiwan.Ado.CheckConnection();
+                _taiwanCain.Ado.CheckConnection();
+                _taiwanBillinig.Ado.CheckConnection();
+                _taiwanCain2nd.Ado.CheckConnection();
+
+                return true;
+            }
+            catch (System.Exception)
             {
-                DbType = DbType.MySql,
-                ConfigId = "taiwan_cain_2nd",
-                ConnectionString = $"Server={server};Port={port};Database=taiwan_cain_2nd;Uid={userName};Pwd={pwd};Charset=utf8;",
-                IsAutoCloseConnection = true,
-            });
+                return false;
+            }
         }
     }
 }

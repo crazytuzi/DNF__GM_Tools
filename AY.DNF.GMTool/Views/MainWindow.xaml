@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:prism="http://prismlibrary.com/"
-    Title="{Binding Title}"
     Width="1280"
     Height="768"
     prism:ViewModelLocator.AutoWireViewModel="True"
@@ -23,7 +22,10 @@
 
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="5" />
+            <Setter Property="Height" Value="25" />
             <Setter Property="Width" Value="100" />
+            <Setter Property="TextAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
         <Style TargetType="GroupBox">
@@ -65,11 +67,14 @@
             HorizontalAlignment="Left"
             Source="/Assets/Images/Logo.png" />
 
-        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <TextBlock
+        <StackPanel
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center">
+            <TextBlock                
                 FontSize="16"
-                Foreground="White"
-                Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}" />
+                Foreground="Orange"
+                Text="{Binding Title}" />
             <TextBlock
                 Margin="0,2,0,0"
                 HorizontalAlignment="Center"
@@ -115,7 +120,8 @@
                         Width="80"
                         Margin="5"
                         Command="{Binding ConnectCommand}"
-                        Content="连接" />
+                        Content="连接"
+                        IsEnabled="{Binding OpenEnabled}" />
                     <Button
                         Width="80"
                         Margin="5"
@@ -231,6 +237,8 @@
             Grid.Row="2"
             AutoGenerateColumns="False"
             Background="Transparent"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
             HorizontalGridLinesBrush="#33000000"
             ItemsSource="{Binding MemberInfos}"
             VerticalGridLinesBrush="#33000000">

@@ -4,12 +4,14 @@ using AY.DNF.GMTool.Db.Services;
 using AY.DNF.GMTool.Enums;
 using AY.DNF.GMTool.Models;
 using HandyControl.Controls;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Modularity;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,9 +58,19 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _connectedForEnabled, value); }
         }
 
+        private bool _openEnabled = true;
+        /// <summary>
+        /// 连接按钮可用性
+        /// </summary>
+        public bool OpenEnabled
+        {
+            get { return _openEnabled; }
+            set { SetProperty(ref _openEnabled, value); }
+        }
+
         #region 数据库连接相关
 
-        private string _server = "192.168.200.131";
+        private string _server = "";
         /// <summary>
         /// Server
         /// </summary>
@@ -68,7 +80,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _server, value); }
         }
 
-        private string _userName = "game";
+        private string _userName = "";
         /// <summary>
         /// 用户名
         /// </summary>
@@ -78,7 +90,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _userName, value); }
         }
 
-        private int _port = 3306;
+        private int _port ;
         /// <summary>
         /// 连接端口
         /// </summary>
@@ -88,7 +100,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _port, value); }
         }
 
-        private string _pwd = "123456";
+        private string _pwd = "";
         /// <summary>
         /// 数据库密码
         /// </summary>
@@ -100,7 +112,7 @@ namespace AY.DNF.GMTool.ViewModels
 
         #endregion
 
-        private string _searchAccount = "elva159753";
+        private string _searchAccount = "";
         /// <summary>
         /// 查询账号
         /// </summary>
@@ -173,6 +185,8 @@ namespace AY.DNF.GMTool.ViewModels
             _moduleMng = moduleManager;
             _regionMng = regionManager;
 
+            LoadCfg();
+
             _timeTaskCancelTokenSource = new CancellationTokenSource();
             var ct = _timeTaskCancelTokenSource.Token;
 
@@ -197,10 +211,20 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         void DoConnectCommand()
         {
-            DbFrameworkScope.Init(Server, UserName, Pwd, Port);
-            Growl.Success("连接成功");
+            var b = DbFrameworkScope.Init(Server, UserName, Pwd, Port);
+            if (!b)
+            {
+                OpenEnabled = true;
+                ConnectedForEnabled = false;
+                Growl.Error("数据库连接失败");
+                return;
+            }
 
+            Growl.Success("连接成功");
+            OpenEnabled = false;
             ConnectedForEnabled = true;
+
+            WriteCfg();
         }
 
         /// <summary>
@@ -217,6 +241,8 @@ namespace AY.DNF.GMTool.ViewModels
                 Growl.Error("未查询到信息");
                 return;
             }
+
+            WriteCfg();
 
             LoginInfo = new LoginBindableModel
             {
@@ -236,6 +262,7 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         void DoDisconnectCommand()
         {
+            OpenEnabled = true;
             ConnectedForEnabled = false;
             _timeTaskCancelTokenSource.Cancel();
         }
@@ -274,15 +301,52 @@ namespace AY.DNF.GMTool.ViewModels
                 CharacName = detailInfo.CharacName.ToString(),
                 ExpertJob = ((ExpertJobType)Enum.Parse(typeof(ExpertJobType), detailInfo.ExpertJob.ToString())).ToString(),
                 LastPlayTime = detailInfo.LastPlayTime,
-                Level=detailInfo.Level,
-                Money=detailInfo.Money,
-                VIP=detailInfo.VIP
+                Level = detailInfo.Level,
+                Money = detailInfo.Money,
+                VIP = detailInfo.VIP
             };
             var jobArr = detailInfo.Job.Split("_", StringSplitOptions.RemoveEmptyEntries);
             CurMemberInfo.Job = ((JobType)Enum.Parse(typeof(JobType), jobArr[0])).ToString();
-            if(jobArr.Length>1)
-                CurMemberInfo.Job= jobArr[1];
+            if (jobArr.Length > 1)
+                CurMemberInfo.Job = jobArr[1];
         }
+
+        #region 连接配置
+
+        void LoadCfg()
+        {
+            var path = "settings.dat";
+            if (!File.Exists(path)) return;
+
+            var str = File.ReadAllText(path);
+            var cfg = JsonConvert.DeserializeObject<ConnectInfoModel>(str);
+            if (cfg == null) return;
+
+            Server = cfg.IP;
+            Port = cfg.Port;
+            UserName = cfg.UserName;
+            Pwd = cfg.Pwd;
+            SearchAccount = cfg.Account;
+        }
+
+        void WriteCfg()
+        {
+            var path = "settings.dat";
+
+            var cfg = new ConnectInfoModel
+            {
+                IP = Server,
+                Port = Port,
+                UserName = UserName,
+                Pwd = Pwd,
+                Account = SearchAccount
+            };
+            var str = JsonConvert.SerializeObject(cfg);
+
+            File.WriteAllText(path, str);
+        }
+
+        #endregion
     }
 }
 

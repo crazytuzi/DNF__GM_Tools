@@ -1,4 +1,5 @@
 ﻿using AY.DNF.GMTool.Db.Services;
+using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Windows.Input;
@@ -58,6 +59,12 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
         async void DoClearBagCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
             var b = await new ClearService().ClearBag(int.Parse(characNo));
             OperateMsg = $"背包清理{(b ? "成功" : "失败")}";
         }
@@ -65,24 +72,48 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
         async void DoUnlimitedWeightCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
             var b = await new MemberService().UnlimitedWeight(int.Parse(characNo));
             OperateMsg = $"无限负重设置{(b ? "成功" : "失败")}";
         }
 
         async void DoOpenLeftAndRightCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
             var b = await new MemberService().OpenLeftAndRight(int.Parse(characNo));
             OperateMsg = $"开左右槽{(b ? "成功" : "失败")}";
         }
 
         async void DoExpertJobFullCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
             var b = await new MemberService().ExpertJobFull(int.Parse(characNo));
             OperateMsg = $"副职满级{(b ? "成功" : "失败")}";
         }
 
         async void DoMaxEquipLevelCommand(string characNo)
         {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
             var b = await new MemberService().MaxEquipLevel(int.Parse(characNo));
             OperateMsg = $"解除装备权限{(b ? "成功" : "失败")}";
         }

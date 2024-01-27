@@ -348,7 +348,7 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         {
             if (string.IsNullOrWhiteSpace(uid))
             {
-                Growl.Error("请选择游戏角色");
+                Growl.Error("请查询账号");
                 return;
             }
 

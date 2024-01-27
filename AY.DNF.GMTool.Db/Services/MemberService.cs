@@ -128,9 +128,9 @@ where delete_flag!=1 ";
 
             var data = DbFrameworkScope.TaiwanCain.Queryable<MemberDungeon>().Where(t => t.MId == uid);
             if (data == null)
-                return await DbFrameworkScope.TaiwanCain2nd.Insertable<MemberDungeon>(new MemberDungeon { MId = uid, Dungeon = dungeonStr }).ExecuteCommandAsync() > 0;
+                return await DbFrameworkScope.TaiwanCain.Insertable<MemberDungeon>(new MemberDungeon { MId = uid, Dungeon = dungeonStr }).ExecuteCommandAsync() > 0;
             else
-                return await DbFrameworkScope.TaiwanCain2nd.Updateable<MemberDungeon>(new MemberDungeon { MId = uid, Dungeon = dungeonStr }).Where(t => t.MId == uid).ExecuteCommandAsync() > 0;
+                return await DbFrameworkScope.TaiwanCain.Updateable<MemberDungeon>(new MemberDungeon { MId = uid, Dungeon = dungeonStr }).Where(t => t.MId == uid).ExecuteCommandAsync() > 0;
         }
     }
 }

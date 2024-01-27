@@ -50,7 +50,7 @@ namespace AY.DNF.GMTool.Db.Services
             // 角色
             var roles =
                 //await DbFrameworkScope.TaiwanCain.Queryable<CharacInfo>().Where(t => t.MId == account.UID && t.DeleteFlag != 1).ToListAsync();
-                await DbFrameworkScope.TaiwanCain.SqlQueryable<CharacInfo>("Set Charset latin1; select charac_no CharacNo,charac_name CharacName,lev from charac_info where delete_flag!=1").ToListAsync();
+                await DbFrameworkScope.TaiwanCain.SqlQueryable<CharacInfo>($"Set Charset latin1; select charac_no CharacNo,charac_name CharacName,lev from charac_info where delete_flag!=1 and m_id={account.UID}").ToListAsync();
             result.MemberInfos.AddRange(roles.Select(t => new SimpleMemberInfoModel { CharacNo = t.CharacNo, CharacName = t.CharacName, Level = t.Lev }));
 
             //result.MemberInfos.ForEach(t =>

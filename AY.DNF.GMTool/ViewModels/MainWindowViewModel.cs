@@ -11,10 +11,8 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,7 +38,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private string _version = "0.0.20240125";
+        private string _version = "0.0.20240127";
 
         public string Version
         {
@@ -101,7 +99,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _userName, value); }
         }
 
-        private int _port;
+        private int _port = 3306;
         /// <summary>
         /// 连接端口
         /// </summary>
@@ -240,7 +238,16 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         void DoConnectCommand()
         {
-            var b = DbFrameworkScope.Init(Server, UserName, Pwd, Port);
+            bool b;
+            try
+            {
+                b = DbFrameworkScope.Init(Server, UserName, Pwd, Port);
+            }
+            catch (Exception ex)
+            {
+                Growl.Error(ex.Message);
+                return;
+            }
             if (!b)
             {
                 OpenEnabled = true;
@@ -253,7 +260,7 @@ namespace AY.DNF.GMTool.ViewModels
             OpenEnabled = false;
             ConnectedForEnabled = true;
 
-            WriteCfg();            
+            WriteCfg();
         }
 
         /// <summary>

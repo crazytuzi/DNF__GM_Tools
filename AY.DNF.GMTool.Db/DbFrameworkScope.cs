@@ -2,6 +2,7 @@
 using SqlSugar;
 using System;
 using System.IO;
+using TiaoTiaoCode.NLogger;
 
 namespace AY.DNF.GMTool.Db
 {
@@ -59,6 +60,8 @@ namespace AY.DNF.GMTool.Db
         {
             try
             {
+                TiaoTiaoNLogger.FastNoDatabaseInit();
+
                 _dTaiwan = new SqlSugarScope(new ConnectionConfig
                 {
                     DbType = DbType.MySql,
@@ -120,12 +123,12 @@ namespace AY.DNF.GMTool.Db
                     _gmToolDb.CodeFirst.InitTables(typeof(EquipDictionary));
                     _gmToolDb.CodeFirst.InitTables(typeof(DungeonDictionary));
                 }
-                _gmToolDb.Ado.CheckConnection();
-
+                _gmToolDb.Ado.CheckConnection();                
                 return true;
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+                TiaoTiaoNLogger.LogDebug(ex.Message);
                 return false;
             }
         }

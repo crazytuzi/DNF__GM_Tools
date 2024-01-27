@@ -119,6 +119,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
         public ICommand RechargeCommand => _rechargeCommand ??= new DelegateCommand<string>(DoRechargeCommand);
 
+        ICommand _changedJobCommand;
+
+        public ICommand ChangedJobCommand => _changedJobCommand ??= new DelegateCommand<string>(DoChangedJobCommand);
+
         /// <summary>
         /// 清理背包
         /// </summary>
@@ -231,6 +235,17 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             }
 
             OperateMsg = $"{msgTitle}充值操作{(b ? "成功" : "失败")}";
+        }
+
+        void DoChangedJobCommand(string characNo)
+        {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
+            Growl.Warning("待开发");
         }
 
         async void DoClearBagCommand(string characNo)

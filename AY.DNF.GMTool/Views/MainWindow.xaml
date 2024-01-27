@@ -91,12 +91,19 @@
             Background="Transparent"
             WindowChrome.IsHitTestVisibleInChrome="True">
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Content="&#xe624;" Style="{StaticResource ControlButtonStyle}" Click="MinClick"/>
-                <Button Content="&#xe600;" Style="{StaticResource ControlButtonStyle}" Click="MaxClick"/>
+                <Button
+                    Click="MinClick"
+                    Content="&#xe624;"
+                    Style="{StaticResource ControlButtonStyle}" />
+                <Button
+                    Click="MaxClick"
+                    Content="&#xe600;"
+                    Style="{StaticResource ControlButtonStyle}" />
                 <Button
                     Background="DarkRed"
+                    Command="{Binding AppCloseCommand}"
                     Content="&#xe609;"
-                    Style="{StaticResource ControlButtonStyle}" Command="{Binding AppCloseCommand}"/>
+                    Style="{StaticResource ControlButtonStyle}" />
             </StackPanel>
         </Border>
 
@@ -310,6 +317,10 @@
                     CommandParameter="Postal"
                     Content="邮件功能" />
                 <RadioButton Content="活动管理" />
+                <RadioButton
+                    Command="{Binding GMToolCommand}"
+                    CommandParameter="Pvf"
+                    Content="Script.Pvf处理" />
                 <RadioButton
                     Command="{Binding GMToolCommand}"
                     CommandParameter="BubbleTimer"

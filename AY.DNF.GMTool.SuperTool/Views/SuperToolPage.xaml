@@ -144,9 +144,9 @@
                     <Button
                         Grid.RowSpan="2"
                         Grid.Column="1"
-                        Content="转职"
-                          CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                        Command="{Binding ChangedJobCommand}"/>
+                        Command="{Binding ChangedJobCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="转职" />
                 </Grid>
             </GroupBox>
         </UniformGrid>
@@ -192,7 +192,10 @@
                     Command="{Binding ExpertJobFullCommand}"
                     CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Content="副职满级" />
-                <Button Content="全图地狱" />
+                <Button
+                    Command="{Binding AllHellCommand}"
+                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Content="全图地狱" />
             </UniformGrid>
         </UniformGrid>
     </Grid>

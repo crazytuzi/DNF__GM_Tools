@@ -170,6 +170,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
         public ICommand ChangeJobCommand => _changeJobCommand ??= new DelegateCommand<string>(DoChangeJobCommand);
 
+        ICommand _allHellCommand;
+
+        public ICommand AllHellCommand => _allHellCommand ??= new DelegateCommand<string>(DoAllHellCommand);
+
         #endregion
 
         public SuperToolPageViewModel()
@@ -335,6 +339,21 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
                 InputCountVisibility = Visibility.Visible;
                 PVPVisibility = Visibility.Hidden;
             }
+        }
+
+        /// <summary>
+        /// 全图地狱
+        /// </summary>
+        async void DoAllHellCommand(string uid)
+        {
+            if (string.IsNullOrWhiteSpace(uid))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
+            var b = await new MemberService().AllHell(int.Parse(uid));
+            OperateMsg = $"全力地狱{(b ? "成功" : "失败")}";
         }
 
 

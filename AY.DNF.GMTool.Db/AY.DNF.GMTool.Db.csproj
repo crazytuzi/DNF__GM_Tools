@@ -15,10 +15,4 @@
     <PackageReference Include="TiaoTiaoCode.BasicDbCore" Version="1.0.20240122" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="LocalData\DNF.mdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

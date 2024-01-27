@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.BubbleTimer",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.SuperTool", "AY.DNF.GMTool.SuperTool\AY.DNF.GMTool.SuperTool.csproj", "{EF4D85D1-80AD-4EEA-B47A-431BF102445C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AY.DNF.GMTool.Postal", "AY.DNF.GMTool.Postal\AY.DNF.GMTool.Postal.csproj", "{AB5177C0-65E6-49DA-8FA3-CE89124A1D41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.Postal", "AY.DNF.GMTool.Postal\AY.DNF.GMTool.Postal.csproj", "{AB5177C0-65E6-49DA-8FA3-CE89124A1D41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AY.DNF.GMTool.Pvf", "AY.DNF.GMTool.Pvf\AY.DNF.GMTool.Pvf.csproj", "{15A7B7B6-F6B9-4D3D-9387-846ACD2E6BC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{AB5177C0-65E6-49DA-8FA3-CE89124A1D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB5177C0-65E6-49DA-8FA3-CE89124A1D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB5177C0-65E6-49DA-8FA3-CE89124A1D41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A7B7B6-F6B9-4D3D-9387-846ACD2E6BC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A7B7B6-F6B9-4D3D-9387-846ACD2E6BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A7B7B6-F6B9-4D3D-9387-846ACD2E6BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A7B7B6-F6B9-4D3D-9387-846ACD2E6BC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -172,11 +172,10 @@ namespace AY.DNF.GMTool.Postal.ViewModels
 
         async void DoSearchCommand()
         {
+            Items.Clear();
             if (string.IsNullOrWhiteSpace(SearchText))
-            {
-                Items.Clear();
                 return;
-            }
+
             var list = await new LocalItemsService().SearchItems(SearchText);
             Items.AddRange(list.Select(t => new ItemModel
             {

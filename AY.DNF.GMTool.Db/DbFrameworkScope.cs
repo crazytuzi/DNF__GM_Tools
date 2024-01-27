@@ -1,4 +1,5 @@
-﻿using SqlSugar;
+﻿using AY.DNF.GMTool.Db.DbModels.GMTool;
+using SqlSugar;
 using System;
 using System.IO;
 
@@ -13,7 +14,7 @@ namespace AY.DNF.GMTool.Db
         static SqlSugarScope? _taiwanBillinig;
         static SqlSugarScope? _taiwanCain2nd;
         static SqlSugarScope? _localDb;
-
+        static SqlSugarScope? _gmToolDb;
         /// <summary>
         /// 用户信息库
         /// </summary>
@@ -39,6 +40,11 @@ namespace AY.DNF.GMTool.Db
         /// 本地数据
         /// </summary>
         public static SqlSugarScope LocalDb => _localDb!;
+
+        /// <summary>
+        /// GM工具数据库
+        /// </summary>
+        public static SqlSugarScope GMToolDb => _gmToolDb!;
 
         #endregion
 
@@ -93,11 +99,28 @@ namespace AY.DNF.GMTool.Db
                     IsAutoCloseConnection = true
                 });
 
+                var sqliteDb = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LocalData", "dnf.db");
+                _gmToolDb = new SqlSugarScope(new ConnectionConfig
+                {
+                    DbType = DbType.Sqlite,
+                    ConfigId = "gm_tool",
+                    ConnectionString = $"DataSource={sqliteDb}",
+                    IsAutoCloseConnection = true,
+                });
+
                 _dTaiwan.Ado.CheckConnection();
                 _taiwanCain.Ado.CheckConnection();
                 _taiwanBillinig.Ado.CheckConnection();
                 _taiwanCain2nd.Ado.CheckConnection();
                 _localDb.Ado.CheckConnection();
+
+                if (!File.Exists(sqliteDb))
+                {
+                    _gmToolDb.DbMaintenance.CreateDatabase();
+                    _gmToolDb.CodeFirst.InitTables(typeof(EquipDictionary));
+                    _gmToolDb.CodeFirst.InitTables(typeof(DungeonDictionary));
+                }
+                _gmToolDb.Ado.CheckConnection();
 
                 return true;
             }

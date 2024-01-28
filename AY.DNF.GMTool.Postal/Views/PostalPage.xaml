@@ -102,6 +102,8 @@
                 TextWrapping="Wrap" />
             <TextBlock
                 Grid.Row="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 FontSize="16"
                 Foreground="Red"
                 Text="{Binding Msg}" />

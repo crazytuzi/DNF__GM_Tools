@@ -204,35 +204,35 @@
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
                     <TextBlock Width="100">
-                        <Run Text="角色编号 " />
+                        <Run FontWeight="Bold" Text="角色编号 " />
                         <Run Text="{Binding CurMemberInfo.CharacNo}" />
                     </TextBlock>
                     <TextBlock Width="100">
-                        <Run Text="用色名 " />
+                        <Run FontWeight="Bold" Text="用色名 " />
                         <Run Text="{Binding CurMemberInfo.CharacName}" />
                     </TextBlock>
                     <TextBlock Width="100">
-                        <Run Text="等级 " />
+                        <Run FontWeight="Bold" Text="等级 " />
                         <Run Text="{Binding CurMemberInfo.Level}" />
                     </TextBlock>
                     <TextBlock Width="100">
-                        <Run Text="职业 " />
+                        <Run FontWeight="Bold" Text="职业 " />
                         <Run Text="{Binding CurMemberInfo.Job}" />
                     </TextBlock>
                     <TextBlock Width="100">
-                        <Run Text="副职业 " />
+                        <Run FontWeight="Bold" Text="副职业 " />
                         <Run Text="{Binding CurMemberInfo.ExpertJob}" />
                     </TextBlock>
                     <TextBlock Width="150">
-                        <Run Text="金币 " />
+                        <Run FontWeight="Bold" Text="金币 " />
                         <Run Text="{Binding CurMemberInfo.Money}" />
                     </TextBlock>
-                    <TextBlock Width="100">
-                        <Run Text="VIP角色 " />
+                    <TextBlock Width="150">
+                        <Run FontWeight="Bold" Text="VIP角色 " />
                         <Run Text="{Binding CurMemberInfo.VIP}" />
                     </TextBlock>
                     <TextBlock Width="200">
-                        <Run Text="最近下线 " />
+                        <Run FontWeight="Bold" Text="最近下线 " />
                         <Run Text="{Binding CurMemberInfo.LastPlayTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                     </TextBlock>
                 </StackPanel>
@@ -316,7 +316,10 @@
                     Command="{Binding GMToolCommand}"
                     CommandParameter="Postal"
                     Content="邮件功能" />
-                <RadioButton Content="活动管理" />
+                <RadioButton
+                    Command="{Binding GMToolCommand}"
+                    CommandParameter="ActivityEvent"
+                    Content="活动管理" />
                 <RadioButton
                     Command="{Binding GMToolCommand}"
                     CommandParameter="Pvf"

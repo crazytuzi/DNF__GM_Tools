@@ -23,10 +23,7 @@ namespace AY.DNF.GMTool.Views
 
         private void MinClick(object sender, RoutedEventArgs e)
         {
-            //WindowState = WindowState.Minimized;
-            var path = "D:\\99Game\\DNF GM\\Script.pvf";
-            var bytes =File.ReadAllBytes(path);
-            
+            WindowState = WindowState.Minimized;
         }
     }
 }

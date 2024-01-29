@@ -66,6 +66,13 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
             }
         }
 
+        private bool _addEnabled;
+
+        public bool AddEnabled
+        {
+            get { return _addEnabled; }
+            set { SetProperty(ref _addEnabled, value); }
+        }
 
         private EventInfoModel? _selectedEvent;
 
@@ -76,7 +83,12 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
             {
                 SetProperty(ref _selectedEvent, value);
 
-                if (value == null) Msg = string.Empty;
+                AddEnabled = value != null;
+                if (value == null)
+                {
+                    Msg = string.Empty;
+                    return;
+                }
 
                 var plain = value!.EventExplain;
 
@@ -100,9 +112,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
 
         #region 命令
 
-        ICommand _refreshCurrentAcitivitiesCommandCommand;
+        ICommand _refreshCurrentActivitiesCommand;
 
-        public ICommand RefreshCurrentAcitivitiesCommandCommand => _refreshCurrentAcitivitiesCommandCommand ??= new DelegateCommand(DoRefreshCurrentAcitivitiesCommandCommand);
+        public ICommand RefreshCurrentActivitiesCommand => _refreshCurrentActivitiesCommand ??= new DelegateCommand(DoRefreshCurrentActivitiesCommand);
 
         ICommand _addEventCommand;
 
@@ -116,7 +128,7 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
 
         public ActivityEventPageViewModel()
         {
-            DoRefreshCurrentAcitivitiesCommandCommand();
+            DoRefreshCurrentActivitiesCommand();
 
             LoadEvents();
         }
@@ -131,7 +143,7 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         /// <summary>
         /// 当前活动
         /// </summary>
-        async void DoRefreshCurrentAcitivitiesCommandCommand()
+        async void DoRefreshCurrentActivitiesCommand()
         {
             Activities.Clear();
 
@@ -155,9 +167,10 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
                 Parameter2 = Param2
             });
 
-            Msg = $"添加_{SelectedEvent.EventId}_活动{(b ? "成功" : "失败")}";
+            SelectedEvent = null;
+            Msg = $"添加活动{(b ? "成功" : "失败")}";
 
-            SelectedEvent = null;            
+            DoRefreshCurrentActivitiesCommand();
         }
 
         async void DoDeleteCurrentActivityCommand()
@@ -176,7 +189,7 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
             SelectedCurEvent = null;
             DelEnabled = false;
 
-            DoRefreshCurrentAcitivitiesCommandCommand();
+            DoRefreshCurrentActivitiesCommand();
         }
     }
 }

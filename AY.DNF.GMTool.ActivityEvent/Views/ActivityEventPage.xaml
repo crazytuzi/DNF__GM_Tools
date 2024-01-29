@@ -15,8 +15,8 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <GroupBox
@@ -99,7 +99,7 @@
                     Width="120"
                     Height="40"
                     Margin="3"
-                    Command="{Binding RefreshCurrentAcitivitiesCommand}"
+                    Command="{Binding RefreshCurrentActivitiesCommand}"
                     Content="刷新当前活动" />
                 <Button
                     Width="120"
@@ -124,12 +124,11 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
-                        <TextBlock Margin="3" Text="参数1" />
-                        <TextBox
-                            Width="100"
+                        <TextBlock
                             Margin="3"
-                            Text="{Binding Param1}" />
-                        <TextBlock Margin="3" Text="参数1" />
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Text="参数1" />
                         <TextBox
                             Width="100"
                             Margin="3"
@@ -139,7 +138,19 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
-                        <Button Command="{Binding AddEventCommand}" Content="添加活动" />
+                        <TextBlock
+                            Margin="3"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Text="参数2" />
+                        <TextBox
+                            Width="100"
+                            Margin="3"
+                            Text="{Binding Param2}" />
+                        <Button
+                            Command="{Binding AddEventCommand}"
+                            Content="添加活动"
+                            IsEnabled="{Binding AddEnabled}" />
                     </StackPanel>
                 </StackPanel>
             </GroupBox>

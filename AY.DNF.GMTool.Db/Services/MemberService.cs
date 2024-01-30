@@ -23,6 +23,8 @@ where delete_flag!=1 ";
             //var info = await DbFrameworkScope.TaiwanCain.SqlQueryable<CharacInfo>(sql).FirstAsync();
             if (info == null) return null;
             var exInfo = await DbFrameworkScope.TaiwanCain.Queryable<CharacStat>().Where(t => t.CharacNo == characNo).FirstAsync();
+            //var exInfoDt = await DbFrameworkScope.TaiwanCain.Queryable<CharacStat>().Where(t => t.CharacNo == characNo).ToDataTableAsync();
+            //var lastPlayTime = exInfoDt == null ? DateTime.MinValue.ToString() : exInfoDt.Rows[0]["last_play_time"].ToString();
 
             var money = await DbFrameworkScope.TaiwanCain2nd.Queryable<Inventory>().Where(t => t.CharacNo == characNo).FirstAsync();
 
@@ -32,6 +34,7 @@ where delete_flag!=1 ";
                 CharacName = info.CharacName,
                 Level = info.Lev,
                 LastPlayTime = exInfo.LastPlayTime.ToString().Equals("0000-00-00 00:00:00") ? DateTime.MinValue : DateTime.Parse(exInfo.LastPlayTime.ToString()),
+                //lastPlayTime.Equals("0000-00-00 00:00:00") ? DateTime.MinValue : DateTime.Parse(lastPlayTime.ToString()),
                 Job = $"{info.Job}_{info.GrowType}",
                 ExpertJob = info.ExpertJob,
                 VIP = string.IsNullOrWhiteSpace(info.VIP) ? "VIP" : "非VIP",

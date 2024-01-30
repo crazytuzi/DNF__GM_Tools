@@ -135,6 +135,11 @@
                         Command="{Binding DisconnectCommand}"
                         Content="断开"
                         IsEnabled="{Binding ConnectedForEnabled}" />
+                    <!--<Button
+                        Width="80"
+                        Margin="5"
+                        Command="{Binding TestCommand}"
+                        Content="测试" />-->
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="账号信息">

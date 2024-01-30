@@ -61,7 +61,7 @@ namespace AY.DNF.GMTool.Db.DbModels.taiwan_cain
 		/// <summary>
 		/// 
 		/// </summary>
-		[SugarColumn(ColumnName = "last_play_time" , ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
+		[SugarColumn(ColumnName = "last_play_time", ColumnDataType = "datetime", DefaultValue = "0000-00-00 00:00:00", ColumnDescription = "")]
 		public object? LastPlayTime { get; set; }
 
 		/// <summary>

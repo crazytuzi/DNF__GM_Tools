@@ -32,6 +32,7 @@
                 FontWeight="Normal"
                 HorizontalGridLinesBrush="#33000000"
                 ItemsSource="{Binding Activities}"
+                RowHeight="30"
                 SelectedItem="{Binding SelectedCurEvent}"
                 VerticalGridLinesBrush="#33000000">
                 <DataGrid.Columns>
@@ -67,6 +68,7 @@
                 FontSize="12"
                 HorizontalGridLinesBrush="#33000000"
                 ItemsSource="{Binding ActivityEvents}"
+                RowHeight="30"
                 SelectedItem="{Binding SelectedEvent}"
                 VerticalGridLinesBrush="#33000000">
                 <hc:Interaction.Triggers />

@@ -176,7 +176,8 @@ namespace AY.DNF.GMTool.Postal.ViewModels
             if (string.IsNullOrWhiteSpace(SearchText))
                 return;
 
-            var list = await new LocalItemsService().SearchItems(SearchText);
+            //var list = await new LocalItemsService().SearchItems(SearchText);
+            var list = await new GMToolService().SearchItems(SearchText);
             Items.AddRange(list.Select(t => new ItemModel
             {
                 ItemId = t.ItemId,

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\LocalItemsService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DbModels\taiwan_cain\" />
     <Folder Include="DbModels\d_taiwain\" />
   </ItemGroup>

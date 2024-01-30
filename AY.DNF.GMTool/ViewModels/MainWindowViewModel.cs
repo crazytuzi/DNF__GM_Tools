@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using TiaoTiaoCode.NLogger;
 
 namespace AY.DNF.GMTool.ViewModels
 {
@@ -38,7 +39,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private string _version = "0.0.20240129";
+        private string _version = "0.1.20240130";
 
         public string Version
         {
@@ -270,27 +271,35 @@ namespace AY.DNF.GMTool.ViewModels
         {
             MemberInfos.Clear();
 
-            var loginInfo = await new LoginService().Login(SearchAccount);
-
-            if (loginInfo == null)
+            try
             {
-                Growl.Error("未查询到信息");
-                return;
+
+                var loginInfo = await new LoginService().Login(SearchAccount);
+
+                if (loginInfo == null)
+                {
+                    Growl.Error("未查询到信息");
+                    return;
+                }
+
+                WriteCfg();
+
+                LoginInfo = new LoginBindableModel
+                {
+                    AccountName = loginInfo.AccountName,
+                    DCoin = loginInfo.DCoin,
+                    DPoint = loginInfo.DPoint,
+                    Status = loginInfo.Status,
+                    Uid = loginInfo.Uid,
+                    VIP = loginInfo.VIP
+                };
+
+                MemberInfos.AddRange(loginInfo.MemberInfos);
             }
-
-            WriteCfg();
-
-            LoginInfo = new LoginBindableModel
+            catch (Exception ex)
             {
-                AccountName = loginInfo.AccountName,
-                DCoin = loginInfo.DCoin,
-                DPoint = loginInfo.DPoint,
-                Status = loginInfo.Status,
-                Uid = loginInfo.Uid,
-                VIP = loginInfo.VIP
-            };
-
-            MemberInfos.AddRange(loginInfo.MemberInfos);
+                TiaoTiaoNLogger.LogError(ex.Message, ex);
+            }
         }
 
         /// <summary>
@@ -381,6 +390,53 @@ namespace AY.DNF.GMTool.ViewModels
 
             File.WriteAllText(path, str);
         }
+
+        #endregion
+
+        #region 测试功能
+
+        ICommand _testCommand;
+
+        public ICommand TestCommand => _testCommand ??= new DelegateCommand(DoTestCommand);
+
+        async void DoTestCommand()
+        {
+            //AccessToSqlite();
+        }
+
+        //async void AccessToSqlite()
+        //{
+        //    var allItems = await DbFrameworkScope.LocalDb.Queryable<AllItems>().ToListAsync();
+
+        //    await DbFrameworkScope.GMToolDb.Deleteable<LocalAllItems>().ExecuteCommandAsync();
+
+        //    // Write to sqlite
+        //    await DbFrameworkScope.GMToolDb.Insertable(allItems.Select(t => new LocalAllItems
+        //    {
+        //        Id = Guid.NewGuid().ToString("n"),
+        //        ItemId = t.ItemId,
+        //        ItemName = t.ItemName,
+        //        Sort = t.Sort
+        //    }).ToList()).ExecuteCommandAsync();
+
+        //    var equips = await DbFrameworkScope.LocalDb.Queryable<Equips>().ToListAsync();
+        //    await DbFrameworkScope.GMToolDb.Insertable(equips.Select(t => new LocalAllItems
+        //    {
+        //        Id = Guid.NewGuid().ToString("n"),
+        //        ItemId = t.ItemId,
+        //        ItemName = t.ItemName,
+        //        Sort = t.Sort
+        //    }).ToList()).ExecuteCommandAsync();
+
+        //    var materials = await DbFrameworkScope.LocalDb.Queryable<Materials>().ToListAsync();
+        //    await DbFrameworkScope.GMToolDb.Insertable(materials.Select(t => new LocalAllItems
+        //    {
+        //        Id = Guid.NewGuid().ToString("n"),
+        //        ItemId = t.ItemId,
+        //        ItemName = t.ItemName,
+        //        Sort = t.Sort
+        //    }).ToList()).ExecuteCommandAsync();
+        //}
 
         #endregion
     }

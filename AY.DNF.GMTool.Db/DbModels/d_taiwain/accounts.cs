@@ -28,17 +28,17 @@ namespace AY.DNF.GMTool.Db.DbModels.d_taiwan
 		[SugarColumn(ColumnName = "password" , ColumnDataType = "varchar", Length = 255, ColumnDescription = "")]
 		public string Password { get; set; } = string.Empty;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[SugarColumn(ColumnName = "qq" , ColumnDataType = "varchar", Length = 255, IsNullable = true, ColumnDescription = "")]
-		public string? Qq { get; set; }
+		///// <summary>
+		///// 
+		///// </summary>
+		//[SugarColumn(ColumnName = "qq" , ColumnDataType = "varchar", Length = 255, IsNullable = true, ColumnDescription = "")]
+		//public string? Qq { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[SugarColumn(ColumnName = "ip" , ColumnDataType = "varchar", Length = 255, IsNullable = true, ColumnDescription = "")]
-		public string? Ip { get; set; }
+		///// <summary>
+		///// 
+		///// </summary>
+		//[SugarColumn(ColumnName = "ip" , ColumnDataType = "varchar", Length = 255, IsNullable = true, ColumnDescription = "")]
+		//public string? Ip { get; set; }
 
 		/// <summary>
 		/// 

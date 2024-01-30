@@ -39,7 +39,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private string _version = "0.1.20240130";
+        private string _version = "0.2.20240130";
 
         public string Version
         {

@@ -3,10 +3,14 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>AY.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Fonts\iconfont.ttf" />
     <None Remove="Assets\Images\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AY.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="HandyControl" Version="3.4.0" />

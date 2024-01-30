@@ -63,7 +63,7 @@
                 VerticalGridLinesBrush="#33000000">
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                        Width="150"
+                        Width="250"
                         Binding="{Binding ItemName}"
                         Header="物品名称" />
                     <DataGridTextColumn

@@ -186,6 +186,9 @@ namespace AY.DNF.GMTool.ViewModels
 
         public ICommand RowClickCommand => _rowClickCommand ??= new DelegateCommand<SimpleMemberInfoModel>(DoRowClickCommand);
 
+        ICommand _changePwdCommand;
+
+        public ICommand ChangePwdCommand => _changePwdCommand ??= new DelegateCommand(DoChangePwdCommand);       
 
         #endregion
 
@@ -356,6 +359,16 @@ namespace AY.DNF.GMTool.ViewModels
                 CurMemberInfo.Job = jobArr[1];
         }
 
+        void DoChangePwdCommand()
+        {
+            if (string.IsNullOrWhiteSpace(Pwd))
+                Pwd = "123456";
+            else if (Pwd == "123456")
+                Pwd = "uu5!^%jg";
+            else
+                Pwd = "123456";
+        }
+
         #region 连接配置
 
         void LoadCfg()
@@ -438,7 +451,7 @@ namespace AY.DNF.GMTool.ViewModels
         //    }).ToList()).ExecuteCommandAsync();
         //}
 
-        #endregion
+        #endregion        
     }
 }
 

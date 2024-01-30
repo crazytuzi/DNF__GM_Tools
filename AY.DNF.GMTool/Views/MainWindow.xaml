@@ -109,38 +109,56 @@
 
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
             <GroupBox Header="数据库设置">
-                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <TextBlock Text="IP地址" />
-                    <TextBox Width="150" Text="{Binding Server, Mode=TwoWay}" />
-                    <TextBlock Text="用户名" />
-                    <TextBox Text="{Binding UserName, Mode=TwoWay}" />
-                    <TextBlock Text="密码" />
-                    <TextBox
-                        Name="pwd"
-                        Width="100"
-                        Margin="5"
-                        Text="{Binding Pwd, Mode=TwoWay}" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock Text="IP地址" />
+                        <TextBox Width="150" Text="{Binding Server, Mode=TwoWay}" />
+                        <TextBlock Text="用户名" />
+                        <TextBox Text="{Binding UserName, Mode=TwoWay}" />
+                        <TextBlock Text="密码" />
+                        <TextBox
+                            Name="pwd"
+                            Width="100"
+                            Margin="5"
+                            Text="{Binding Pwd, Mode=TwoWay}" />
 
-                    <TextBlock Text="端口" />
-                    <TextBox Text="{Binding Port, Mode=TwoWay}" />
-                    <Button
-                        Width="80"
-                        Margin="5"
-                        Command="{Binding ConnectCommand}"
-                        Content="连接"
-                        IsEnabled="{Binding OpenEnabled}" />
-                    <Button
-                        Width="80"
-                        Margin="5"
-                        Command="{Binding DisconnectCommand}"
-                        Content="断开"
-                        IsEnabled="{Binding ConnectedForEnabled}" />
-                    <!--<Button
-                        Width="80"
-                        Margin="5"
-                        Command="{Binding TestCommand}"
-                        Content="测试" />-->
-                </StackPanel>
+                        <TextBlock Text="端口" />
+                        <TextBox Text="{Binding Port, Mode=TwoWay}" />
+                        <Button
+                            Width="80"
+                            Margin="5"
+                            Command="{Binding ConnectCommand}"
+                            Content="连接"
+                            IsEnabled="{Binding OpenEnabled}" />
+                        <Button
+                            Width="80"
+                            Margin="5"
+                            Command="{Binding DisconnectCommand}"
+                            Content="断开"
+                            IsEnabled="{Binding ConnectedForEnabled}" />
+                        <Button
+                            Width="80"
+                            Margin="5"
+                            Command="{Binding ChangePwdCommand}"
+                            Content="切换密码" />
+                        <!--<Button
+         Width="80"
+         Margin="5"
+         Command="{Binding TestCommand}"
+         Content="测试" />-->
+                    </StackPanel>
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="100,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="Red"
+                        Text="切换密码：因为不同版本数据库密码可能不同，方便切换，不用记忆" />
+                </Grid>
             </GroupBox>
             <GroupBox Header="账号信息">
                 <Grid>

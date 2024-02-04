@@ -1,5 +1,4 @@
 ﻿using AY.DNF.GMTool.Db.DbModels.GMTool;
-using AY.DNF.GMTool.Db.DbModels.local;
 using SqlSugar;
 using System;
 using System.IO;
@@ -116,12 +115,12 @@ namespace AY.DNF.GMTool.Db
                 _taiwanCain2nd.Ado.CheckConnection();
                 //_localDb.Ado.CheckConnection();
 
-                if (!_gmToolDb.DbMaintenance.IsAnyTable("DungeonDictionary"))
-                    _gmToolDb.CodeFirst.InitTables(typeof(DungeonDictionary));
-                if (!_gmToolDb.DbMaintenance.IsAnyTable("EquipDictionary"))
-                    _gmToolDb.CodeFirst.InitTables(typeof(EquipDictionary));
-                if (!_gmToolDb.DbMaintenance.IsAnyTable("LocalAllItems"))
-                    _gmToolDb.CodeFirst.InitTables(typeof(LocalAllItems));
+                if (!_gmToolDb.DbMaintenance.IsAnyTable("Equipments"))
+                    _gmToolDb.CodeFirst.InitTables(typeof(Equipments));
+                if (!_gmToolDb.DbMaintenance.IsAnyTable("Stackables"))
+                    _gmToolDb.CodeFirst.InitTables(typeof(Stackables));
+                if (!_gmToolDb.DbMaintenance.IsAnyTable("Dungeons"))
+                    _gmToolDb.CodeFirst.InitTables(typeof(Dungeons));
 
                 _gmToolDb.Ado.CheckConnection();
                 return true;

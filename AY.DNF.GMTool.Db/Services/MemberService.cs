@@ -125,7 +125,7 @@ where delete_flag!=1 ";
         public async Task<bool> AllHell(int uid)
         {
             var dungeonStr = "1|1,2|3,3|3,4|3,5|3,6|3,7|3,8|3,9|3,11|3,12|3,13|3,14|3,15|3,17|3,21|3,22|3,23|3,24|3,25|3,26|3,27|3,31|3,32|3,33|3,34|3,35|3,36|3,37|3,40|3,41|2,42|3,43|3,44|3,45|3,50|3,51|3,52|3,53|3,60|3,61|3,65|2,66|1,67|2,70|3,71|3,72|3,73|3,74|3,75|3,76|3,77|3,80|3,81|3,82|3,83|3,84|3,85|3,86|3,87|3,88|3,89|3,90|3,91|2,92|3,93|3,100|3,101|3,102|3,103|3,104|3,110|3,111|3,112|3,140|3,141|3,502|3,511|3,521|3,1000|3,1500|3,1501|3,1502|3,1504|1,1506|3,3506|3,10000|3";
-            var dungeon = await DbFrameworkScope.GMToolDb.Queryable<DungeonDictionary>().ToListAsync();
+            var dungeon = await DbFrameworkScope.GMToolDb.Queryable<Dungeons>().ToListAsync();
             if (dungeon != null && dungeon.Count > 0)
                 dungeonStr = dungeon.Aggregate(string.Empty, (x, y) => x += $"{y.Id}|3,").TrimEnd(',');
 

@@ -15,8 +15,8 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition />
+            <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
@@ -40,42 +40,17 @@
                 Text="{Binding PvfPath, Mode=TwoWay}" />
             <Button
                 Width="120"
-                Height="25"
+                Height="35"
                 Margin="3"
                 Click="PvfFileSelectClick"
                 Content="选择" />
             <Button
                 Width="120"
-                Height="25"
+                Height="35"
                 Margin="3"
                 Command="{Binding PvfParseCommand}"
-                Content="解析" />
+                Content="解析并导入" />
         </StackPanel>
-
-        <Grid
-            Grid.Row="1"
-            Grid.ColumnSpan="4"
-            Margin="5"
-            Background="#33000000"
-            Visibility="{Binding IsLoading}">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <hc:LoadingLine
-                Grid.Row="1"
-                Background="#33000000"
-                Style="{StaticResource LoadingLineLarge}" />
-            <TextBlock
-                Grid.Row="2"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="16"
-                Foreground="Orange"
-                Text="{Binding LoadingText}" />
-        </Grid>
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -85,26 +60,12 @@
             <TextBlock
                 Margin="3"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Text="地下城" />
-            <ScrollViewer Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding DungeonItems}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
+                VerticalAlignment="Center">
+                <Run FontWeight="Bold" Text="地下城 " />
+                <Run FontSize="8" Text="{Binding DungeonCount}" />
+            </TextBlock>
 
-                                <TextBlock Text="{Binding Id}" />
-                                <TextBlock Grid.Column="1" Text="{Binding Name}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <ListBox Grid.Row="1" ItemsSource="{Binding DungeonLogs}" />
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="1">
@@ -116,26 +77,27 @@
             <TextBlock
                 Margin="3"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Text="装备" />
-            <ScrollViewer Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding EquipItems}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
+                VerticalAlignment="Center">
+                <Run FontWeight="Bold" Text="装备 " />
+                <Run FontSize="8" Text="{Binding EquipmentCount}" />
+            </TextBlock>
+            <ListBox Grid.Row="1" ItemsSource="{Binding EquipmentLogs}" />
+        </Grid>
 
-                                <TextBlock Text="{Binding ItemId}" />
-                                <TextBlock Grid.Column="1" Text="{Binding ItemName}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+        <Grid Grid.Row="1" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Margin="3"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center">
+                <Run FontWeight="Bold" Text="道具 " />
+                <Run FontSize="8" Text="{Binding StackableCount}" />
+            </TextBlock>
+            <ListBox Grid.Row="1" ItemsSource="{Binding StackableLogs}" />
         </Grid>
     </Grid>
 </UserControl>

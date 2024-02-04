@@ -44,12 +44,24 @@
                 Margin="3"
                 VerticalContentAlignment="Center"
                 Text="{Binding SearchText, Mode=TwoWay}" />
-            <Button
+            <StackPanel
                 Grid.Row="2"
                 Margin="3"
                 HorizontalAlignment="Right"
-                Command="{Binding SearchCommand}"
-                Content="查询" />
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Margin="3"
+                    HorizontalAlignment="Right"
+                    Command="{Binding SearchStackableCommand}"
+                    Content="查询道具" />
+                <Button
+                    Margin="3"
+                    HorizontalAlignment="Right"
+                    Command="{Binding SearchEquipmentCommand}"
+                    Content="查询装备" />
+            </StackPanel>
+
             <DataGrid
                 x:Name="gridItems"
                 Grid.Row="3"

@@ -17,4 +17,10 @@
     <ProjectReference Include="..\AY.DNF.GMTool.Db\AY.DNF.GMTool.Db.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ChineseConverter">
+      <HintPath>..\Libs\ChineseConverter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

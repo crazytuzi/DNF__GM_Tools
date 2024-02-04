@@ -151,9 +151,12 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         ICommand _sendAllCommand;
         ICommand _deleteCommand;
         ICommand _deleteAllCommand;
-        ICommand _searchCommand;
+        ICommand _searchStackableCommand;
+        ICommand _searchEquipmentCommand;
 
-        public ICommand SearchCommand => _searchCommand ??= new DelegateCommand(DoSearchCommand);
+        public ICommand SearchStackableCommand => _searchStackableCommand ??= new DelegateCommand(DoSearchStackableCommand);
+
+        public ICommand SearchEquipmentCommand => _searchEquipmentCommand ??= new DelegateCommand(DoSearchEquipmentCommand);
 
         public ICommand SendCommand => _sendCommand ??= new DelegateCommand<string>(DoSendCommand);
 
@@ -170,14 +173,41 @@ namespace AY.DNF.GMTool.Postal.ViewModels
 
         }
 
-        async void DoSearchCommand()
+        async void DoSearchStackableCommand()
         {
             Items.Clear();
             if (string.IsNullOrWhiteSpace(SearchText))
                 return;
 
-            //var list = await new LocalItemsService().SearchItems(SearchText);
-            var list = await new GMToolService().SearchItems(SearchText);
+            var b = await new GMToolService().StackablesHasData();
+            if (!b)
+            {
+                Growl.Warning("请先导入Script.pvf");
+                return;
+            }
+
+            var list = await new GMToolService().SearchStackables(SearchText);
+            Items.AddRange(list.Select(t => new ItemModel
+            {
+                ItemId = t.ItemId,
+                ItemName = t.ItemName
+            }));
+        }
+
+        async void DoSearchEquipmentCommand()
+        {
+            Items.Clear();
+            if (string.IsNullOrWhiteSpace(SearchText))
+                return;
+
+            var b = await new GMToolService().EquipmentsHasData();
+            if (!b)
+            {
+                Growl.Warning("请先导入Script.pvf");
+                return;
+            }
+
+            var list = await new GMToolService().SearchEquipments(SearchText);
             Items.AddRange(list.Select(t => new ItemModel
             {
                 ItemId = t.ItemId,

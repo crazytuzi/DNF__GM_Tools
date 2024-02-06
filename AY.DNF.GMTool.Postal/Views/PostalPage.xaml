@@ -227,17 +227,15 @@
                 <Button
                     Margin="3"
                     Command="{Binding DeleteCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Content="删除邮件" />
                 <!--<Button
                     Margin="3"
                     Command="{Binding SendAllCommand}"
-                    Content="全服发送" />
-
+                    Content="全服发送" />-->
                 <Button
                     Margin="3"
                     Command="{Binding DeleteAllCommand}"
-                    Content="删除全服邮件" />-->
+                    Content="删除全服邮件" />
             </UniformGrid>
         </Grid>
     </Grid>

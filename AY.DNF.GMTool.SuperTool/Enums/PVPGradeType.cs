@@ -1,5 +1,8 @@
 ﻿namespace AY.DNF.GMTool.SuperTool.Enums
 {
+    /// <summary>
+    /// PVP段位
+    /// </summary>
     public enum PVPGradeType
     {
         _10级 = 0,

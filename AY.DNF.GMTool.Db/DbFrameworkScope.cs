@@ -125,7 +125,7 @@ namespace AY.DNF.GMTool.Db
                 _gmToolDb.Ado.CheckConnection();
                 return true;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 TiaoTiaoNLogger.LogDebug(ex.Message);
                 return false;

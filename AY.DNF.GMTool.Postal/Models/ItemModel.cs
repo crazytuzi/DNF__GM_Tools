@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AY.DNF.GMTool.Postal.Models
+﻿namespace AY.DNF.GMTool.Postal.Models
 {
+    /// <summary>
+    /// 查询信息Model
+    /// </summary>
     public class ItemModel
     {
+        /// <summary>
+        /// 物品ID
+        /// </summary>
         public string? ItemId { get; set; }
+
+        /// <summary>
+        /// 物品名
+        /// </summary>
         public string? ItemName { get; set; }
     }
 }

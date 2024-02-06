@@ -23,7 +23,7 @@ namespace AY.DNF.GMTool.Pvf.Views
 
             txtPvfPath.Text = ofd.FileName;
 
-            (this.DataContext as PvfPageViewModel).PvfPath= ofd.FileName;
+            (this.DataContext as PvfPageViewModel)!.PvfPath = ofd.FileName;
         }
     }
 }

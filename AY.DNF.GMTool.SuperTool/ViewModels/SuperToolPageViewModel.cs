@@ -14,15 +14,19 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
     internal class SuperToolPageViewModel : BindableBase
     {
         private string? _operateMsg;
-
+        /// <summary>
+        /// 操作信息
+        /// </summary>
         public string? OperateMsg
         {
             get { return _operateMsg; }
             set { SetProperty(ref _operateMsg, value); }
         }
 
-        private ObservableCollection<KeyValuePair<string, int>> _rechargeTypes = new ObservableCollection<KeyValuePair<string, int>>(EnumHelper.EnumToList<RechargeType>());
-
+        private ObservableCollection<KeyValuePair<string, int>> _rechargeTypes = new();
+        /// <summary>
+        /// 充值类型
+        /// </summary>
         public ObservableCollection<KeyValuePair<string, int>> RechargeTypes
         {
             get { return _rechargeTypes; }
@@ -30,15 +34,19 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
         private int _selectedRecharge;
-
+        /// <summary>
+        /// 选择的充值类型
+        /// </summary>
         public int SelectedRecharge
         {
             get { return _selectedRecharge; }
             set { SetProperty(ref _selectedRecharge, value); }
         }
 
-        private ObservableCollection<KeyValuePair<string, int>> _pvpGradeTypes = new ObservableCollection<KeyValuePair<string, int>>(EnumHelper.EnumToList<PVPGradeType>());
-
+        private ObservableCollection<KeyValuePair<string, int>> _pvpGradeTypes = new();
+        /// <summary>
+        /// PVP 等级类型
+        /// </summary>
         public ObservableCollection<KeyValuePair<string, int>> PVPGradeTypes
         {
             get { return _pvpGradeTypes; }
@@ -46,16 +54,19 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
         private int _selectedPVPGrade;
-
+        /// <summary>
+        /// 选择的PVP类型
+        /// </summary>
         public int SelectedPVPGrade
         {
             get { return _selectedPVPGrade; }
             set { SetProperty(ref _selectedPVPGrade, value); }
         }
 
-
         private int _rechargeCount = 0;
-
+/// <summary>
+/// 充值数量
+/// </summary>
         public int RechargeCount
         {
             get { return _rechargeCount; }
@@ -63,7 +74,9 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
         private Visibility _inputCountVisibility = Visibility.Visible;
-
+        /// <summary>
+        /// 充值数量输入框是否可见
+        /// </summary>
         public Visibility InputCountVisibility
         {
             get { return _inputCountVisibility; }
@@ -71,15 +84,19 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
         private Visibility _pvpVisibility = Visibility.Hidden;
-
+        /// <summary>
+        /// PVP 选择下拉是否可见
+        /// </summary>
         public Visibility PVPVisibility
         {
             get { return _pvpVisibility; }
             set { SetProperty(ref _pvpVisibility, value); }
         }
 
-        private ObservableCollection<KeyValuePair<string, int>> _jobTypes = new ObservableCollection<KeyValuePair<string, int>>(EnumHelper.EnumToList<JobType>());
-
+        private ObservableCollection<KeyValuePair<string, int>> _jobTypes = new();
+        /// <summary>
+        /// 职业数据
+        /// </summary>
         public ObservableCollection<KeyValuePair<string, int>> JobTypes
         {
             get { return _jobTypes; }
@@ -87,15 +104,19 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
         private JobType _selectedJob;
-
+        /// <summary>
+        /// 选中的职业
+        /// </summary>
         public JobType SelectedJob
         {
             get { return _selectedJob; }
             set { SetProperty(ref _selectedJob, value); }
         }
 
-        private ObservableCollection<KeyValuePair<string, int>> _growTypes = new ObservableCollection<KeyValuePair<string, int>>(EnumHelper.EnumToList<GrowJobType>());
-
+        private ObservableCollection<KeyValuePair<string, int>> _growTypes = new();
+        /// <summary>
+        /// 觉醒职业
+        /// </summary>
         public ObservableCollection<KeyValuePair<string, int>> GrowTypes
         {
             get { return _growTypes; }
@@ -103,7 +124,9 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
         private int _selectedGrowJob;
-
+        /// <summary>
+        /// 选中的觉醒职业
+        /// </summary>
         public int SelectedGrowJob
         {
             get { return _selectedGrowJob; }
@@ -112,15 +135,20 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
         #region 命令
 
-        ICommand _clearBagCommand;
-        ICommand _unlimitedWeightCommand;
-        ICommand _openLeftAndRightCommand;
-        ICommand _rechargeCommand;
+        ICommand? _clearBagCommand;
+        ICommand? _unlimitedWeightCommand;
+        ICommand? _openLeftAndRightCommand;
+        ICommand? _rechargeCommand;
 
+        /// <summary>
+        /// 充值
+        /// </summary>
         public ICommand RechargeCommand => _rechargeCommand ??= new DelegateCommand<string>(DoRechargeCommand);
 
-        ICommand _changedJobCommand;
-
+        ICommand? _changedJobCommand;
+        /// <summary>
+        /// 角色转职
+        /// </summary>
         public ICommand ChangedJobCommand => _changedJobCommand ??= new DelegateCommand<string>(DoChangedJobCommand);
 
         /// <summary>
@@ -138,45 +166,53 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// </summary>
         public ICommand OpenLeftAndRightCommand => _openLeftAndRightCommand ??= new DelegateCommand<string>(DoOpenLeftAndRightCommand);
 
-        ICommand _expertJobFullCommand;
+        ICommand? _expertJobFullCommand;
         /// <summary>
         /// 副职满级
         /// </summary>
         public ICommand ExpertJobFullCommand => _expertJobFullCommand ??= new DelegateCommand<string>(DoExpertJobFullCommand);
 
-        ICommand _maxEquipLevelCommand;
+        ICommand? _maxEquipLevelCommand;
         /// <summary>
         /// 解除装备上限
         /// </summary>
         public ICommand MaxEquipLevelCommand => _maxEquipLevelCommand ??= new DelegateCommand<string>(DoMaxEquipLevelCommand);
 
-        ICommand _setVIPCommand;
-
+        ICommand? _setVIPCommand;
+        /// <summary>
+        /// 设置VIP
+        /// </summary>
         public ICommand SetVIPCommand => _setVIPCommand ??= new DelegateCommand<string>(DoSetVIPCommand);
 
-        ICommand _unsetVIPCommand;
-
+        ICommand? _unsetVIPCommand;
+        /// <summary>
+        /// 撤消VIP
+        /// </summary>
         public ICommand UnsetVIPCommand => _unsetVIPCommand ??= new DelegateCommand<string>(DoUnsetVIPCommand);
 
-        ICommand _unsetMemberVIPCommand;
+        ICommand? _unsetMemberVIPCommand;
+        /// <summary>
+        /// 撤消角色 VIP
+        /// </summary>
+        public ICommand UnsetMemberVIPCommand => _unsetMemberVIPCommand ??= new DelegateCommand<string>(DoUnsetMemberVIPCommand);              
 
-        public ICommand UnsetMemberVIPCommand => _unsetMemberVIPCommand ??= new DelegateCommand<string>(DoUnsetMemberVIPCommand);
+        ICommand? _allHellCommand;
+        /// <summary>
+        /// 全图地狱
+        /// </summary>
+        public ICommand AllHellCommand => _allHellCommand ??= new DelegateCommand<string>(DoAllHellCommand);
 
-        ICommand _rechageChangedCommand;
-
-        public ICommand RechargeChangedCommand => _rechageChangedCommand ??= new DelegateCommand(DoRechargeChangedCommand);
-
-        ICommand _jobChangedCommand;
-
+        ICommand? _jobChangedCommand;
+        /// <summary>
+        /// 职业类型下拉变化
+        /// </summary>
         public ICommand JobChangedCommand => _jobChangedCommand ??= new DelegateCommand(DoJobChangedCommand);
 
-        ICommand _changeJobCommand;
-
-        public ICommand ChangeJobCommand => _changeJobCommand ??= new DelegateCommand<string>(DoChangeJobCommand);
-
-        ICommand _allHellCommand;
-
-        public ICommand AllHellCommand => _allHellCommand ??= new DelegateCommand<string>(DoAllHellCommand);
+        ICommand? _rechageChangedCommand;
+        /// <summary>
+        /// 充值类型下拉变化
+        /// </summary>
+        public ICommand RechargeChangedCommand => _rechageChangedCommand ??= new DelegateCommand(DoRechargeChangedCommand);
 
         #endregion
 
@@ -186,6 +222,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
 
+        /// <summary>
+        /// 充值
+        /// </summary>
+        /// <param name="characNo"></param>
         async void DoRechargeCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -197,7 +237,8 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             var cn = int.Parse(characNo);
             var service = new RechargeService();
             var b = false;
-            var msgTitle = string.Empty;
+            string? msgTitle;
+            var extMsg=string.Empty;
 
             if (SelectedRecharge == (int)RechargeType.段位)
             {
@@ -212,31 +253,42 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
                 {
                     case RechargeType.D币:
                         b = await service.RechargeD(cn, RechargeCount, 0);
+                        extMsg = "重新选择角色后生效";
                         break;
                     case RechargeType.D点:
                         b = await service.RechargeD(cn, RechargeCount, 1);
+                        extMsg = "重新选择角色后生效";
                         break;
                     case RechargeType.SP点:
                         b = await service.RechargeSP(cn, RechargeCount);
+                        extMsg = "重启服务后才能生效";
                         break;
                     case RechargeType.QP点:
                         b = await service.RechargeQP(cn, RechargeCount);
+                        extMsg = "重启服务后才能生效";
                         break;
                     case RechargeType.TP点:
                         b = await service.RechargeTP(cn, RechargeCount);
+                        extMsg = "重启服务后才能生效";
                         break;
                     case RechargeType.胜场:
                         b = await service.RechargePVPWin(cn, RechargeCount);
+                        extMsg = "重新选择角色后生效";
                         break;
                     case RechargeType.胜点:
                         b = await service.RechargePVPWinPoint(cn, RechargeCount);
+                        extMsg = "重新选择角色后生效";
                         break;
                 }
             }
 
-            OperateMsg = $"{msgTitle}充值操作{(b ? "成功" : "失败")}";
+            OperateMsg = $"{msgTitle}充值操作{(b ? "成功" : "失败")}\r\n{extMsg}";
         }
 
+        /// <summary>
+        /// 职业转换
+        /// </summary>
+        /// <param name="characNo"></param>
         void DoChangedJobCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -248,6 +300,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             Growl.Warning("待开发");
         }
 
+        /// <summary>
+        /// 清理背包
+        /// </summary>
+        /// <param name="characNo"></param>
         async void DoClearBagCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -260,7 +316,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"背包清理{(b ? "成功" : "失败")}";
         }
 
-
+        /// <summary>
+        /// 无限负重
+        /// </summary>
+        /// <param name="characNo"></param>
         async void DoUnlimitedWeightCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -273,6 +332,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"无限负重设置{(b ? "成功" : "失败")}";
         }
 
+        /// <summary>
+        /// 开左右槽
+        /// </summary>
+        /// <param name="characNo"></param>
         async void DoOpenLeftAndRightCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -285,6 +348,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"开左右槽{(b ? "成功" : "失败")}";
         }
 
+        /// <summary>
+        /// 副职满级
+        /// </summary>
+        /// <param name="characNo"></param>
         async void DoExpertJobFullCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -297,6 +364,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"副职满级{(b ? "成功" : "失败")}";
         }
 
+        /// <summary>
+        /// 解除装备限制
+        /// </summary>
+        /// <param name="characNo"></param>
         async void DoMaxEquipLevelCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -309,6 +380,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"解除装备权限{(b ? "成功" : "失败")}";
         }
 
+        /// <summary>
+        /// VIP设置
+        /// </summary>
+        /// <param name="characNo"></param>
         void DoUnsetMemberVIPCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -320,6 +395,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             Growl.Warning("待开发");
         }
 
+        /// <summary>
+        /// 撤消VIP
+        /// </summary>
+        /// <param name="characNo"></param>
         void DoUnsetVIPCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -331,6 +410,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             Growl.Warning("待开发");
         }
 
+        /// <summary>
+        /// 设置VIP
+        /// </summary>
+        /// <param name="characNo"></param>
         void DoSetVIPCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
@@ -342,6 +425,9 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             Growl.Warning("待开发");
         }
 
+        /// <summary>
+        /// 充值内容变化，UI变化
+        /// </summary>
         void DoRechargeChangedCommand()
         {
             if (SelectedRecharge == (int)RechargeType.段位)
@@ -371,21 +457,12 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"全力地狱{(b ? "成功" : "失败")}";
         }
 
-
+        /// <summary>
+        /// 角色列表变化，觉醒列表变化
+        /// </summary>
         void DoJobChangedCommand()
         {
 
-        }
-
-        void DoChangeJobCommand(string characNo)
-        {
-            if (string.IsNullOrWhiteSpace(characNo))
-            {
-                Growl.Error("请选择游戏角色");
-                return;
-            }
-
-            Growl.Warning("待开发");
         }
     }
 }

@@ -24,23 +24,28 @@ namespace AY.DNF.GMTool.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        IModuleManager _moduleMng;
-        IRegionManager _regionMng;
+        readonly IModuleManager _moduleMng;
+        readonly IRegionManager _regionMng;
 
-        Task _timeTask;
-        CancellationTokenSource _timeTaskCancelTokenSource;
+        readonly Task _timeTask;
+        readonly CancellationTokenSource _timeTaskCancelTokenSource;
 
         #region 属性
 
         private string _title = "DNF GM Tool";
+        /// <summary>
+        /// 工具栏标题
+        /// </summary>
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
 
-        private string _version = "0.0.20240204";
-
+        private string _version = "0.0.20240206";
+        /// <summary>
+        /// 显示的自定义版本号
+        /// </summary>
         public string Version
         {
             get { return _version; }
@@ -132,34 +137,39 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _searchAccount, value); }
         }
 
-        private LoginBindableModel _loginInfo;
+        private LoginBindableModel? _loginInfo;
         /// <summary>
         /// 登录信息
         /// </summary>
-        public LoginBindableModel LoginInfo
+        public LoginBindableModel? LoginInfo
         {
             get { return _loginInfo; }
             set { SetProperty(ref _loginInfo, value); }
         }
 
-        private CurMemberInfoModel _curMemberInfo;
-
-        public CurMemberInfoModel CurMemberInfo
+        private CurMemberInfoModel? _curMemberInfo;
+        /// <summary>
+        /// 当前选中角色信息
+        /// </summary>
+        public CurMemberInfoModel? CurMemberInfo
         {
             get { return _curMemberInfo; }
             set { SetProperty(ref _curMemberInfo, value); }
         }
 
+        /// <summary>
+        /// 角色列表
+        /// </summary>
         public ObservableCollection<SimpleMemberInfoModel> MemberInfos { get; set; } = new ObservableCollection<SimpleMemberInfoModel>();
 
         #endregion
 
         #region 命令
 
-        ICommand _connectCommand;
-        ICommand _searchAccountCommand;
-        ICommand _disconnectCommand;
-        ICommand _gmToolCommand;
+        ICommand? _connectCommand;
+        ICommand? _searchAccountCommand;
+        ICommand? _disconnectCommand;
+        ICommand? _gmToolCommand;
 
         /// <summary>
         /// 连接命令
@@ -182,30 +192,32 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         public ICommand GMToolCommand => _gmToolCommand ??= new DelegateCommand<string>(DoGMToolCommand);
 
-        ICommand _rowClickCommand;
+        ICommand? _rowClickCommand;
+        /// <summary>
+        /// 角色列表点击事件
+        /// </summary>
+        public ICommand RowClickCommand => _rowClickCommand ??= new DelegateCommand<SimpleMemberInfoModel?>(DoRowClickCommand);
 
-        public ICommand RowClickCommand => _rowClickCommand ??= new DelegateCommand<SimpleMemberInfoModel>(DoRowClickCommand);
-
-        ICommand _changePwdCommand;
-
-        public ICommand ChangePwdCommand => _changePwdCommand ??= new DelegateCommand(DoChangePwdCommand);       
+        ICommand? _changePwdCommand;
+        /// <summary>
+        /// 切换密码事件
+        /// </summary>
+        public ICommand ChangePwdCommand => _changePwdCommand ??= new DelegateCommand(DoChangePwdCommand);
 
         #endregion
 
-        ICommand _appCloseCommand;
-
+        ICommand? _appCloseCommand;
+        /// <summary>
+        /// 应用程序关闭
+        /// </summary>
         public ICommand AppCloseCommand => _appCloseCommand ??= new DelegateCommand(() =>
         {
             _timeTaskCancelTokenSource.Cancel();
 
-            if (DbFrameworkScope.TaiwanCain2nd != null)
-                DbFrameworkScope.TaiwanCain2nd.Close();
-            if (DbFrameworkScope.TaiwanCain != null)
-                DbFrameworkScope.TaiwanCain.Close();
-            if (DbFrameworkScope.DTaiwan != null)
-                DbFrameworkScope.DTaiwan.Close();
-            if (DbFrameworkScope.TaiwanBilling != null)
-                DbFrameworkScope.TaiwanBilling.Close();
+            DbFrameworkScope.TaiwanCain2nd?.Close();
+            DbFrameworkScope.TaiwanCain?.Close();
+            DbFrameworkScope.DTaiwan?.Close();
+            DbFrameworkScope.TaiwanBilling?.Close();
 
             Application.Current.Shutdown();
         });
@@ -334,31 +346,36 @@ namespace AY.DNF.GMTool.ViewModels
         /// <summary>
         /// 角色列表点击事件
         /// </summary>
-        async void DoRowClickCommand(SimpleMemberInfoModel memberInfo)
+        async void DoRowClickCommand(SimpleMemberInfoModel? memberInfo)
         {
+            if (memberInfo == null) return;
+
             var detailInfo = await new MemberService().GetDetailMemberInfo(memberInfo.CharacNo);
             if (detailInfo == null)
             {
-                CurMemberInfo = default;
+                CurMemberInfo = null;
                 return;
             }
 
             CurMemberInfo = new CurMemberInfoModel
             {
                 CharacNo = detailInfo.CharacNo.ToString(),
-                CharacName = detailInfo.CharacName.ToString(),
+                CharacName = detailInfo.CharacName!.ToString(),
                 ExpertJob = ((ExpertJobType)Enum.Parse(typeof(ExpertJobType), detailInfo.ExpertJob.ToString())).ToString(),
                 LastPlayTime = detailInfo.LastPlayTime,
                 Level = detailInfo.Level,
                 Money = detailInfo.Money,
                 VIP = detailInfo.VIP
             };
-            var jobArr = detailInfo.Job.Split("_", StringSplitOptions.RemoveEmptyEntries);
+            var jobArr = detailInfo.Job!.Split("_", StringSplitOptions.RemoveEmptyEntries);
             CurMemberInfo.Job = ((JobType)Enum.Parse(typeof(JobType), jobArr[0])).ToString();
             if (jobArr.Length > 1)
                 CurMemberInfo.Job = jobArr[1];
         }
 
+        /// <summary>
+        /// 切换密码
+        /// </summary>
         void DoChangePwdCommand()
         {
             if (string.IsNullOrWhiteSpace(Pwd))
@@ -371,6 +388,9 @@ namespace AY.DNF.GMTool.ViewModels
 
         #region 连接配置
 
+        /// <summary>
+        /// 读取连接相关信息
+        /// </summary>
         void LoadCfg()
         {
             var path = "settings.dat";
@@ -387,6 +407,9 @@ namespace AY.DNF.GMTool.ViewModels
             SearchAccount = cfg.Account;
         }
 
+        /// <summary>
+        /// 连接相关信息写入本地文件
+        /// </summary>
         void WriteCfg()
         {
             var path = "settings.dat";
@@ -404,54 +427,7 @@ namespace AY.DNF.GMTool.ViewModels
             File.WriteAllText(path, str);
         }
 
-        #endregion
-
-        #region 测试功能
-
-        ICommand _testCommand;
-
-        public ICommand TestCommand => _testCommand ??= new DelegateCommand(DoTestCommand);
-
-        async void DoTestCommand()
-        {
-            //AccessToSqlite();
-        }
-
-        //async void AccessToSqlite()
-        //{
-        //    var allItems = await DbFrameworkScope.LocalDb.Queryable<AllItems>().ToListAsync();
-
-        //    await DbFrameworkScope.GMToolDb.Deleteable<LocalAllItems>().ExecuteCommandAsync();
-
-        //    // Write to sqlite
-        //    await DbFrameworkScope.GMToolDb.Insertable(allItems.Select(t => new LocalAllItems
-        //    {
-        //        Id = Guid.NewGuid().ToString("n"),
-        //        ItemId = t.ItemId,
-        //        ItemName = t.ItemName,
-        //        Sort = t.Sort
-        //    }).ToList()).ExecuteCommandAsync();
-
-        //    var equips = await DbFrameworkScope.LocalDb.Queryable<Equips>().ToListAsync();
-        //    await DbFrameworkScope.GMToolDb.Insertable(equips.Select(t => new LocalAllItems
-        //    {
-        //        Id = Guid.NewGuid().ToString("n"),
-        //        ItemId = t.ItemId,
-        //        ItemName = t.ItemName,
-        //        Sort = t.Sort
-        //    }).ToList()).ExecuteCommandAsync();
-
-        //    var materials = await DbFrameworkScope.LocalDb.Queryable<Materials>().ToListAsync();
-        //    await DbFrameworkScope.GMToolDb.Insertable(materials.Select(t => new LocalAllItems
-        //    {
-        //        Id = Guid.NewGuid().ToString("n"),
-        //        ItemId = t.ItemId,
-        //        ItemName = t.ItemName,
-        //        Sort = t.Sort
-        //    }).ToList()).ExecuteCommandAsync();
-        //}
-
-        #endregion        
+        #endregion    
     }
 }
 

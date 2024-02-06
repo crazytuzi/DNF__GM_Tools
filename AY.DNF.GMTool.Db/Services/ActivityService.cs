@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Db.Services
 {
+    /// <summary>
+    /// 活动管理服务
+    /// </summary>
     public class ActivityService
     {
         /// <summary>

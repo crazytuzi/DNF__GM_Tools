@@ -14,13 +14,12 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
 {
     public class BubbleTimerPageViewModel : BindableBase
     {
-        Task _intervalTask;
-        CancellationTokenSource _cancellationTokenSource;
-
+        Task? _intervalTask;
+        CancellationTokenSource? _cancellationTokenSource;
 
         #region 属性
 
-        private bool _isUseDCoin;
+        private bool _isUseDCoin = true;
 
         /// <summary>
         /// 是否启用D币
@@ -91,8 +90,7 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
             set { SetProperty(ref _runInfo, value); }
         }
 
-
-        private ObservableCollection<RunLogModel> _runLogs = new ObservableCollection<RunLogModel>();
+        private ObservableCollection<RunLogModel> _runLogs = new();
         /// <summary>
         /// 运行日志
         /// </summary>
@@ -102,23 +100,33 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
             set { SetProperty(ref _runLogs, value); }
         }
 
-
         #endregion
 
         #region 命令
-        ICommand _startCommand;
-        ICommand _stopCommand;
 
+        ICommand? _startCommand;
+        ICommand? _stopCommand;
+
+        /// <summary>
+        /// 开始泡点
+        /// </summary>
         public ICommand StartCommand => _startCommand ??= new DelegateCommand(DoStartCommand);
 
+        /// <summary>
+        /// 停止泡点
+        /// </summary>
         public ICommand StopCommand => _stopCommand ??= new DelegateCommand(DoStopCommand);
 
 
         #endregion
+
         public BubbleTimerPageViewModel()
         {
         }
 
+        /// <summary>
+        /// 开始泡点
+        /// </summary>
         void DoStartCommand()
         {
             if (!IsUseDCoin && !IsUseDPoint)
@@ -127,7 +135,7 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
                 return;
             }
 
-            RunInfo = $"开始运行====={DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}";
+            RunInfo = $"开始运行====={DateTime.Now:yyyy-MM-dd HH:mm:ss}";
 
             _cancellationTokenSource = new CancellationTokenSource();
             var ct = _cancellationTokenSource.Token;
@@ -137,7 +145,7 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
                 DateTime? lastCoin = null, lastPoint = null;
                 while (!ct.IsCancellationRequested)
                 {
-                    RunInfo = $"开始运行====={DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}";
+                    RunInfo = $"开始运行====={DateTime.Now:yyyy-MM-dd HH:mm:ss}";
                     if (IsUseDCoin)
                     {
                         if (lastCoin == null)
@@ -169,12 +177,21 @@ namespace AY.DNF.GMTool.BubbleTimer.ViewModels
             _intervalTask.Start();
         }
 
+        /// <summary>
+        /// 停止泡点
+        /// </summary>
         void DoStopCommand()
         {
             RunInfo = string.Empty;
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource?.Cancel();
         }
 
+        /// <summary>
+        /// 泡点日志
+        /// </summary>
+        /// <param name="logTime"></param>
+        /// <param name="rowCount"></param>
+        /// <param name="info"></param>
         void AddLog(DateTime logTime, int rowCount, string info)
         {
             if (RunLogs.Count >= 100)

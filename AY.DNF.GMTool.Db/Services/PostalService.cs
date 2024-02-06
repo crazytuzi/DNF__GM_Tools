@@ -4,10 +4,13 @@ using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Db.Services
 {
+    /// <summary>
+    /// 邮件功能服务
+    /// </summary>
     public class PostalService
     {
         /// <summary>
-        /// 
+        /// 发送邮件
         /// </summary>
         /// <param name="characNo"></param>
         /// <param name="itemId"></param>
@@ -17,33 +20,17 @@ namespace AY.DNF.GMTool.Db.Services
         /// <param name="red">3-力量 4-智力 1-体力 2-精神</param>
         /// <param name="redValue"></param>
         /// <returns></returns>
-        public async Task<bool> SendPostal(int characNo, string letterText, int itemId, int count, int forge, int strengthen, int red, int redValue, bool isPackaged)
+        public async Task<(bool, int)> SendPostal(int characNo, string letterText, int itemId, int count, int forge, int strengthen, int red, int redValue, bool isPackaged)
         {
-            // add_info => count
-            // upgrade => strengthen
-            // seperate_upgrade => forge
-            // amplify_option => red
-            // amplify_value => redValue
-
             try
             {
                 DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
 
-                //var letter = new Letter
-                //{
-                //    CharacNo = characNo,
-                //    SendCharacNo = 0,
-                //    SendCharacName = "GM",
-                //    LetterText = Encoding.UTF8.GetString(Encoding.GetEncoding("latin1").GetBytes(letterText)),
-                //    RegDate = DateTime.Now,
-                //    Stat = 1
-                //};
-                //var letterId = await DbFrameworkScope.TaiwanCain2nd.Insertable<Letter>(letter).ExecuteReturnIdentityAsync();
-                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"set charset latin1;insert into letter(charac_no,send_charac_no,send_charac_name,letter_text,reg_date,stat) values({characNo},0,'GM','{letterText}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}',1);");
+                // 因为字符编码问题，先设备字符集再插入数据
+                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"set charset latin1;insert into letter(charac_no,send_charac_no,send_charac_name,letter_text,reg_date,stat) values({characNo},0,'GM','{letterText}','{DateTime.Now:yyyy-MM-dd HH:mm:ss}',1);");
                 var dt = await DbFrameworkScope.TaiwanCain2nd.Ado.GetDataTableAsync("SELECT LAST_INSERT_ID()");
                 var letterId = int.Parse(dt.Rows[0][0].ToString());
 
-                //DbFrameworkScope.TaiwanCain2nd.SqlQueryable("insert into postal(letter_id,count,upgrade,seperate_upgrade,amplify_option,amplify_value,occ_time,send_charac_no,send_charac_name)")
                 var postal = new Postal
                 {
                     OccTime = DateTime.Now,
@@ -63,16 +50,62 @@ namespace AY.DNF.GMTool.Db.Services
                 var postalId = await DbFrameworkScope.TaiwanCain2nd.Insertable<Postal>(postal).ExecuteReturnIdentityAsync();
 
                 DbFrameworkScope.TaiwanCain2nd.Ado.CommitTran();
+                return (true, letterId);
             }
             catch
             {
                 DbFrameworkScope.TaiwanCain2nd.Ado.RollbackTran();
-                return false;
+                return (false, -1);
             }
-
-
-            return true;
         }
 
+        /// <summary>
+        /// 删除最近发送的邮件
+        /// </summary>
+        /// <param name="letterId"></param>
+        /// <returns></returns>
+        public async Task<bool> Delete(int letterId)
+        {
+            try
+            {
+                DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
+
+                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"delete from letter where letter_id={letterId}");
+                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"delete from postal where letter_id={letterId}");
+
+                DbFrameworkScope.TaiwanCain2nd.Ado.CommitTran();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                DbFrameworkScope.TaiwanCain2nd.Ado.RollbackTran();
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 删除全服
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> DeleteAll()
+        {
+            try
+            {
+                DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
+
+                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync("delete from letter");
+                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync("delete from postal");
+
+                DbFrameworkScope.TaiwanCain2nd.Ado.CommitTran();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                DbFrameworkScope.TaiwanCain2nd.Ado.RollbackTran();
+                return false;
+            }
+        }
     }
 }

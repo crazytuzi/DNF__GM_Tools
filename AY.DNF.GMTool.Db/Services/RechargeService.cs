@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Db.Services
 {
+    /// <summary>
+    /// 充值服务
+    /// </summary>
     public class RechargeService
     {
         #region D币/点
 
         /// <summary>
-        /// 
+        /// 充值D币/点
         /// </summary>
         /// <param name="characNo"></param>
         /// <param name="count"></param>
@@ -31,16 +34,34 @@ namespace AY.DNF.GMTool.Db.Services
 
         #region 技能点
 
+        /// <summary>
+        /// 充值QP点
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public async Task<bool> RechargeQP(int characNo, int count)
         {
             return await DbFrameworkScope.TaiwanCain.Updateable<CharacQuestShop>().SetColumns(t => t.Qp == t.Qp + count).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() > 0;
         }
 
+        /// <summary>
+        /// 充值SP点
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public async Task<bool> RechargeSP(int characNo, int count)
         {
             return await DbFrameworkScope.TaiwanCain2nd.Updateable<Skill>().SetColumns(t => t.RemainSp == t.RemainSp + count).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() >= 0;
         }
 
+        /// <summary>
+        /// 充值TP点
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public async Task<bool> RechargeTP(int characNo, int count)
         {
             return await DbFrameworkScope.TaiwanCain2nd.Updateable<Skill>()

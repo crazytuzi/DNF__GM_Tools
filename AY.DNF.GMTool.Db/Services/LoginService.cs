@@ -8,8 +8,17 @@ using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Db.Services
 {
+    /// <summary>
+    /// 登录相关服务
+    /// </summary>
     public class LoginService
     {
+        /// <summary>
+        /// 登录 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<LoginInfoModel?> Login(string userName, string password = "")
         {
             LoginInfoModel? result = null;
@@ -49,18 +58,10 @@ namespace AY.DNF.GMTool.Db.Services
 
             // 角色
             var roles =
-                //await DbFrameworkScope.TaiwanCain.Queryable<CharacInfo>().Where(t => t.MId == account.UID && t.DeleteFlag != 1).ToListAsync();
+                // 角色信息编码问题，用这种方式查询可以解决乱码
                 await DbFrameworkScope.TaiwanCain.SqlQueryable<CharacInfo>($"Set Charset latin1; select charac_no CharacNo,charac_name CharacName,lev from charac_info where delete_flag!=1 and m_id={account.UID}").ToListAsync();
             result.MemberInfos.AddRange(roles.Select(t => new SimpleMemberInfoModel { CharacNo = t.CharacNo, CharacName = t.CharacName, Level = t.Lev }));
 
-            //result.MemberInfos.ForEach(t =>
-            //{
-            //    var latin1 = Encoding.GetEncoding("latin1");
-            //    var bs = Encoding.UTF8.GetBytes(t.CharacName);
-            //    var isoBs = Encoding.Convert(latin1, Encoding.UTF8, bs);
-
-            //    t.CharacName = latin1.GetString(isoBs);
-            //});
             return result;
         }
     }

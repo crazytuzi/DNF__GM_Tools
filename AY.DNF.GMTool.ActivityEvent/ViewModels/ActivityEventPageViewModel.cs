@@ -13,16 +13,20 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
     {
         #region 属性
 
-        private ObservableCollection<ActivityEventModel> _activities = new ObservableCollection<ActivityEventModel>();
-
+        private ObservableCollection<ActivityEventModel> _activities = new();
+        /// <summary>
+        /// 服务器已添加活动列表
+        /// </summary>
         public ObservableCollection<ActivityEventModel> Activities
         {
             get { return _activities; }
             set { SetProperty(ref _activities, value); }
         }
 
-        private ObservableCollection<EventInfoModel> _activityEvents = new ObservableCollection<EventInfoModel>();
-
+        private ObservableCollection<EventInfoModel> _activityEvents = new ();
+        /// <summary>
+        /// 可添加活动事件
+        /// </summary>
         public ObservableCollection<EventInfoModel> ActivityEvents
         {
             get { return _activityEvents; }
@@ -30,7 +34,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         }
 
         private int _param1 = 0;
-
+        /// <summary>
+        /// 活动事件参数1
+        /// </summary>
         public int Param1
         {
             get { return _param1; }
@@ -38,7 +44,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         }
 
         private int _param2 = 0;
-
+        /// <summary>
+        /// 活动事件参数2
+        /// </summary>
         public int Param2
         {
             get { return _param2; }
@@ -46,7 +54,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         }
 
         private bool _delEnabled = false;
-
+        /// <summary>
+        /// 删除按钮是否可用
+        /// </summary>
         public bool DelEnabled
         {
             get { return _delEnabled; }
@@ -54,7 +64,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         }
 
         private ActivityEventModel? _selectedCurEvent;
-
+        /// <summary>
+        /// 当前选中的已添加活动
+        /// </summary>
         public ActivityEventModel? SelectedCurEvent
         {
             get { return _selectedCurEvent; }
@@ -67,7 +79,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         }
 
         private bool _addEnabled;
-
+        /// <summary>
+        /// 添加按钮是否可用
+        /// </summary>
         public bool AddEnabled
         {
             get { return _addEnabled; }
@@ -75,7 +89,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         }
 
         private EventInfoModel? _selectedEvent;
-
+        /// <summary>
+        /// 选中的可添加活动
+        /// </summary>
         public EventInfoModel? SelectedEvent
         {
             get { return _selectedEvent; }
@@ -100,8 +116,10 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
             }
         }
 
-        private string _msg;
-
+        private string _msg = string.Empty;
+        /// <summary>
+        /// 操作消息
+        /// </summary>
         public string Msg
         {
             get { return _msg; }
@@ -112,16 +130,22 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
 
         #region 命令
 
-        ICommand _refreshCurrentActivitiesCommand;
-
+        ICommand? _refreshCurrentActivitiesCommand;
+        /// <summary>
+        /// 刷新活动
+        /// </summary>
         public ICommand RefreshCurrentActivitiesCommand => _refreshCurrentActivitiesCommand ??= new DelegateCommand(DoRefreshCurrentActivitiesCommand);
 
-        ICommand _addEventCommand;
-
+        ICommand? _addEventCommand;
+        /// <summary>
+        /// 添加活动
+        /// </summary>
         public ICommand AddEventCommand => _addEventCommand ??= new DelegateCommand(DoAddEventCommand);
 
-        ICommand _deleteCurrentActivityCommand;
-
+        ICommand? _deleteCurrentActivityCommand;
+        /// <summary>
+        /// 删除当前选中活动
+        /// </summary>
         public ICommand DeleteCurrentActivityCommand => _deleteCurrentActivityCommand ??= new DelegateCommand(DoDeleteCurrentActivityCommand);
 
         #endregion
@@ -133,6 +157,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
             LoadEvents();
         }
 
+        /// <summary>
+        /// 加载已添加活动
+        /// </summary>
         async void LoadEvents()
         {
             ActivityEvents.Clear();
@@ -141,7 +168,7 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
         }
 
         /// <summary>
-        /// 当前活动
+        /// 刷新当前活动
         /// </summary>
         async void DoRefreshCurrentActivitiesCommand()
         {
@@ -152,6 +179,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
             Activities.AddRange(list);
         }
 
+        /// <summary>
+        /// 添加活动
+        /// </summary>
         async void DoAddEventCommand()
         {
             if (SelectedEvent == null)
@@ -173,6 +203,9 @@ namespace AY.DNF.GMTool.ActivityEvent.ViewModels
             DoRefreshCurrentActivitiesCommand();
         }
 
+        /// <summary>
+        /// 删除活动
+        /// </summary>
         async void DoDeleteCurrentActivityCommand()
         {
             if (SelectedCurEvent == null)

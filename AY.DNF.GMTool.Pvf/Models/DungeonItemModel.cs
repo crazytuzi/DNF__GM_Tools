@@ -6,9 +6,19 @@ using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Pvf.Models
 {
+    /// <summary>
+    /// 地下城数据
+    /// </summary>
     public class DungeonItemModel
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        /// <summary>
+        /// ID
+        /// </summary>
+        public string? Id { get; set; }
+
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string? Name { get; set; }
     }
 }

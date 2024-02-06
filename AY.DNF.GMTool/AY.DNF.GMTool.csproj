@@ -4,6 +4,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>AY.ico</ApplicationIcon>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Fonts\iconfont.ttf" />
@@ -34,4 +35,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+	
 </Project>

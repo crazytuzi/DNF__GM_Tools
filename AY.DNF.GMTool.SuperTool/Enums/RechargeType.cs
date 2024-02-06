@@ -1,5 +1,8 @@
 ﻿namespace AY.DNF.GMTool.SuperTool.Enums
 {
+    /// <summary>
+    /// 充值类型
+    /// </summary>
     public enum RechargeType
     {
         D币 = 0,

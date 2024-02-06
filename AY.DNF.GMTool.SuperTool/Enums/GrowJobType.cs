@@ -1,5 +1,8 @@
 ﻿namespace AY.DNF.GMTool.SuperTool.Enums
 {
+    /// <summary>
+    /// 觉醒职业
+    /// </summary>
     public enum GrowJobType
     {
         未转职 = 0,

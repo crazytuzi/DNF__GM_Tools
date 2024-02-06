@@ -5,7 +5,10 @@ using System.Text;
 
 namespace pvfLoaderXinyu
 {
-    struct PvfHeader//头文件内容，没什么好说的
+    /// <summary>
+    /// 头文件内容，没什么好说的
+    /// </summary>
+    struct PvfHeader
     {
         public int sizeGUID; //Always 0x24
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x24)]
@@ -15,6 +18,8 @@ namespace pvfLoaderXinyu
         public int dirTreeChecksum;//CRC32码
         public int numFilesInDirTree;//PVF文件总数
     }
+
+
     class HeaderTreeNode
     {
         public byte[] unpackedFileByteArr;
@@ -26,7 +31,7 @@ namespace pvfLoaderXinyu
         public uint fileNumber;
         public uint fileCrc32;
 
-        public int readNodeFromBitArrStream(PvfHeader header, FileStream fs,byte[] unpackedHeaderTree, int offsite)
+        public int ReadNodeFromBitArrStream(PvfHeader header, FileStream fs,byte[] unpackedHeaderTree, int offsite)
         {
             try
             {
@@ -43,7 +48,7 @@ namespace pvfLoaderXinyu
                     unpackedFileByteArr = new byte[computedFileLength];
                     fs.Seek(Marshal.SizeOf(typeof(PvfHeader)) + header.dirTreeLength + relativeOffset, SeekOrigin.Begin);
                     fs.Read(unpackedFileByteArr,0, computedFileLength);
-                    Util.unpackHeaderTree(ref unpackedFileByteArr, computedFileLength, fileCrc32);
+                    Util.UnpackHeaderTree(ref unpackedFileByteArr, computedFileLength, fileCrc32);
                     for (int i = 0; i < (computedFileLength - fileLength); i++)
                     {
                         unpackedFileByteArr[fileLength + i] = 0;

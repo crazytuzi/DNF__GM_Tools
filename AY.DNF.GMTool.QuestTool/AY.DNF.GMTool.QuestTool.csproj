@@ -8,8 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
-    <Folder Include="ViewModels\" />
+    <PackageReference Include="HandyControl" Version="3.4.0" />
+    <PackageReference Include="Prism.DryIoc" Version="9.0.271-pre" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AY.DNF.GMTool.Db\AY.DNF.GMTool.Db.csproj" />
   </ItemGroup>
 
 </Project>

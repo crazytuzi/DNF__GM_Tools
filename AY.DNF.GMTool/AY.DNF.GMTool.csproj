@@ -19,6 +19,7 @@
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AY.DNF.GMTool.Common\AY.DNF.GMTool.Common.csproj" />
     <ProjectReference Include="..\AY.DNF.GMTool.Db\AY.DNF.GMTool.Db.csproj" />
   </ItemGroup>
   <ItemGroup>

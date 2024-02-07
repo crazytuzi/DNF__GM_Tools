@@ -82,7 +82,7 @@ namespace AY.DNF.GMTool.Db.Services
         /// <returns></returns>
         public async Task<bool> RechargePVPGrade(int characNo, int pvpGradeTypeValue)
         {
-            return await DbFrameworkScope.DTaiwan.Updateable<PvpResult>().SetColumns(t => t.PvpGrade == pvpGradeTypeValue).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() > 0;
+            return await DbFrameworkScope.TaiwanCain.Updateable<PvpResult>().SetColumns(t => t.PvpGrade == pvpGradeTypeValue).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() > 0;
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace AY.DNF.GMTool.Db.Services
         /// <returns></returns>
         public async Task<bool> RechargePVPWinPoint(int characNo, int winPoint)
         {
-            return await DbFrameworkScope.DTaiwan.Updateable<PvpResult>().SetColumns(t => t.WinPoint == winPoint).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() > 0;
+            return await DbFrameworkScope.TaiwanCain.Updateable<PvpResult>().SetColumns(t => t.WinPoint == winPoint).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() > 0;
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace AY.DNF.GMTool.Db.Services
         /// <returns></returns>
         public async Task<bool> RechargePVPWin(int characNo, int win)
         {
-            return await DbFrameworkScope.DTaiwan.Updateable<PvpResult>().SetColumns(t => t.Win == win).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() > 0;
+            return await DbFrameworkScope.TaiwanCain.Updateable<PvpResult>().SetColumns(t => t.Win == win).Where(t => t.CharacNo == characNo).ExecuteCommandAsync() > 0;
         }
 
         #endregion

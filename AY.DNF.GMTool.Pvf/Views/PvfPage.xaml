@@ -97,5 +97,20 @@
             </TextBlock>
             <ListBox Grid.Row="1" ItemsSource="{Binding StackableLogs}" />
         </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Margin="3"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="其他 " />
+            <ListBox Grid.Row="1" ItemsSource="{Binding OtherLogs}" />
+        </Grid>
     </Grid>
 </UserControl>

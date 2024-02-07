@@ -1,5 +1,6 @@
 ﻿using AY.DNF.GMTool.Db.DbModels.GMTool;
 using AY.DNF.GMTool.Db.Models;
+using SqlSugar;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -38,6 +39,12 @@ namespace AY.DNF.GMTool.Db.Services
         {
             await DbFrameworkScope.GMToolDb.Ado.ExecuteCommandAsync("delete from stackables");
             await DbFrameworkScope.GMToolDb.Fastest<Stackables>().PageSize(5000).BulkCopyAsync(items);
+        }
+
+        public async void WriteJobData(List<JobTree> items)
+        {
+            await DbFrameworkScope.GMToolDb.Ado.ExecuteCommandAsync("delete from jobtree");
+            await DbFrameworkScope.GMToolDb.Fastest<JobTree>().PageSize(5000).BulkCopyAsync(items);
         }
 
         /// <summary>
@@ -88,6 +95,13 @@ namespace AY.DNF.GMTool.Db.Services
                               ItemId = t.ItemId,
                               ItemName = t.ItemName
                           }).ToListAsync();
+        }
+
+        public async Task<List<JobTree>> GetJobs()
+        {
+            return await DbFrameworkScope.GMToolDb.Queryable<JobTree>()
+                            .ToTreeAsync(t => t.GrowJobs, t => t.ParentId, "root");
+
         }
     }
 }

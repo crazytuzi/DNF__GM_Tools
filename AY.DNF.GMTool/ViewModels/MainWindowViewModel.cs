@@ -42,7 +42,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private string _version = "0.0.20240206";
+        private string _version = "0.0.20240207";
         /// <summary>
         /// 显示的自定义版本号
         /// </summary>
@@ -247,6 +247,12 @@ namespace AY.DNF.GMTool.ViewModels
                 });
             }, ct);
             _timeTask.Start();
+
+            Task.Run(() =>
+            {
+                Task.Delay(5000);
+                Growl.Info("首次使用，请先进行Script.pvf导入，以便生成基础数据\r\n若版本更换也需重新导入Script.pvf");
+            });
         }
 
         /// <summary>

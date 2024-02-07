@@ -1,11 +1,13 @@
 ﻿using AY.DNF.GMTool.Db.Services;
 using AY.DNF.GMTool.SuperTool.Enums;
+using AY.DNF.GMTool.SuperTool.Models;
 using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -64,9 +66,9 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         }
 
         private int _rechargeCount = 0;
-/// <summary>
-/// 充值数量
-/// </summary>
+        /// <summary>
+        /// 充值数量
+        /// </summary>
         public int RechargeCount
         {
             get { return _rechargeCount; }
@@ -93,41 +95,41 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             set { SetProperty(ref _pvpVisibility, value); }
         }
 
-        private ObservableCollection<KeyValuePair<string, int>> _jobTypes = new();
+        private ObservableCollection<JobTreeModel> _baseJobs = new();
         /// <summary>
         /// 职业数据
         /// </summary>
-        public ObservableCollection<KeyValuePair<string, int>> JobTypes
+        public ObservableCollection<JobTreeModel> BaseJobs
         {
-            get { return _jobTypes; }
-            set { SetProperty(ref _jobTypes, value); }
+            get { return _baseJobs; }
+            set { SetProperty(ref _baseJobs, value); }
         }
 
-        private JobType _selectedJob;
+        private JobTreeModel? _selectedBaseJob;
         /// <summary>
         /// 选中的职业
         /// </summary>
-        public JobType SelectedJob
+        public JobTreeModel? SelectedBaseJob
         {
-            get { return _selectedJob; }
-            set { SetProperty(ref _selectedJob, value); }
+            get { return _selectedBaseJob; }
+            set { SetProperty(ref _selectedBaseJob, value); }
         }
 
-        private ObservableCollection<KeyValuePair<string, int>> _growTypes = new();
+        private ObservableCollection<JobTreeModel> _growJobs = new();
         /// <summary>
         /// 觉醒职业
         /// </summary>
-        public ObservableCollection<KeyValuePair<string, int>> GrowTypes
+        public ObservableCollection<JobTreeModel> GrowJobs
         {
-            get { return _growTypes; }
-            set { SetProperty(ref _growTypes, value); }
+            get { return _growJobs; }
+            set { SetProperty(ref _growJobs, value); }
         }
 
-        private int _selectedGrowJob;
+        private JobTreeModel? _selectedGrowJob;
         /// <summary>
         /// 选中的觉醒职业
         /// </summary>
-        public int SelectedGrowJob
+        public JobTreeModel? SelectedGrowJob
         {
             get { return _selectedGrowJob; }
             set { SetProperty(ref _selectedGrowJob, value); }
@@ -194,7 +196,7 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// <summary>
         /// 撤消角色 VIP
         /// </summary>
-        public ICommand UnsetMemberVIPCommand => _unsetMemberVIPCommand ??= new DelegateCommand<string>(DoUnsetMemberVIPCommand);              
+        public ICommand UnsetMemberVIPCommand => _unsetMemberVIPCommand ??= new DelegateCommand<string>(DoUnsetMemberVIPCommand);
 
         ICommand? _allHellCommand;
         /// <summary>
@@ -218,9 +220,24 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
         public SuperToolPageViewModel()
         {
+            RechargeTypes.AddRange(EnumHelper.EnumToList<RechargeType>());
 
+            LoadJobs();
         }
 
+        async void LoadJobs()
+        {
+            var jobs = await new GMToolService().GetJobs();
+            var tmp = jobs.Where(t => t.ParentId == "root").Select(t => new JobTreeModel
+            {
+                Id = t.Id,
+                JobId = t.JobId,
+                JobName = t.JobName,
+                GrowJobs = t.GrowJobs.Select(t => new JobTreeModel { Id = t.Id, JobName = t.JobName, JobId = t.JobId }).ToList()
+            }).ToList();
+            BaseJobs.Clear();
+            BaseJobs.AddRange(tmp);
+        }
 
         /// <summary>
         /// 充值
@@ -238,7 +255,7 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             var service = new RechargeService();
             var b = false;
             string? msgTitle;
-            var extMsg=string.Empty;
+            var extMsg = string.Empty;
 
             if (SelectedRecharge == (int)RechargeType.段位)
             {
@@ -279,6 +296,10 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
                         b = await service.RechargePVPWinPoint(cn, RechargeCount);
                         extMsg = "重新选择角色后生效";
                         break;
+                    case RechargeType.金币:
+                        b = await service.RechargeMoney(cn, RechargeCount);
+                        extMsg = "重新选择角色后生效";
+                        break;
                 }
             }
 
@@ -289,7 +310,7 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// 职业转换
         /// </summary>
         /// <param name="characNo"></param>
-        void DoChangedJobCommand(string characNo)
+        async void DoChangedJobCommand(string characNo)
         {
             if (string.IsNullOrWhiteSpace(characNo))
             {
@@ -297,7 +318,17 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
                 return;
             }
 
-            Growl.Warning("待开发");
+            if (SelectedBaseJob == null)
+            {
+                Growl.Warning("请选择职业");
+                return;
+            }
+            var baseJobId = SelectedBaseJob.JobId;
+
+            var growJobId = SelectedGrowJob == null ? 0 : SelectedGrowJob.JobId;
+
+            var b = await new MemberService().ChangeJog(int.Parse(characNo), baseJobId, growJobId);
+            OperateMsg = $"转职{(b ? "成功" : "失败")}";
         }
 
         /// <summary>
@@ -462,7 +493,18 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// </summary>
         void DoJobChangedCommand()
         {
+            if (SelectedBaseJob == null) return;
 
+            var tmp = SelectedBaseJob.GrowJobs.Select(t => new JobTreeModel
+            {
+                Id = t.Id,
+                JobId = t.JobId,
+                JobName = t.JobName
+            }).ToList();
+
+            GrowJobs.Clear();
+            tmp.Insert(0, new JobTreeModel { Id = Guid.NewGuid().ToString("n"), JobName = "", JobId = 0 });
+            GrowJobs.AddRange(tmp);
         }
     }
 }

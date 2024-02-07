@@ -145,5 +145,17 @@ where delete_flag!=1 ";
             else
                 return await DbFrameworkScope.TaiwanCain.Updateable<MemberDungeon>(new MemberDungeon { MId = uid, Dungeon = dungeonStr }).Where(t => t.MId == uid).ExecuteCommandAsync() > 0;
         }
+
+        public async Task<bool> ChangeJog(int characNo, int job, int growJob)
+        {
+            var data = await DbFrameworkScope.TaiwanCain.Queryable<CharacInfo>().Where(t => t.CharacNo == characNo).FirstAsync();
+            if (data == null) return false;
+
+            if (data.Lev < 50) growJob = 0;
+            data.Job = job;
+            data.GrowType = growJob;
+
+            return await DbFrameworkScope.TaiwanCain.Updateable(data).ExecuteCommandAsync() > 0;
+        }
     }
 }

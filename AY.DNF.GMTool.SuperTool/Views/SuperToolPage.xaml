@@ -79,6 +79,8 @@
                     <TextBox
                         Grid.Row="1"
                         Grid.Column="1"
+                        Height="35"
+                        VerticalContentAlignment="Center"
                         Text="{Binding RechargeCount, Mode=TwoWay}"
                         Visibility="{Binding InputCountVisibility}" />
 
@@ -125,10 +127,11 @@
                     </Grid.ColumnDefinitions>
 
                     <ComboBox
-                        DisplayMemberPath="Key"
-                        ItemsSource="{Binding JobTypes}"
-                        SelectedValue="{Binding SelectedJob}"
-                        SelectedValuePath="Value">
+                        VerticalContentAlignment="Center"
+                        DisplayMemberPath="JobName"
+                        ItemsSource="{Binding BaseJobs}"
+                        SelectedItem="{Binding SelectedBaseJob}"
+                        SelectedValuePath="JobId">
                         <hc:Interaction.Triggers>
                             <hc:EventTrigger EventName="SelectionChanged">
                                 <hc:EventToCommand Command="{Binding JobChangedCommand}" />
@@ -137,10 +140,11 @@
                     </ComboBox>
                     <ComboBox
                         Grid.Row="1"
-                        DisplayMemberPath="Key"
-                        ItemsSource="{Binding GrowTypes}"
-                        SelectedValue="{Binding SelectedGrowJob}"
-                        SelectedValuePath="Value" />
+                        VerticalContentAlignment="Center"
+                        DisplayMemberPath="JobName"
+                        ItemsSource="{Binding GrowJobs}"
+                        SelectedItem="{Binding SelectedGrowJob}"
+                        SelectedValuePath="JobId" />
                     <Button
                         Grid.RowSpan="2"
                         Grid.Column="1"

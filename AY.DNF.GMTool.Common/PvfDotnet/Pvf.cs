@@ -5,7 +5,7 @@ using System.Text;
 
 namespace pvfLoaderXinyu
 {
-    class PvfFile : IDisposable
+    public class PvfFile : IDisposable
     {
         /// <summary>
         /// PVF文件头

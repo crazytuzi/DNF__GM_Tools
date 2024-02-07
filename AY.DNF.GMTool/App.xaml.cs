@@ -2,6 +2,7 @@
 using Prism.Ioc;
 using Prism.Modularity;
 using System;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using TiaoTiaoCode.NLogger;
@@ -20,7 +21,7 @@ namespace AY.DNF.GMTool
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         protected override IModuleCatalog CreateModuleCatalog()
@@ -32,12 +33,11 @@ namespace AY.DNF.GMTool
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
-        static Mutex? _mutex;
+        private static Mutex? _mutex;
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            bool createNew;
-            _mutex = new Mutex(true, "AY.DNF.GMTool", out createNew);
+            _mutex = new Mutex(true, "AY.DNF.GMTool", out bool createNew);
             if (createNew)
             {
                 TiaoTiaoNLogger.FastNoDatabaseInit();

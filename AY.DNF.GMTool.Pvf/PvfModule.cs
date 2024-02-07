@@ -13,8 +13,7 @@ namespace AY.DNF.GMTool.Pvf
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
-        {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        {            
             containerRegistry.RegisterForNavigation<PvfPage>(nameof(PvfModule));
         }
     }

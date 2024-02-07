@@ -15,7 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.Postal", "AY.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.Pvf", "AY.DNF.GMTool.Pvf\AY.DNF.GMTool.Pvf.csproj", "{15A7B7B6-F6B9-4D3D-9387-846ACD2E6BC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AY.DNF.GMTool.ActivityEvent", "AY.DNF.GMTool.ActivityEvent\AY.DNF.GMTool.ActivityEvent.csproj", "{1F439E2E-D3E3-4D70-AF04-7A61A4E58A23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.ActivityEvent", "AY.DNF.GMTool.ActivityEvent\AY.DNF.GMTool.ActivityEvent.csproj", "{1F439E2E-D3E3-4D70-AF04-7A61A4E58A23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AY.DNF.GMTool.Test", "AY.DNF.GMTool.Test\AY.DNF.GMTool.Test.csproj", "{691D3099-2D41-44BF-8B1B-90AEE6188E78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AY.DNF.GMTool.QuestTool", "AY.DNF.GMTool.QuestTool\AY.DNF.GMTool.QuestTool.csproj", "{9BBDD064-DC98-46D6-A51D-A9F42348749D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AY.DNF.GMTool.Common", "AY.DNF.GMTool.Common\AY.DNF.GMTool.Common.csproj", "{DB30D9D1-2676-4758-A1F6-5BEE0345A611}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +57,18 @@ Global
 		{1F439E2E-D3E3-4D70-AF04-7A61A4E58A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F439E2E-D3E3-4D70-AF04-7A61A4E58A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F439E2E-D3E3-4D70-AF04-7A61A4E58A23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{691D3099-2D41-44BF-8B1B-90AEE6188E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{691D3099-2D41-44BF-8B1B-90AEE6188E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{691D3099-2D41-44BF-8B1B-90AEE6188E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{691D3099-2D41-44BF-8B1B-90AEE6188E78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BBDD064-DC98-46D6-A51D-A9F42348749D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BBDD064-DC98-46D6-A51D-A9F42348749D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BBDD064-DC98-46D6-A51D-A9F42348749D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BBDD064-DC98-46D6-A51D-A9F42348749D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB30D9D1-2676-4758-A1F6-5BEE0345A611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB30D9D1-2676-4758-A1F6-5BEE0345A611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB30D9D1-2676-4758-A1F6-5BEE0345A611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB30D9D1-2676-4758-A1F6-5BEE0345A611}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,7 +8,7 @@ namespace pvfLoaderXinyu
     /// <summary>
     /// 头文件内容，没什么好说的
     /// </summary>
-    struct PvfHeader
+    public struct PvfHeader
     {
         public int sizeGUID; //Always 0x24
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x24)]
@@ -20,7 +20,7 @@ namespace pvfLoaderXinyu
     }
 
 
-    class HeaderTreeNode
+    public class HeaderTreeNode
     {
         public byte[] unpackedFileByteArr;
         public int filePathLength;

@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="HandyControl" Version="3.4.0" />
-    <PackageReference Include="Prism.DryIoc" Version="9.0.271-pre" />
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
   </ItemGroup>
 
   <ItemGroup>

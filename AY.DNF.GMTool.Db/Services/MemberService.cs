@@ -3,6 +3,7 @@ using AY.DNF.GMTool.Db.DbModels.taiwan_cain;
 using AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd;
 using AY.DNF.GMTool.Db.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -146,6 +147,13 @@ where delete_flag!=1 ";
                 return await DbFrameworkScope.TaiwanCain.Updateable<MemberDungeon>(new MemberDungeon { MId = uid, Dungeon = dungeonStr }).Where(t => t.MId == uid).ExecuteCommandAsync() > 0;
         }
 
+        /// <summary>
+        /// 修改职业
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <param name="job"></param>
+        /// <param name="growJob"></param>
+        /// <returns></returns>
         public async Task<bool> ChangeJog(int characNo, int job, int growJob)
         {
             var data = await DbFrameworkScope.TaiwanCain.Queryable<CharacInfo>().Where(t => t.CharacNo == characNo).FirstAsync();
@@ -156,6 +164,49 @@ where delete_flag!=1 ";
             data.GrowType = growJob;
 
             return await DbFrameworkScope.TaiwanCain.Updateable(data).ExecuteCommandAsync() > 0;
+        }
+
+        /// <summary>
+        /// 获取角色进行中任务列表
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <returns></returns>
+        public async Task<List<QuestModel>> GetCharacQuests(int characNo)
+        {
+            var dt = await DbFrameworkScope.TaiwanCain.Ado.GetDataTableAsync($"select * from new_charac_quest where charac_no={characNo}");
+            if (dt.Rows.Count <= 0) return new List<QuestModel>();
+
+            var result = new List<QuestModel>();
+            var row = dt.Rows[0];
+            for (var i = 1; i <= 20; i++)
+            {
+                var quest = new QuestModel
+                {
+                    Slot = i,
+                };
+
+                var indexStr = row[$"play_{i}"].ToString();
+                var trigger = row[$"play_{i}_trigger"].ToString();
+                // 任务已标识完成，但还没确认完成的任务则不显示
+                if (int.Parse(trigger) == 0) continue;
+                quest.QuestIndex = int.Parse(indexStr);
+
+                result.Add(quest);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 完成指定任务
+        /// </summary>
+        /// <param name="characNo"></param>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public async Task<bool> FinishQuest(int characNo, int slot)
+        {
+            var sql = $"update new_charac_quest set play_{slot}_trigger=0 where charac_no={characNo}";
+            return await DbFrameworkScope.TaiwanCain.Ado.ExecuteCommandAsync(sql) > 0;
         }
     }
 }

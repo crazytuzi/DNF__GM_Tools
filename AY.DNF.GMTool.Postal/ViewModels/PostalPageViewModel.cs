@@ -6,6 +6,7 @@ using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace AY.DNF.GMTool.Postal.ViewModels
@@ -23,7 +24,16 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         public string? Msg
         {
             get { return _msg; }
-            set { SetProperty(ref _msg, value); }
+            set
+            {
+                SetProperty(ref _msg, value);
+                if (!string.IsNullOrWhiteSpace(value))
+                    Task.Run(() =>
+                    {
+                        Task.Delay(5000);
+                        Msg = null;
+                    });
+            }
         }
 
         private string? _searchText;

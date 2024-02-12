@@ -123,6 +123,8 @@ namespace AY.DNF.GMTool.Db
                     _gmToolDb.CodeFirst.InitTables(typeof(Dungeons));
                 if (!_gmToolDb.DbMaintenance.IsAnyTable("JobTree"))
                     _gmToolDb.CodeFirst.InitTables(typeof(JobTree));
+                if (!_gmToolDb.DbMaintenance.IsAnyTable("Quests"))
+                    _gmToolDb.CodeFirst.InitTables(typeof(Quests));
 
                 _gmToolDb.Ado.CheckConnection();
                 return true;

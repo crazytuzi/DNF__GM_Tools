@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -22,7 +23,16 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         public string? OperateMsg
         {
             get { return _operateMsg; }
-            set { SetProperty(ref _operateMsg, value); }
+            set
+            {
+                SetProperty(ref _operateMsg, value);
+                if (!string.IsNullOrWhiteSpace(value))
+                    Task.Run(() =>
+                    {
+                        Task.Delay(5000);
+                        OperateMsg = null;
+                    });
+            }
         }
 
         private ObservableCollection<KeyValuePair<string, int>> _rechargeTypes = new();
@@ -215,6 +225,18 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// 充值类型下拉变化
         /// </summary>
         public ICommand RechargeChangedCommand => _rechageChangedCommand ??= new DelegateCommand(DoRechargeChangedCommand);
+
+        ICommand _clearUserItemsCommand;
+        /// <summary>
+        /// 清理时装
+        /// </summary>
+        public ICommand ClearUserItemsCommand => _clearUserItemsCommand ??= new DelegateCommand<string>(DoClearUserItemsCommand);
+
+        ICommand _clearCreatureCommand;
+        /// <summary>
+        /// 清理宠物
+        /// </summary>
+        public ICommand ClearCreatureCommand => _clearCreatureCommand ??= new DelegateCommand<string>(DoClearCreatureCommand);
 
         #endregion
 
@@ -505,6 +527,38 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             GrowJobs.Clear();
             tmp.Insert(0, new JobTreeModel { Id = Guid.NewGuid().ToString("n"), JobName = "", JobId = 0 });
             GrowJobs.AddRange(tmp);
+        }
+
+        /// <summary>
+        /// 清理宠物
+        /// </summary>
+        /// <param name="characNo"></param>
+        async void DoClearCreatureCommand(string characNo)
+        {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
+            var b = await new ClearService().ClearCreature(int.Parse(characNo));
+            OperateMsg = $"宠物清理{(b ? "成功" : "失败")}";
+        }
+
+        /// <summary>
+        /// 清理时装
+        /// </summary>
+        /// <param name="characNo"></param>
+        async void DoClearUserItemsCommand(string characNo)
+        {
+            if (string.IsNullOrWhiteSpace(characNo))
+            {
+                Growl.Error("请选择游戏角色");
+                return;
+            }
+
+            var b = await new ClearService().ClearUserItems(int.Parse(characNo));
+            OperateMsg = $"时装清理{(b ? "成功" : "失败")}";
         }
     }
 }

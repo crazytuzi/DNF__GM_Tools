@@ -107,9 +107,10 @@
             <TextBlock
                 Margin="3"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Text="其他 " />
+                VerticalAlignment="Center">
+                <Run FontWeight="Bold" Text="其他 " />
+                <Run FontSize="8" Text="{Binding OtherCount}" />
+            </TextBlock>
             <ListBox Grid.Row="1" ItemsSource="{Binding OtherLogs}" />
         </Grid>
     </Grid>

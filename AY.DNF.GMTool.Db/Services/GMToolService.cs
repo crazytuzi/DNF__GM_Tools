@@ -2,6 +2,7 @@
 using AY.DNF.GMTool.Db.Models;
 using SqlSugar;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AY.DNF.GMTool.Db.Services
@@ -41,10 +42,24 @@ namespace AY.DNF.GMTool.Db.Services
             await DbFrameworkScope.GMToolDb.Fastest<Stackables>().PageSize(5000).BulkCopyAsync(items);
         }
 
+        /// <summary>
+        /// 写入职业数据
+        /// </summary>
+        /// <param name="items"></param>
         public async void WriteJobData(List<JobTree> items)
         {
             await DbFrameworkScope.GMToolDb.Ado.ExecuteCommandAsync("delete from jobtree");
             await DbFrameworkScope.GMToolDb.Fastest<JobTree>().PageSize(5000).BulkCopyAsync(items);
+        }
+
+        /// <summary>
+        /// 写入任务数据
+        /// </summary>
+        /// <param name="items"></param>
+        public async void WriteQuestData(List<Quests> items)
+        {
+            await DbFrameworkScope.GMToolDb.Ado.ExecuteCommandAsync("delete from quests");
+            await DbFrameworkScope.GMToolDb.Fastest<Quests>().PageSize(5000).BulkCopyAsync(items);
         }
 
         /// <summary>
@@ -97,11 +112,28 @@ namespace AY.DNF.GMTool.Db.Services
                           }).ToListAsync();
         }
 
+        /// <summary>
+        /// 获取职业信息
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<JobTree>> GetJobs()
         {
             return await DbFrameworkScope.GMToolDb.Queryable<JobTree>()
                             .ToTreeAsync(t => t.GrowJobs, t => t.ParentId, "root");
 
+        }
+
+        /// <summary>
+        /// 根据任务索引获取任务信息
+        /// </summary>
+        /// <param name="questIndex"></param>
+        /// <returns></returns>
+        public async Task<List<Quests>> GetQuests(int[] questIndex)
+        {
+            if (questIndex.Length <= 0) return new List<Quests>();
+
+            var tmp = questIndex.ToList();
+            return await DbFrameworkScope.GMToolDb.Queryable<Quests>().Where(t => tmp.Contains(t.QuestIndex)).ToListAsync();
         }
     }
 }

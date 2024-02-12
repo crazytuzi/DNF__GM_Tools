@@ -341,16 +341,20 @@
                     Content="邮件功能" />
                 <RadioButton
                     Command="{Binding GMToolCommand}"
+                    CommandParameter="QuestTool"
+                    Content="任务管理" />
+                <RadioButton
+                    Command="{Binding GMToolCommand}"
                     CommandParameter="ActivityEvent"
                     Content="活动管理" />
                 <RadioButton
                     Command="{Binding GMToolCommand}"
-                    CommandParameter="Pvf"
-                    Content="Script.Pvf处理" />
-                <RadioButton
-                    Command="{Binding GMToolCommand}"
                     CommandParameter="BubbleTimer"
                     Content="泡点功能" />
+                <RadioButton
+                    Command="{Binding GMToolCommand}"
+                    CommandParameter="Pvf"
+                    Content="Script.Pvf处理" />
             </StackPanel>
             <Border
                 Grid.Row="1"

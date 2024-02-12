@@ -173,13 +173,19 @@
                 </StackPanel>
             </GroupBox>
 
-            <UniformGrid Columns="4">
+            <UniformGrid Columns="3">
                 <Button
                     Command="{Binding ClearBagCommand}"
                     CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                     Content="清理背包" />
-                <!--<Button Content="清理时装" />
-                <Button Content="清理宠物" />-->
+                <Button
+                    Command="{Binding ClearUserItemsCommand}"
+                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Content="清理时装" />
+                <Button
+                    Command="{Binding ClearCreatureCommand}"
+                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Content="清理宠物" />
                 <Button
                     Command="{Binding OpenLeftAndRightCommand}"
                     CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"

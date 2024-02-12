@@ -1,7 +1,7 @@
 ﻿using AY.DNF.GMTool.Db.DbModels.GMTool;
 using AY.DNF.GMTool.Db.Services;
-using AY.DNF.GMTool.Pvf.Models;
 using HandyControl.Controls;
+using ImTools;
 using Microsoft.International.Converters.TraditionalChineseToSimplifiedConverter;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,9 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace AY.DNF.GMTool.Pvf.ViewModels
 {
@@ -108,6 +106,17 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
             set { SetProperty(ref _otherLogs, value); }
         }
 
+        private string? _otherCount;
+
+        /// <summary>
+        /// 其他信息数量
+        /// </summary>
+        public string? OtherCount
+        {
+            get { return _otherCount; }
+            set { SetProperty(ref _otherCount, value); }
+        }
+
         #endregion
 
         #region 命令
@@ -149,6 +158,7 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                 AnalysisEquipments(pvf);
                 AnalysisStackables(pvf);
                 AnalysisJob(pvf);
+                AnalysisQuest(pvf);
             });
         }
 
@@ -294,6 +304,8 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
         /// <param name="pvf"></param>
         void AnalysisJob(PvfFile pvf)
         {
+            DispatcherInfos(()=> OtherCount = string.Empty);
+
             var characLst = pvf.GetPvfFileByPath("character/character.lst", Encoding.UTF8);
             if (characLst == null)
             {
@@ -433,6 +445,190 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
             new GMToolService().WriteJobData(jobTreeData);
 
             DispatcherInfos(() => OtherLogs.Insert(0, "职业数据写入完成..."));
+        }
+
+        /// <summary>
+        /// 解析任务信息
+        /// </summary>
+        /// <param name="pvf"></param>
+        void AnalysisQuest(PvfFile pvf)
+        {
+            DispatcherInfos(() => OtherCount = string.Empty);
+
+            var questLst = pvf.GetPvfFileByPath("n_quest/quest.lst", Encoding.UTF8);
+            if (questLst == null)
+            {
+                DispatcherInfos(() => OtherLogs.Insert(0, "未解析出任务信息"));
+                return;
+            }
+
+            DispatcherInfos(() => OtherLogs.Insert(0, "准备加载任务数据..."));
+
+            var quests = new List<Quests>();
+
+            // 任务列表 id\t任务文件名
+            var questArr = questLst.Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+                                .Where(t => !t.StartsWith("#"))
+                                .ToList();
+
+            var total = questArr.Count;
+            DispatcherInfos(() => OtherCount = $"0/{total}");
+
+            var countIndex = 1;
+            foreach (var item in questArr)
+            {
+                DispatcherInfos(() => OtherCount = $"{countIndex++}/{total}");
+
+                var itemArr = item.Split("\t", StringSplitOptions.RemoveEmptyEntries);
+                if (itemArr.Length < 2) continue;
+                var questIndex = itemArr[0];
+                var questPath = itemArr[1].Replace("`", "");
+                questPath = $"n_quest/{questPath}";
+
+                // 任务详细内容
+                var questInfos = pvf.GetPvfFileByPath(questPath, Encoding.UTF8)
+                                    .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+                                    .Where(t => !t.StartsWith("#"))
+                                    .ToList();
+                var questTypes = GetPvfPart(questInfos, "[type]");
+                if (questTypes.Count <= 0) continue;
+                var questType = questTypes[0].Replace("`", "");
+                var questNames = GetPvfPart(questInfos, "[name]");
+                var questName = questNames.Count <= 0 ? string.Empty : questNames[0].Replace("`", "");
+                questName = ChineseConverter.Convert(questName, ChineseConversionDirection.TraditionalToSimplified);
+
+                var quest = new Quests
+                {
+                    QuestIndex = int.Parse(questIndex),
+                    QuestName = questName,
+                    QuestItems = string.Empty,
+                    QuestItemsDescription = string.Empty
+                };
+
+                switch (questType)
+                {
+                    case "[condition under clear]":
+                        quest.QuestType = "过图";
+                        break;
+                    case "[seeking]":
+                        quest.QuestType = "需要道具";
+                        var intData = GetPvfPart(questInfos, "[int data]");
+                        if (intData.Count > 0)
+                        {
+                            quest.QuestItemsDescription = string.Empty;
+                            foreach (var d in intData)
+                            {
+                                var arr = d.Split("\t", StringSplitOptions.RemoveEmptyEntries);
+                                if (arr.Length < 2) continue;
+                                for (var j = 0; j < arr.Length; j += 2)
+                                {
+                                    var itemId = arr[j];
+                                    var itemCount = int.Parse(arr[j + 1]);
+
+                                    var stackable = pvf.GetPvfFileByPath("stackable/stackable.lst", Encoding.UTF8)
+                                        .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+                                        .Where(t => t.Split("\t")[0] == itemId.ToString())
+                                        .FirstOrDefault();
+                                    if (stackable == null)
+                                    {
+                                        // 不是道具，则查装备
+                                        var equip = pvf.GetPvfFileByPath("equipment/equipment.lst", Encoding.UTF8)
+                                                        .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+                                                        .Where(t => t.Split('\t')[0] == itemId.ToString())
+                                                        .FirstOrDefault();
+
+                                        // 找不到信息，这个物品描述则跳过
+                                        if (equip == null) continue;
+
+                                        var equipInfos = pvf.GetPvfFileByPath($"equipment/{equip.Split('\t')[1].Replace("`", "")}", Encoding.UTF8)
+                                                            .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+                                                            .Where(t => !t.StartsWith("#"))
+                                                            .ToList();
+                                        var equipNames = GetPvfPart(equipInfos, "[name]");
+                                        var equipName = equipNames.Count <= 0 ? "" : equipNames[0].Replace("`", "");
+                                        equipName = ChineseConverter.Convert(equipName, ChineseConversionDirection.TraditionalToSimplified);
+                                        quest.QuestItemsDescription += $"{equipName}({itemCount})\r\n";
+                                    }
+                                    else
+                                    {
+                                        // 道具信息
+                                        var stackableInfos = pvf.GetPvfFileByPath($"stackable/{stackable.Split("\t")[1].Replace("`", "")}", Encoding.UTF8)
+                                                               .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+                                                               .Where(t => !t.StartsWith("#"))
+                                                               .ToList();
+                                        var stackableNames = GetPvfPart(stackableInfos, "[name]");
+                                        var stackableName = stackableNames.Count <= 0 ? "" : stackableNames[0].Replace("`", "");
+                                        stackableName = ChineseConverter.Convert(stackableName, ChineseConversionDirection.TraditionalToSimplified);
+                                        quest.QuestItemsDescription += $"{stackableName}({itemCount})\r\n";
+                                    }
+                                    quest.QuestItems += $"{itemId}-{itemCount}@";
+                                }
+                            }
+                            quest.QuestItemsDescription = quest.QuestItemsDescription.TrimEnd(new char[] { '\r', '\n' });
+                            quest.QuestItems = quest.QuestItems.TrimEnd('@');
+                        }
+                        break;
+                    case "[hunt monster]":
+                        quest.QuestType = "击杀怪物次数";
+                        break;
+                    case "[hunt enemy]":
+                        quest.QuestType = "击杀怪物";
+                        break;
+                    case "[meet npc]":
+                        quest.QuestType = "与NPC对话";
+                        break;
+                    case "[custom quest]":
+                        quest.QuestType = "定制任务";
+                        break;
+                    case "[disjoint item]":
+                        quest.QuestType = "分解装备";
+                        break;
+                    case "[clear map]":
+                        quest.QuestType = "在地下城中找人";
+                        break;
+                    default:
+                        quest.QuestType = string.Empty;
+                        break;
+                }
+
+                quests.Add(quest);
+            }
+
+            DispatcherInfos(() => OtherLogs.Insert(0, "任务数据解析完毕..."));
+
+            DispatcherInfos(() => OtherLogs.Insert(0, "写入任务数据..."));
+
+            new GMToolService().WriteQuestData(quests);
+
+            DispatcherInfos(() => OtherLogs.Insert(0, "任务数据写入完成..."));
+        }
+
+        /// <summary>
+        /// 获取pvf解析后指定节下的数据
+        /// </summary>
+        /// <param name="orgStrs"></param>
+        /// <param name="elementName"></param>
+        /// <param name="endJugdeStr"></param>
+        /// <returns></returns>
+        List<string> GetPvfPart(List<string> orgStrs, string elementName, string endJugdeStr = "[")
+        {
+            var list = new List<string>();
+
+            var index = orgStrs.IndexOf(elementName);
+            if (index < 0) return list;
+
+            for (var i = 1; ; i++)
+            {
+                if (index + i >= orgStrs.Count) break;
+
+                var data = orgStrs[index + i];
+                if (!data.StartsWith(endJugdeStr))
+                    list.Add(data);
+                else
+                    break;
+            }
+
+            return list;
         }
 
         static void DispatcherInfos(Action act)

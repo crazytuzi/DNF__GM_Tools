@@ -373,10 +373,35 @@ namespace AY.DNF.GMTool.ViewModels
                 Money = detailInfo.Money,
                 VIP = detailInfo.VIP
             };
+
+
             var jobArr = detailInfo.Job!.Split("_", StringSplitOptions.RemoveEmptyEntries);
-            CurMemberInfo.Job = ((JobType)Enum.Parse(typeof(JobType), jobArr[0])).ToString();
-            if (jobArr.Length > 1)
-                CurMemberInfo.Job = jobArr[1];
+            var jobs = await new GMToolService().GetJobs(int.Parse(jobArr[0]));
+            var baseJobId = int.Parse(jobArr[0]);
+            var growJobId = int.Parse(jobArr[1]);
+            var job = jobs.First(t => t.JobId == baseJobId);
+            // 基础职业
+            CurMemberInfo.Job = job.JobName;
+
+            // 觉醒次数
+            var jxCount = growJobId / 16;
+            CurMemberInfo.JxCount = jxCount;
+
+            var jx = growJobId % 16;
+            // 新职业，单机版的可能都是一转职业的最后一个顺位的职业
+            var jxJob = job.GrowJobs!.First(t => t.JobId == jx);
+            if (jxCount == 0)
+                CurMemberInfo.JxNames = "未觉醒";
+            else
+            {
+                if (jxJob.GrowJobs == null || jxJob.GrowJobs.Count <= 0)
+                    CurMemberInfo.JxNames = jxJob.JobName;
+                else
+                {
+                    var jxNames = jxJob.GrowJobs.Where(t => t.JobId <= jxCount).ToList();
+                    CurMemberInfo.JxNames = jxNames.Aggregate(string.Empty, (x, y) => x += $"{y.JobName} -> ").TrimEnd('-', '>',' ');
+                }
+            }
         }
 
         /// <summary>

@@ -116,11 +116,14 @@ namespace AY.DNF.GMTool.Db.Services
         /// 获取职业信息
         /// </summary>
         /// <returns></returns>
-        public async Task<List<JobTree>> GetJobs()
+        public async Task<List<JobTree>> GetJobs(int? baseJobIndex = null)
         {
-            return await DbFrameworkScope.GMToolDb.Queryable<JobTree>()
-                            .ToTreeAsync(t => t.GrowJobs, t => t.ParentId, "root");
+            var data = await DbFrameworkScope.GMToolDb.Queryable<JobTree>().ToTreeAsync(t => t.GrowJobs, t => t.ParentId, "root");
 
+            if (baseJobIndex != null)
+                return data.Where(t => t.JobId == baseJobIndex).ToList();
+
+            return data;
         }
 
         /// <summary>

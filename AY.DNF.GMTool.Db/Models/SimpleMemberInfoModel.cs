@@ -16,5 +16,10 @@
         /// 等级
         /// </summary>
         public long Level { get; set; }
+
+        /// <summary>
+        /// 觉醒次数
+        /// </summary>
+        public int JxCount { get; set; }
     }
 }

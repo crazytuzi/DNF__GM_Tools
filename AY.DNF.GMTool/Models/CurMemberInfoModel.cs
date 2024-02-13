@@ -87,5 +87,26 @@ namespace AY.DNF.GMTool.Models
 			get { return _money; }
 			set { SetProperty(ref _money, value); }
 		}
+
+		private int _jxCount;
+		/// <summary>
+		/// 觉醒次数
+		/// </summary>
+		public int JxCount
+		{
+			get { return _jxCount; }
+			set { SetProperty(ref _jxCount, value); }
+		}
+
+		private string? _jxNames;
+		/// <summary>
+		/// 觉醒名
+		/// </summary>
+		public string? JxNames
+		{
+			get { return _jxNames; }
+			set { SetProperty(ref _jxNames, value); }
+		}
+
 	}
 }

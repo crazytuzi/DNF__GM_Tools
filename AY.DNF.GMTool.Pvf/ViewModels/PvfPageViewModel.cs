@@ -154,11 +154,11 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
             Task.Run(() =>
             {
                 using var pvf = new PvfFile(PvfPath);
-                AnalysisDungeons(pvf);
-                AnalysisEquipments(pvf);
-                AnalysisStackables(pvf);
+                //AnalysisDungeons(pvf);
+                //AnalysisEquipments(pvf);
+                //AnalysisStackables(pvf);
                 AnalysisJob(pvf);
-                AnalysisQuest(pvf);
+                //AnalysisQuest(pvf);
             });
         }
 
@@ -304,7 +304,7 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
         /// <param name="pvf"></param>
         void AnalysisJob(PvfFile pvf)
         {
-            DispatcherInfos(()=> OtherCount = string.Empty);
+            DispatcherInfos(() => OtherCount = string.Empty);
 
             var characLst = pvf.GetPvfFileByPath("character/character.lst", Encoding.UTF8);
             if (characLst == null)
@@ -373,21 +373,13 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                 // 基础职业名
                 job.JobName = ChineseConverter.Convert(jobs[startIndex + 1], ChineseConversionDirection.TraditionalToSimplified).Replace("`", "");
 
-                // 一转职业 二进制串
-                var jobBin = "";
-                for (i = 0; i < jobCount; i++)
-                    jobBin += "0";
-
                 // 一转职业
-                i = 1;
+                i = 0;
                 while (i < jobCount)
                 {
-                    var tmp = jobBin!.ToArray();
-                    tmp[tmp.Length - 1 - i] = '1';
-                    var jobId = string.Join("", tmp);
                     var growJob = new JobTree
                     {
-                        JobId = Convert.ToInt32(jobId, 2),
+                        JobId = i,
                         JobName = ChineseConverter.Convert(jobs[startIndex + 1 + i].Replace("`", ""), ChineseConversionDirection.TraditionalToSimplified),
                         GrowJobs = new List<JobTree>(),
                         ParentId = job.Id
@@ -396,7 +388,25 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                     jobTreeData.Add(growJob);
 
                     var growTypeIndex = jobs.IndexOf($"[growtype {(i + 1)}]");
-                    if (growTypeIndex <= 0) break;
+                    if (growTypeIndex <= -1)
+                    {
+                        i++;
+                        continue;
+                    }
+
+                    // 暂放弃，不知道其他版本的什么样子，还是保持通用
+                    //if (growTypeIndex <= 0) break;
+                    //// 特殊处理
+                    //// 小魔女 次元行者 等几个职业，觉醒名与下面规则不同，需要特殊处理，不知道其他版本是否有这个问题
+                    //var part1s = GetPvfPart(jobs, "[growtype 1]", "[awakening 1]");
+                    //var ans = GetPvfPart(part1s, "[awakening name]");
+                    //// 特殊处理的对应觉醒名
+                    //if (ans.Contains(job.JobName))
+                    //{
+
+                    //}
+                    //else // 非特殊处理
+
                     // 觉醒职业
                     for (var j = 0; j < jobs.Count; j++)
                     {

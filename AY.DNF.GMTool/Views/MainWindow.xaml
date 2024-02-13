@@ -45,7 +45,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
-            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="auto" />
             <RowDefinition />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
@@ -53,14 +53,6 @@
             <ColumnDefinition Width="320" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-
-        <!--<ScrollViewer
-            Grid.RowSpan="4"
-            Grid.Column="1"
-            HorizontalAlignment="Right"
-            VerticalScrollBarVisibility="Hidden">
-            <StackPanel Margin="10" VerticalAlignment="Top" hc:Growl.GrowlParent="True"/>
-        </ScrollViewer>-->
 
         <Image
             Margin="20,5"
@@ -160,6 +152,7 @@
                         Text="切换密码：因为不同版本数据库密码可能不同，方便切换，不用记忆" />
                 </Grid>
             </GroupBox>
+
             <GroupBox Header="账号信息">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -221,44 +214,64 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
+
             <GroupBox Header="角色信息">
-                <StackPanel
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-                    <TextBlock Width="100">
-                        <Run FontWeight="Bold" Text="角色编号 " />
-                        <Run Text="{Binding CurMemberInfo.CharacNo}" />
-                    </TextBlock>
-                    <TextBlock Width="100">
-                        <Run FontWeight="Bold" Text="用色名 " />
-                        <Run Text="{Binding CurMemberInfo.CharacName}" />
-                    </TextBlock>
-                    <TextBlock Width="100">
-                        <Run FontWeight="Bold" Text="等级 " />
-                        <Run Text="{Binding CurMemberInfo.Level}" />
-                    </TextBlock>
-                    <TextBlock Width="100">
-                        <Run FontWeight="Bold" Text="职业 " />
-                        <Run Text="{Binding CurMemberInfo.Job}" />
-                    </TextBlock>
-                    <TextBlock Width="100">
-                        <Run FontWeight="Bold" Text="副职业 " />
-                        <Run Text="{Binding CurMemberInfo.ExpertJob}" />
-                    </TextBlock>
-                    <TextBlock Width="150">
-                        <Run FontWeight="Bold" Text="金币 " />
-                        <Run Text="{Binding CurMemberInfo.Money}" />
-                    </TextBlock>
-                    <TextBlock Width="150">
-                        <Run FontWeight="Bold" Text="VIP角色 " />
-                        <Run Text="{Binding CurMemberInfo.VIP}" />
-                    </TextBlock>
-                    <TextBlock Width="200">
-                        <Run FontWeight="Bold" Text="最近下线 " />
-                        <Run Text="{Binding CurMemberInfo.LastPlayTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    </TextBlock>
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <UniformGrid
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Columns="5">
+                        <UniformGrid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="Margin" Value="10,3,0,3" />
+                                <Setter Property="Width" Value="200" />
+                            </Style>
+                        </UniformGrid.Resources>
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="角色编号 " />
+                            <Run Text="{Binding CurMemberInfo.CharacNo}" />
+                        </TextBlock>
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="用色名 " />
+                            <Run Text="{Binding CurMemberInfo.CharacName}" />
+                        </TextBlock>
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="等      级 " />
+                            <Run Text="{Binding CurMemberInfo.Level}" />
+                        </TextBlock>
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="职      业 " />
+                            <Run Text="{Binding CurMemberInfo.Job}" />
+                        </TextBlock>
+                        <TextBlock Width="auto">
+                            <Run FontWeight="Bold" Text="觉醒 " />
+                            <Run Text="{Binding CurMemberInfo.JxNames}" />
+                        </TextBlock>
+
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="副  职  业 " />
+                            <Run Text="{Binding CurMemberInfo.ExpertJob}" />
+                        </TextBlock>
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="金    币 " />
+                            <Run Text="{Binding CurMemberInfo.Money}" />
+                        </TextBlock>
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="VIP角色 " />
+                            <Run Text="{Binding CurMemberInfo.VIP}" />
+                        </TextBlock>
+                        <TextBlock>
+                            <Run FontWeight="Bold" Text="最近下线 " />
+                            <Run Text="{Binding CurMemberInfo.LastPlayTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                        </TextBlock>
+                    </UniformGrid>
+                </Grid>
             </GroupBox>
         </StackPanel>
 

@@ -23,7 +23,7 @@ namespace AY.DNF.GMTool.Db.Services
         {
             var sql = @$"
 Set Charset latin1;
-select charac_no CharacNo,charac_name CharacName,lev ,grow_type GrowType,expert_job ExpertJob
+select charac_no CharacNo,charac_name CharacName,job,lev,grow_type GrowType,expert_job ExpertJob
 from charac_info 
 where delete_flag!=1 ";
             var infos = await DbFrameworkScope.TaiwanCain.SqlQueryable<CharacInfo>(sql).ToListAsync();

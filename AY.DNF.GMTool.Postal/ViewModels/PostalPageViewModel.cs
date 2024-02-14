@@ -30,7 +30,7 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                     Task.Run(() =>
                     {
-                        Task.Delay(5000);
+                        Task.Delay(5000).Wait();
                         Msg = null;
                     });
             }

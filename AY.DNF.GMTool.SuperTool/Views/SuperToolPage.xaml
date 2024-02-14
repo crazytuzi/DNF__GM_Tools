@@ -119,6 +119,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -127,6 +128,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ComboBox
+                        Width="100"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="JobName"
                         ItemsSource="{Binding BaseJobs}"
@@ -138,16 +140,36 @@
                             </hc:EventTrigger>
                         </hc:Interaction.Triggers>
                     </ComboBox>
+
                     <ComboBox
-                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="100"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="JobName"
                         ItemsSource="{Binding GrowJobs}"
                         SelectedItem="{Binding SelectedGrowJob}"
-                        SelectedValuePath="JobId" />
+                        SelectedValuePath="JobId">
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="SelectionChanged">
+                                <hc:EventToCommand Command="{Binding JxChangedCommand}" />
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
+                    </ComboBox>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Width="200">
+                        <Run
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Text="觉醒职业" />
+                        <Run Foreground="OrangeRed" Text="{Binding JxNames}" />
+                    </TextBlock>
+
                     <Button
-                        Grid.RowSpan="2"
-                        Grid.Column="1"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2"
                         Command="{Binding ChangedJobCommand}"
                         CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                         Content="转职" />

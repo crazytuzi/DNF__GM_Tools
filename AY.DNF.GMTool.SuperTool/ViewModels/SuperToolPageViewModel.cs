@@ -1,4 +1,5 @@
-﻿using AY.DNF.GMTool.Db.Services;
+﻿using AY.DNF.GMTool.Db.DbModels.GMTool;
+using AY.DNF.GMTool.Db.Services;
 using AY.DNF.GMTool.SuperTool.Enums;
 using AY.DNF.GMTool.SuperTool.Models;
 using HandyControl.Controls;
@@ -29,7 +30,7 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                     Task.Run(() =>
                     {
-                        Task.Delay(5000);
+                        Task.Delay(5000).Wait();
                         OperateMsg = null;
                     });
             }
@@ -145,6 +146,16 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             set { SetProperty(ref _selectedGrowJob, value); }
         }
 
+        private string? _jxNames;
+        /// <summary>
+        /// 觉醒名
+        /// </summary>
+        public string? JxNames
+        {
+            get { return _jxNames; }
+            set { SetProperty(ref _jxNames, value); }
+        }
+
         #region 命令
 
         ICommand? _clearBagCommand;
@@ -162,6 +173,30 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// 角色转职
         /// </summary>
         public ICommand ChangedJobCommand => _changedJobCommand ??= new DelegateCommand<string>(DoChangedJobCommand);
+
+        #region VIP
+
+        ICommand? _setVIPCommand;
+        /// <summary>
+        /// 设置VIP
+        /// </summary>
+        public ICommand SetVIPCommand => _setVIPCommand ??= new DelegateCommand<string>(DoSetVIPCommand);
+
+        ICommand? _unsetVIPCommand;
+        /// <summary>
+        /// 撤消VIP
+        /// </summary>
+        public ICommand UnsetVIPCommand => _unsetVIPCommand ??= new DelegateCommand<string>(DoUnsetVIPCommand);
+
+        ICommand? _unsetMemberVIPCommand;
+        /// <summary>
+        /// 撤消角色 VIP
+        /// </summary>
+        public ICommand UnsetMemberVIPCommand => _unsetMemberVIPCommand ??= new DelegateCommand<string>(DoUnsetMemberVIPCommand);
+
+        #endregion
+
+        #region 超级功能按钮
 
         /// <summary>
         /// 清理背包
@@ -190,24 +225,6 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// </summary>
         public ICommand MaxEquipLevelCommand => _maxEquipLevelCommand ??= new DelegateCommand<string>(DoMaxEquipLevelCommand);
 
-        ICommand? _setVIPCommand;
-        /// <summary>
-        /// 设置VIP
-        /// </summary>
-        public ICommand SetVIPCommand => _setVIPCommand ??= new DelegateCommand<string>(DoSetVIPCommand);
-
-        ICommand? _unsetVIPCommand;
-        /// <summary>
-        /// 撤消VIP
-        /// </summary>
-        public ICommand UnsetVIPCommand => _unsetVIPCommand ??= new DelegateCommand<string>(DoUnsetVIPCommand);
-
-        ICommand? _unsetMemberVIPCommand;
-        /// <summary>
-        /// 撤消角色 VIP
-        /// </summary>
-        public ICommand UnsetMemberVIPCommand => _unsetMemberVIPCommand ??= new DelegateCommand<string>(DoUnsetMemberVIPCommand);
-
         ICommand? _allHellCommand;
         /// <summary>
         /// 全图地狱
@@ -220,12 +237,6 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// </summary>
         public ICommand JobChangedCommand => _jobChangedCommand ??= new DelegateCommand(DoJobChangedCommand);
 
-        ICommand? _rechageChangedCommand;
-        /// <summary>
-        /// 充值类型下拉变化
-        /// </summary>
-        public ICommand RechargeChangedCommand => _rechageChangedCommand ??= new DelegateCommand(DoRechargeChangedCommand);
-
         ICommand _clearUserItemsCommand;
         /// <summary>
         /// 清理时装
@@ -237,6 +248,21 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// 清理宠物
         /// </summary>
         public ICommand ClearCreatureCommand => _clearCreatureCommand ??= new DelegateCommand<string>(DoClearCreatureCommand);
+
+        #endregion
+
+        ICommand? _rechageChangedCommand;
+        /// <summary>
+        /// 充值类型下拉变化
+        /// </summary>
+        public ICommand RechargeChangedCommand => _rechageChangedCommand ??= new DelegateCommand(DoRechargeChangedCommand);
+
+        ICommand? _jxChangedCommand;
+        /// <summary>
+        /// 觉醒职业变化
+        /// </summary>
+        public ICommand JxChangedCommand => _jxChangedCommand ??= new DelegateCommand(DoJxChangedCommand);
+
 
         #endregion
 
@@ -255,7 +281,18 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
                 Id = t.Id,
                 JobId = t.JobId,
                 JobName = t.JobName,
-                GrowJobs = t.GrowJobs.Select(t => new JobTreeModel { Id = t.Id, JobName = t.JobName, JobId = t.JobId }).ToList()
+                GrowJobs = t.GrowJobs!.Select(x => new JobTreeModel
+                {
+                    Id = x.Id,
+                    JobName = x.JobName,
+                    JobId = x.JobId,
+                    GrowJobs = x.GrowJobs?.Select(y => new JobTreeModel
+                    {
+                        Id = y.Id,
+                        JobName = y.JobName,
+                        JobId = y.JobId,
+                    }).ToList()!
+                }).ToList()
             }).ToList();
             BaseJobs.Clear();
             BaseJobs.AddRange(tmp);
@@ -521,7 +558,8 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             {
                 Id = t.Id,
                 JobId = t.JobId,
-                JobName = t.JobName
+                JobName = t.JobName,
+                GrowJobs = t.GrowJobs
             }).ToList();
 
             GrowJobs.Clear();
@@ -559,6 +597,23 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
 
             var b = await new ClearService().ClearUserItems(int.Parse(characNo));
             OperateMsg = $"时装清理{(b ? "成功" : "失败")}";
+        }
+
+        void DoJxChangedCommand()
+        {
+            if (SelectedGrowJob == null)
+            {
+                JxNames = null;
+                return;
+            }
+
+            if (SelectedGrowJob.GrowJobs == null)
+            {
+                JxNames = null;
+                return;
+            }
+
+            JxNames = SelectedGrowJob.GrowJobs.Aggregate(string.Empty, (x, y) => x += $"{y.JobName} -> ").TrimEnd('-', '>', ' ');
         }
     }
 }

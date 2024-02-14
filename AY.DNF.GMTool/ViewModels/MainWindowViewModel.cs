@@ -42,7 +42,7 @@ namespace AY.DNF.GMTool.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private string _version = "1.0.20240212";
+        private string _version = "1.0.20240214";
         /// <summary>
         /// 显示的自定义版本号
         /// </summary>

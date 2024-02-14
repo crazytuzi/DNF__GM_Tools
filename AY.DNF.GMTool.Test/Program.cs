@@ -14,8 +14,10 @@ TiaoTiaoNLogger.FastNoDatabaseInit();
 
 DbFrameworkScope.Init("192.168.200.131", "game", "uu5!^%jg", 3306);
 
-CharacTest.CharacStat();
-CharacTest.CharacPvf();
+//CharacTest.CharacStat();
+//CharacTest.CharacPvf();
 
 InventoryTest.InventoryInfo();
 QuestTest.QuestInfo();
+
+Console.ReadLine();

@@ -11,6 +11,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -162,6 +163,16 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         public ObservableCollection<SimpleMemberInfoModel> MemberInfos { get; set; } = new ObservableCollection<SimpleMemberInfoModel>();
 
+        private string? _exeFilePath;
+        /// <summary>
+        /// 游戏启动器程序路径
+        /// </summary>
+        public string? ExeFilePath
+        {
+            get { return _exeFilePath; }
+            set { SetProperty(ref _exeFilePath, value); }
+        }
+
         #endregion
 
         #region 命令
@@ -203,6 +214,12 @@ namespace AY.DNF.GMTool.ViewModels
         /// 切换密码事件
         /// </summary>
         public ICommand ChangePwdCommand => _changePwdCommand ??= new DelegateCommand(DoChangePwdCommand);
+
+        ICommand _gameStartCommand;
+        /// <summary>
+        /// 使用游戏启动器启动游戏
+        /// </summary>
+        public ICommand GameStartCommand => _gameStartCommand ??= new DelegateCommand(DoGameStartCommand);
 
         #endregion
 
@@ -399,7 +416,7 @@ namespace AY.DNF.GMTool.ViewModels
                 else
                 {
                     var jxNames = jxJob.GrowJobs.Where(t => t.JobId <= jxCount).ToList();
-                    CurMemberInfo.JxNames = jxNames.Aggregate(string.Empty, (x, y) => x += $"{y.JobName} -> ").TrimEnd('-', '>',' ');
+                    CurMemberInfo.JxNames = jxNames.Aggregate(string.Empty, (x, y) => x += $"{y.JobName} -> ").TrimEnd('-', '>', ' ');
                 }
             }
         }
@@ -415,6 +432,31 @@ namespace AY.DNF.GMTool.ViewModels
                 Pwd = "uu5!^%jg";
             else
                 Pwd = "123456";
+        }
+
+        /// <summary>
+        /// 启动游戏
+        /// </summary>
+        void DoGameStartCommand()
+        {
+            if (string.IsNullOrWhiteSpace(ExeFilePath))
+            {
+                Growl.Warning("请选择启动程序");
+                return;
+            }
+            if (!File.Exists(ExeFilePath))
+            {
+                Growl.Warning("启动程序不存在");
+                return;
+            }
+
+            var psi = new ProcessStartInfo(ExeFilePath);
+            psi.WorkingDirectory = Path.GetDirectoryName(ExeFilePath);
+
+            var ps = new Process();
+            ps.StartInfo = psi;
+
+            ps.Start();
         }
 
         #region 连接配置
@@ -436,6 +478,7 @@ namespace AY.DNF.GMTool.ViewModels
             UserName = cfg.UserName;
             Pwd = cfg.Pwd;
             SearchAccount = cfg.Account;
+            ExeFilePath = cfg.ExeFilePath;
         }
 
         /// <summary>
@@ -451,7 +494,8 @@ namespace AY.DNF.GMTool.ViewModels
                 Port = Port,
                 UserName = UserName,
                 Pwd = Pwd,
-                Account = SearchAccount
+                Account = SearchAccount,
+                ExeFilePath = ExeFilePath!
             };
             var str = JsonConvert.SerializeObject(cfg);
 

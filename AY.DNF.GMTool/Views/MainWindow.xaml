@@ -160,19 +160,34 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <StackPanel
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal">
-                        <TextBlock Text="用户名" />
-                        <TextBox Text="{Binding SearchAccount}" />
+                    <DockPanel VerticalAlignment="Center">
+                        <TextBlock DockPanel.Dock="Left" Text="用户名" />
+                        <TextBox DockPanel.Dock="Left" Text="{Binding SearchAccount}" />
                         <Button
                             Width="80"
                             Margin="5"
                             Command="{Binding SearchAccountCommand}"
                             Content="查询"
+                            DockPanel.Dock="Left"
                             IsEnabled="{Binding ConnectedForEnabled}" />
-                    </StackPanel>
+
+                        <Button
+                            Margin="3"
+                            Command="{Binding GameStartCommand}"
+                            Content="启动"
+                            DockPanel.Dock="Right" />
+                        <Button
+                            Margin="3"
+                            Click="OnSelectExeClick"
+                            Content="选择Exe"
+                            DockPanel.Dock="Right" />
+                        <TextBox
+                            Width="200"
+                            DockPanel.Dock="Right"
+                            Text="{Binding ExeFilePath}" />
+                        <TextBlock DockPanel.Dock="Right" Text="启动程序路径：" />
+
+                    </DockPanel>
 
                     <StackPanel
                         Grid.Row="1"

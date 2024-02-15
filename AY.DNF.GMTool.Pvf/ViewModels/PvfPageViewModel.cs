@@ -154,11 +154,11 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
             Task.Run(() =>
             {
                 using var pvf = new PvfFile(PvfPath);
-                //AnalysisDungeons(pvf);
-                //AnalysisEquipments(pvf);
-                //AnalysisStackables(pvf);
+                AnalysisDungeons(pvf);
+                AnalysisEquipments(pvf);
+                AnalysisStackables(pvf);
                 AnalysisJob(pvf);
-                //AnalysisQuest(pvf);
+                AnalysisQuest(pvf);
             });
         }
 

@@ -110,7 +110,7 @@
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Top"
                 AcceptsReturn="True"
-                Text="{Binding LetterContent, Mode=TwoWay}"
+                Text="{Binding LetterContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap" />
             <TextBlock
                 Grid.Row="2"

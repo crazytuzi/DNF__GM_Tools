@@ -30,7 +30,7 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                     Task.Run(() =>
                     {
-                        Task.Delay(5000).Wait();
+                        Task.Delay(2000).Wait();
                         OperateMsg = null;
                     });
             }

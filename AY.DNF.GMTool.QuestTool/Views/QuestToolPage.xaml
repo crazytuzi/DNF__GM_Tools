@@ -37,7 +37,7 @@
             <ItemsControl ItemsSource="{Binding QuestInfos}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="2" />
+                        <UniformGrid Columns="3" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -51,6 +51,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="25" />
                                     <RowDefinition Height="35" />
+                                    <RowDefinition Height="45" />
                                     <RowDefinition Height="45" />
                                     <RowDefinition Height="45" />
                                     <RowDefinition />
@@ -90,19 +91,25 @@
                                 <TextBlock
                                     Grid.Row="4"
                                     FontSize="10"
-                                    FontWeight="Normal">
-                                    <Run Text="任务所需：" />
-                                    <Run Text="{Binding QuestDesc}" />
-                                </TextBlock>
+                                    FontWeight="Normal"
+                                    Text="任务所需：" />
 
                                 <TextBlock
                                     Grid.Row="5"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    FontSize="10"
+                                    FontWeight="Normal"
+                                    Text="{Binding QuestDesc}" />
+
+                                <TextBlock
+                                    Grid.Row="6"
                                     HorizontalAlignment="Left"
                                     FontSize="12"
                                     Foreground="Red"
                                     Text="{Binding Msg}" />
                                 <Button
-                                    Grid.Row="5"
+                                    Grid.Row="6"
                                     HorizontalAlignment="Right"
                                     Command="{Binding DataContext.FinishQuestCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
                                     CommandParameter="{Binding}"

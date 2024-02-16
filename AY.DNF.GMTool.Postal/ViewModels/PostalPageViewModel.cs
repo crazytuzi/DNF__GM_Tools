@@ -3,8 +3,10 @@ using AY.DNF.GMTool.Postal.Models;
 using HandyControl.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -30,7 +32,7 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                     Task.Run(() =>
                     {
-                        Task.Delay(5000).Wait();
+                        Task.Delay(2000).Wait();
                         Msg = null;
                     });
             }
@@ -53,7 +55,11 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         public string? LetterContent
         {
             get { return _letterContent; }
-            set { SetProperty(ref _letterContent, value); }
+            set
+            {
+                SetProperty(ref _letterContent, value);
+                WriteLetterData();
+            }
         }
 
         private ItemModel? _selectedItem;
@@ -224,8 +230,26 @@ namespace AY.DNF.GMTool.Postal.ViewModels
 
         public PostalPageViewModel()
         {
-
+            ReadLetterData();
         }
+
+        #region 信件内容
+
+        void ReadLetterData()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "letter.dat");
+            if (!File.Exists(path)) return;
+
+            LetterContent = File.ReadAllText(path);
+        }
+
+        void WriteLetterData()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "letter.dat");
+            File.WriteAllText(path, LetterContent);
+        }
+
+        #endregion
 
         /// <summary>
         /// 查询道具

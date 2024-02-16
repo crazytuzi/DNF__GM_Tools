@@ -249,6 +249,12 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
         /// </summary>
         public ICommand ClearCreatureCommand => _clearCreatureCommand ??= new DelegateCommand<string>(DoClearCreatureCommand);
 
+        ICommand _deleteCharacNameReleaseCommand;
+        /// <summary>
+        /// 删除角色名释放
+        /// </summary>
+        public ICommand DeleteCharacNameReleaseCommand => _deleteCharacNameReleaseCommand ??= new DelegateCommand(DoDeleteCharacNameReleaseCommand);
+
         #endregion
 
         ICommand? _rechageChangedCommand;
@@ -599,6 +605,9 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             OperateMsg = $"时装清理{(b ? "成功" : "失败")}";
         }
 
+        /// <summary>
+        /// 转职变化
+        /// </summary>
         void DoJxChangedCommand()
         {
             if (SelectedGrowJob == null)
@@ -614,6 +623,15 @@ namespace AY.DNF.GMTool.SuperTool.ViewModels
             }
 
             JxNames = SelectedGrowJob.GrowJobs.Aggregate(string.Empty, (x, y) => x += $"{y.JobName} -> ").TrimEnd('-', '>', ' ');
+        }
+
+        /// <summary>
+        /// 删除角色名释放
+        /// </summary>
+        async void DoDeleteCharacNameReleaseCommand()
+        {
+            var b = await new MemberService().DeleteCharacNameRelease();
+            OperateMsg = $"释放删除角色名称{(b ? "成功" : "失败")}";
         }
     }
 }

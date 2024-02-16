@@ -208,5 +208,16 @@ where delete_flag!=1 ";
             var sql = $"update new_charac_quest set play_{slot}_trigger=0 where charac_no={characNo}";
             return await DbFrameworkScope.TaiwanCain.Ado.ExecuteCommandAsync(sql) > 0;
         }
+
+        /// <summary>
+        /// 已删除角色名释放
+        /// 调用一次，在其名前加一次"del_"
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> DeleteCharacNameRelease()
+        {
+            var sql = @$"set charset latin1;update charac_info set charac_name=concat('del_',charac_name) where delete_flag=1";
+            return await DbFrameworkScope.TaiwanCain.Ado.ExecuteCommandAsync(sql) > 0;
+        }
     }
 }

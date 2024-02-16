@@ -59,7 +59,7 @@
                                     <RowDefinition Height="35" />
                                 </Grid.RowDefinitions>
 
-                                <TextBlock FontSize="10" FontWeight="Normal">
+                                <TextBlock FontSize="12" FontWeight="Normal">
                                     <Run Text="任务槽位：" />
                                     <Run Text="{Binding Slot}" />
                                 </TextBlock>
@@ -77,6 +77,7 @@
                                     FontSize="14"
                                     FontWeight="Bold">
                                     <Run Text="任务名称：" />
+                                    <Run Text="{Binding Grade, StringFormat={}{0}--}" />
                                     <Run Text="{Binding QuestName}" />
                                 </TextBlock>
 
@@ -90,7 +91,7 @@
 
                                 <TextBlock
                                     Grid.Row="4"
-                                    FontSize="10"
+                                    FontSize="12"
                                     FontWeight="Normal"
                                     Text="任务所需：" />
 
@@ -98,7 +99,7 @@
                                     Grid.Row="5"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    FontSize="10"
+                                    FontSize="12"
                                     FontWeight="Normal"
                                     Text="{Binding QuestDesc}" />
 
@@ -109,7 +110,7 @@
                                     Foreground="Red"
                                     Text="{Binding Msg}" />
                                 <Button
-                                    Grid.Row="6"
+                                    Grid.Row="7"
                                     HorizontalAlignment="Right"
                                     Command="{Binding DataContext.FinishQuestCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
                                     CommandParameter="{Binding}"

@@ -64,24 +64,26 @@ namespace AY.DNF.GMTool.Db.Services
         /// </summary>
         /// <param name="letterId"></param>
         /// <returns></returns>
-        public async Task<bool> Delete(int letterId)
+        public async Task<bool> Delete(int characNo)
         {
-            try
-            {
-                DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
+            //try
+            //{
+            //    DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
 
-                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"delete from letter where letter_id={letterId}");
-                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"delete from postal where letter_id={letterId}");
+            //    await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"delete from letter where letter_id={letterId}");
+            //    await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync($"delete from postal where letter_id={letterId}");
 
-                DbFrameworkScope.TaiwanCain2nd.Ado.CommitTran();
+            //    DbFrameworkScope.TaiwanCain2nd.Ado.CommitTran();
 
-                return true;
-            }
-            catch (Exception)
-            {
-                DbFrameworkScope.TaiwanCain2nd.Ado.RollbackTran();
-                return false;
-            }
+            //    return true;
+            //}
+            //catch (Exception)
+            //{
+            //    DbFrameworkScope.TaiwanCain2nd.Ado.RollbackTran();
+            //    return false;
+            //}
+
+            return await DbFrameworkScope.TaiwanCain2nd.Updateable<Postal>().Where(t => t.ReceiveCharacNo == characNo && t.DeleteFlag == 0).SetColumns(t => t.DeleteFlag == 1).ExecuteCommandAsync() > 0;
         }
 
         /// <summary>
@@ -90,22 +92,24 @@ namespace AY.DNF.GMTool.Db.Services
         /// <returns></returns>
         public async Task<bool> DeleteAll()
         {
-            try
-            {
-                DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
+            //try
+            //{
+            //    DbFrameworkScope.TaiwanCain2nd.Ado.BeginTran();
 
-                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync("delete from letter");
-                await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync("delete from postal");
+            //    await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync("delete from letter");
+            //    await DbFrameworkScope.TaiwanCain2nd.Ado.ExecuteCommandAsync("delete from postal");
 
-                DbFrameworkScope.TaiwanCain2nd.Ado.CommitTran();
+            //    DbFrameworkScope.TaiwanCain2nd.Ado.CommitTran();
 
-                return true;
-            }
-            catch (Exception)
-            {
-                DbFrameworkScope.TaiwanCain2nd.Ado.RollbackTran();
-                return false;
-            }
+            //    return true;
+            //}
+            //catch (Exception)
+            //{
+            //    DbFrameworkScope.TaiwanCain2nd.Ado.RollbackTran();
+            //    return false;
+            //}
+
+            return await DbFrameworkScope.TaiwanCain2nd.Updateable<Postal>().Where(t => t.DeleteFlag == 0).SetColumns(t => t.DeleteFlag == 1).ExecuteCommandAsync() > 0;
         }
     }
 }

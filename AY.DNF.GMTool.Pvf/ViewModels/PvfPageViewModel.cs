@@ -154,10 +154,10 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
             Task.Run(() =>
             {
                 using var pvf = new PvfFile(PvfPath);
-                AnalysisDungeons(pvf);
-                AnalysisEquipments(pvf);
-                AnalysisStackables(pvf);
-                AnalysisJob(pvf);
+                //AnalysisDungeons(pvf);
+                //AnalysisEquipments(pvf);
+                //AnalysisStackables(pvf);
+                //AnalysisJob(pvf);
                 AnalysisQuest(pvf);
             });
         }
@@ -500,9 +500,18 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                                     .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
                                     .Where(t => !t.StartsWith("#"))
                                     .ToList();
+
+                // 任务等级
+                var questGrades = GetPvfPart(questInfos, "[grade]");
+                if (questGrades.Count <= 0) continue;
+                var questGrade = questGrades[0].Replace("`", "");
+
+                // 任务类型
                 var questTypes = GetPvfPart(questInfos, "[type]");
                 if (questTypes.Count <= 0) continue;
                 var questType = questTypes[0].Replace("`", "");
+
+                // 任务名
                 var questNames = GetPvfPart(questInfos, "[name]");
                 var questName = questNames.Count <= 0 ? string.Empty : questNames[0].Replace("`", "");
                 questName = ChineseConverter.Convert(questName, ChineseConversionDirection.TraditionalToSimplified);
@@ -513,6 +522,18 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                     QuestName = questName,
                     QuestItems = string.Empty,
                     QuestItemsDescription = string.Empty
+                };
+
+                quest.Grade = questGrade switch
+                {
+                    "[achievement]" => "成就",
+                    "[common unique]" => "普通",
+                    "[epic]" => "主线",
+                    "[daily]"=>"每日",
+                    "[urgent]"=>"紧急",
+                    "[normaly repeat]"=>"重复",
+                    "[training]"=>"修炼",
+                    _ => "未知"
                 };
 
                 switch (questType)

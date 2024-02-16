@@ -228,7 +228,8 @@
                 <Button
                     Margin="3"
                     Command="{Binding DeleteCommand}"
-                    Content="删除邮件" />
+                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                    Content="删除角色邮件" />
                 <!--<Button
                     Margin="3"
                     Command="{Binding SendAllCommand}"

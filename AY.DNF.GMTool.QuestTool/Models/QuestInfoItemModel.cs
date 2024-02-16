@@ -14,7 +14,7 @@ namespace AY.DNF.GMTool.QuestTool.Models
     {
         public int Slot { get; set; }
         public int QuestIndex { get; set; }
-
+        public string Grade { get; set; }
         public string QuestType { get; set; }
         public string QuestName { get; set; }
         public string QuestDesc { get; set; }

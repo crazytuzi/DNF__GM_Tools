@@ -177,7 +177,7 @@
             </GroupBox>
         </UniformGrid>
 
-        <UniformGrid Grid.Row="1" Columns="2">
+        <UniformGrid Grid.Row="1" Columns="4">
             <GroupBox Header="VIP">
                 <StackPanel>
                     <Button
@@ -195,40 +195,55 @@
                 </StackPanel>
             </GroupBox>
 
-            <UniformGrid Columns="3">
-                <Button
-                    Command="{Binding ClearBagCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="清理背包" />
-                <Button
-                    Command="{Binding ClearUserItemsCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="清理时装" />
-                <Button
-                    Command="{Binding ClearCreatureCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="清理宠物" />
-                <Button
-                    Command="{Binding OpenLeftAndRightCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="开左右槽" />
-                <Button
-                    Command="{Binding UnlimitedWeightCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="无限负重" />
-                <Button
-                    Command="{Binding MaxEquipLevelCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="解除装备权限" />
-                <Button
-                    Command="{Binding ExpertJobFullCommand}"
-                    CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="副职满级" />
-                <Button
-                    Command="{Binding AllHellCommand}"
-                    CommandParameter="{Binding DataContext.LoginInfo.Uid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                    Content="全图地狱" />
-            </UniformGrid>
+            <GroupBox Header="清理">
+                <StackPanel>
+                    <Button
+                        Command="{Binding ClearBagCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="清理背包" />
+                    <Button
+                        Command="{Binding ClearUserItemsCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="清理时装" />
+                    <Button
+                        Command="{Binding ClearCreatureCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="清理宠物" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="人物">
+                <StackPanel>
+                    <Button
+                        Command="{Binding UnlimitedWeightCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="无限负重" />
+                    <Button
+                        Command="{Binding ExpertJobFullCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="副职满级" />
+                    <Button Command="{Binding DeleteCharacNameReleaseCommand}" Content="删除角色名释放" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="其他">
+                <StackPanel>
+                    <Button
+                        Command="{Binding OpenLeftAndRightCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="开左右槽" />
+
+                    <Button
+                        Command="{Binding MaxEquipLevelCommand}"
+                        CommandParameter="{Binding DataContext.CurMemberInfo.CharacNo, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="解除装备权限" />
+
+                    <Button
+                        Command="{Binding AllHellCommand}"
+                        CommandParameter="{Binding DataContext.LoginInfo.Uid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                        Content="全图地狱" />
+                </StackPanel>
+            </GroupBox>
         </UniformGrid>
     </Grid>
 </UserControl>

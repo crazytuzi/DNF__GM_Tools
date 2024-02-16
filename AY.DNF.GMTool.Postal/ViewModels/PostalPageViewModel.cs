@@ -219,7 +219,7 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         /// <summary>
         /// 删除邮件
         /// </summary>
-        public ICommand DeleteCommand => _deleteCommand ??= new DelegateCommand(DoDeleteCommand);
+        public ICommand DeleteCommand => _deleteCommand ??= new DelegateCommand<string>(DoDeleteCommand);
 
         /// <summary>
         /// 删除全服邮件
@@ -350,15 +350,15 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         /// 删除邮件
         /// </summary>
         /// <param name="characNo"></param>
-        async void DoDeleteCommand()
+        async void DoDeleteCommand(string characNo)
         {
-            if (_lastLetterId == null)
+            if (string.IsNullOrWhiteSpace(characNo))
             {
-                Msg = "没有最近发送的邮件可删除";
+                Growl.Error("请选择游戏角色");
                 return;
             }
 
-            var b = await new PostalService().Delete((int)_lastLetterId);
+            var b = await new PostalService().Delete(int.Parse(characNo));
             Msg = $"删除邮件{(b ? "成功" : "失败")}";
         }
 

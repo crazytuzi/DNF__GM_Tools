@@ -124,7 +124,9 @@ namespace AY.DNF.GMTool.QuestTool.ViewModels
                     QuestName = q?.QuestName,
                     QuestType = q?.QuestType,
                     QuestDesc = q?.QuestItemsDescription,
+                    Grade = q?.Grade
                 };
+                questInfo.QuestDesc = string.IsNullOrWhiteSpace(questInfo.QuestDesc) ? "-" : questInfo.QuestDesc;
 
                 if (q != null && !string.IsNullOrWhiteSpace(q.QuestItems))
                 {
@@ -139,6 +141,11 @@ namespace AY.DNF.GMTool.QuestTool.ViewModels
                     }
                 }
 
+                if (questInfo.QuestName.Contains("副职业") && questInfo.Grade == "普通")
+                {
+                    questInfo.Grade = "副职业";
+                    questInfo.QuestName = questInfo.QuestName.Replace("副职业", "").Replace("-", "").Trim();
+                }
                 QuestInfos.Add(questInfo);
             }
         }

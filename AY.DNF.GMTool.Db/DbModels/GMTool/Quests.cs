@@ -14,6 +14,11 @@ namespace AY.DNF.GMTool.Db.DbModels.GMTool
         public int QuestIndex { get; set; }
 
         /// <summary>
+        /// 任务等级 主线/普通/成就
+        /// </summary>
+        public string Grade { get; set; }
+
+        /// <summary>
         /// 任务名
         /// </summary>
         public string? QuestName { get; set; }

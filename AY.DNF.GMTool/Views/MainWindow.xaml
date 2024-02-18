@@ -137,7 +137,7 @@
                             Margin="5"
                             Command="{Binding ChangePwdCommand}"
                             Content="切换密码" />
-                        <Button Command="{Binding TestCommand}" Content="测试" />
+                        <!--<Button Command="{Binding TestCommand}" Content="测试" />-->
                         <!--<Button
          Width="80"
          Margin="5"

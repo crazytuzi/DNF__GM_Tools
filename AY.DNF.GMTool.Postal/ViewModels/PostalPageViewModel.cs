@@ -197,6 +197,7 @@ namespace AY.DNF.GMTool.Postal.ViewModels
             {
                 SetProperty(ref _imagePacksPath, value);
                 WriteImagePacksPath();
+                PreLoadImagePacks();
             }
         }
 

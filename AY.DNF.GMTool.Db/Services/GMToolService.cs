@@ -83,7 +83,9 @@ namespace AY.DNF.GMTool.Db.Services
                           .Select(t => new LocalDbItemModel
                           {
                               ItemId = t.ItemId,
-                              ItemName = t.ItemName
+                              ItemName = t.ItemName,
+                              NpkPath = t.NpkPath,
+                              FrameNo = t.FrameNo,
                           }).ToListAsync();
         }
 
@@ -108,7 +110,9 @@ namespace AY.DNF.GMTool.Db.Services
                           .Select(t => new LocalDbItemModel
                           {
                               ItemId = t.ItemId,
-                              ItemName = t.ItemName
+                              ItemName = t.ItemName,
+                              NpkPath = t.NpkPath,
+                              FrameNo = t.FrameNo,
                           }).ToListAsync();
         }
 

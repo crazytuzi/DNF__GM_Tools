@@ -10,14 +10,16 @@ Console.WriteLine("Hello, World!");
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 
-TiaoTiaoNLogger.FastNoDatabaseInit();
+//TiaoTiaoNLogger.FastNoDatabaseInit();
 
-DbFrameworkScope.Init("192.168.200.131", "game", "uu5!^%jg", 3306);
+//DbFrameworkScope.Init("192.168.200.131", "game", "uu5!^%jg", 3306);
 
 //CharacTest.CharacStat();
 //CharacTest.CharacPvf();
 
-InventoryTest.InventoryInfo();
-QuestTest.QuestInfo();
+//InventoryTest.InventoryInfo();
+//QuestTest.QuestInfo();
+
+NpkTest.Read();
 
 Console.ReadLine();

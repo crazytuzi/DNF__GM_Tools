@@ -1,4 +1,5 @@
-﻿using AY.DNF.GMTool.Db;
+﻿using AY.DNF.GMTool.Common;
+using AY.DNF.GMTool.Db;
 using AY.DNF.GMTool.Db.DbModels.GMTool;
 using AY.DNF.GMTool.Db.DbModels.taiwan_cain_2nd;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
@@ -22,7 +23,7 @@ namespace AY.DNF.GMTool.Test
             // inventory.Inventory_
             var blob = inventory.Inventory_.ToList();
             blob = blob.GetRange(4, blob.Count - 4);
-            blob = SharpZipLibDecompress(blob.ToArray()).ToList();
+            blob = SharpZipHelper.SharpZipLibDecompress(blob.ToArray()).ToList();
             var num = blob.Count / 61;
             for (var i = 0; i < num; i++)
             {
@@ -68,22 +69,7 @@ namespace AY.DNF.GMTool.Test
             return result;
         }
 
-        public static byte[] SharpZipLibDecompress(byte[] data)
-        {
-            MemoryStream compressed = new MemoryStream(data);
-            MemoryStream decompressed = new MemoryStream();
-            InflaterInputStream inputStream = new InflaterInputStream(compressed);
-            inputStream.CopyTo(decompressed);
-            return decompressed.ToArray();
-        }
-        public static byte[] SharpZipLibCompress(byte[] data)
-        {
-            MemoryStream compressed = new MemoryStream();
-            DeflaterOutputStream outputStream = new DeflaterOutputStream(compressed);
-            outputStream.Write(data, 0, data.Length);
-            outputStream.Close();
-            return compressed.ToArray();
-        }
+
 
         #endregion
     }

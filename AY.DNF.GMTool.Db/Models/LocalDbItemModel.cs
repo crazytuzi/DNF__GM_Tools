@@ -9,5 +9,8 @@ namespace AY.DNF.GMTool.Db.Models
         public string ItemName { get; set; }
         public string ItemId { get; set; }
         public int Sort { get; set; }
+
+        public string NpkPath { get; set; }
+        public uint FrameNo { get; set; }
     }
 }

@@ -155,10 +155,10 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
             {
                 using var pvf = new PvfFile(PvfPath);
                 //AnalysisDungeons(pvf);
-                //AnalysisEquipments(pvf);
+                AnalysisEquipments(pvf);
                 //AnalysisStackables(pvf);
                 //AnalysisJob(pvf);
-                AnalysisQuest(pvf);
+                //AnalysisQuest(pvf);
             });
         }
 
@@ -239,7 +239,27 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                 var index = eduInfos.IndexOf("[name]");
                 var name = eduInfos[index + 1].Replace("`", "");
 
-                list.Add(new Equipments { ItemId = id, ItemName = ChineseConverter.Convert(name, ChineseConversionDirection.TraditionalToSimplified) });
+                var iconMark = GetPvfPart(eduInfos, "[icon]");
+                if (iconMark.Count <= 0)
+                    iconMark = GetPvfPart(eduInfos, "[icon mark]");
+                var npkPath = string.Empty;
+                var no = 0u;
+                if (iconMark.Count > 0)
+                {
+                    npkPath = iconMark[0].Replace("`", "");
+                    if (iconMark[1].Contains("`"))
+                        no = uint.Parse(iconMark[2]);
+                    else
+                        no = uint.Parse(iconMark[1]);
+                }
+
+                list.Add(new Equipments
+                {
+                    ItemId = id,
+                    ItemName = ChineseConverter.Convert(name, ChineseConversionDirection.TraditionalToSimplified),
+                    NpkPath = npkPath,
+                    FrameNo = no,
+                });
 
                 DispatcherInfos(() => EquipmentCount = $"{(i + 1)}/{total}");
             }
@@ -286,7 +306,24 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                 var index = eduInfos.IndexOf("[name]");
                 var name = eduInfos[index + 1].Replace("`", "");
 
-                list.Add(new Stackables { ItemId = id, ItemName = ChineseConverter.Convert(name, ChineseConversionDirection.TraditionalToSimplified) });
+                var iconMark = GetPvfPart(eduInfos, "[icon]");
+                if (iconMark.Count <= 0)
+                    iconMark = GetPvfPart(eduInfos, "[icon mark]");
+                var npkPath = string.Empty;
+                var no = 0u;
+                if (iconMark.Count > 0)
+                {
+                    npkPath = iconMark[0].Replace("`", "");
+                    no = uint.Parse(iconMark[1]);
+                }
+
+                list.Add(new Stackables
+                {
+                    ItemId = id,
+                    ItemName = ChineseConverter.Convert(name, ChineseConversionDirection.TraditionalToSimplified),
+                    NpkPath = npkPath,
+                    FrameNo = no
+                });
 
                 DispatcherInfos(() => StackableCount = $"{(i + 1)}/{total}");
             }
@@ -529,10 +566,10 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                     "[achievement]" => "成就",
                     "[common unique]" => "普通",
                     "[epic]" => "主线",
-                    "[daily]"=>"每日",
-                    "[urgent]"=>"紧急",
-                    "[normaly repeat]"=>"重复",
-                    "[training]"=>"修炼",
+                    "[daily]" => "每日",
+                    "[urgent]" => "紧急",
+                    "[normaly repeat]" => "重复",
+                    "[training]" => "修炼",
                     _ => "未知"
                 };
 

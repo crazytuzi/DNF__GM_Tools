@@ -14,5 +14,8 @@
         /// 物品名
         /// </summary>
         public string? ItemName { get; set; }
+
+        public string? NpkPath { get; set; }
+        public uint FrameNo { get; set; }
     }
 }

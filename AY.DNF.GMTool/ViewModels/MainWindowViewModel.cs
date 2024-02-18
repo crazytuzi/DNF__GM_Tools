@@ -1,4 +1,7 @@
-﻿using AY.DNF.GMTool.Db;
+﻿using AY.DNF.GMTool.Common;
+using AY.DNF.GMTool.Common.Lib;
+using AY.DNF.GMTool.Common.Npk;
+using AY.DNF.GMTool.Db;
 using AY.DNF.GMTool.Db.Models;
 using AY.DNF.GMTool.Db.Services;
 using AY.DNF.GMTool.Enums;
@@ -12,8 +15,11 @@ using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -503,6 +509,24 @@ namespace AY.DNF.GMTool.ViewModels
         }
 
         #endregion    
+
+        ICommand _testCommand;
+
+        public ICommand TestCommand => _testCommand ??= new DelegateCommand(DoTestCommand);
+
+        void DoTestCommand()
+        {
+            var npkFilePath = @"D:\99Game\游蝶新客户端95黑金5\ImagePacks2\sprite_item.NPK";
+            var npkFile = new NpkFile(npkFilePath);
+            var sprite = npkFile.NpkFiles[0].Images[94];
+            var imgData = sprite.ImageBytes;
+            var data = SharpZipHelper.SharpZipLibDecompress(imgData);
+            var path = @"D:\test.png";
+            var type = (ColorBits)Enum.Parse(typeof(ColorBits), sprite.ColorBytes[0].ToString());
+
+            var bitmap = Bitmaps.FromArray(data, new System.Drawing.Size((int)sprite.Width, (int)sprite.Height), type);
+            bitmap.Save(@"D:\test.png");
+        }
     }
 }
 

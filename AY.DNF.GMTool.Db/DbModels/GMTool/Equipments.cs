@@ -12,5 +12,7 @@ namespace AY.DNF.GMTool.Db.DbModels.GMTool
         public string Id { get; set; } = Guid.NewGuid().ToString("n");
         public string ItemId { get; set; }
         public string ItemName { get; set; }
+        public string NpkPath { get; set; }
+        public uint FrameNo { get; set; }
     }
 }

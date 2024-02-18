@@ -1,4 +1,7 @@
-﻿using AY.DNF.GMTool.Db.Services;
+﻿using AY.DNF.GMTool.Common;
+using AY.DNF.GMTool.Common.Lib;
+using AY.DNF.GMTool.Common.Npk;
+using AY.DNF.GMTool.Db.Services;
 using AY.DNF.GMTool.Postal.Models;
 using HandyControl.Controls;
 using Prism.Commands;
@@ -6,16 +9,19 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace AY.DNF.GMTool.Postal.ViewModels
 {
     class PostalPageViewModel : BindableBase
     {
         int? _lastLetterId;
+        List<NpkIndex> _npkIndexes = new();
 
         #region 属性
 
@@ -75,7 +81,10 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 if (value == null)
                     SelectedItemId = null;
                 else
+                {
                     SelectedItemId = int.Parse(value.ItemId!);
+                    GetBitMap();
+                }
             }
         }
 
@@ -177,6 +186,35 @@ namespace AY.DNF.GMTool.Postal.ViewModels
 
         #endregion
 
+        private string? _imagePacksPath;
+        /// <summary>
+        /// ImagePacks2路径
+        /// </summary>
+        public string? ImagePacksPath
+        {
+            get { return _imagePacksPath; }
+            set
+            {
+                SetProperty(ref _imagePacksPath, value);
+                WriteImagePacksPath();
+            }
+        }
+
+
+        private BitmapImage? _bitMap;
+        /// <summary>
+        /// 道具/装备图片
+        /// </summary>
+        public BitmapImage? BitMap
+        {
+            get { return _bitMap; }
+            set
+            {
+                SetProperty(ref _bitMap, value);
+            }
+        }
+
+
         private ObservableCollection<ItemModel> _items = new();
         /// <summary>
         /// 物品查询结果
@@ -231,6 +269,7 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         public PostalPageViewModel()
         {
             ReadLetterData();
+            ReadImagePacksPath();
         }
 
         #region 信件内容
@@ -247,6 +286,26 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "letter.dat");
             File.WriteAllText(path, LetterContent);
+        }
+
+        #endregion
+
+        #region ImagePacks2
+
+        void ReadImagePacksPath()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "imagePacksPath.dat");
+            if (!File.Exists(path)) return;
+
+            ImagePacksPath = File.ReadAllText(path);
+
+            PreLoadImagePacks();
+        }
+
+        void WriteImagePacksPath()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "imagePacksPath.dat");
+            File.WriteAllText(path, ImagePacksPath);
         }
 
         #endregion
@@ -273,7 +332,9 @@ namespace AY.DNF.GMTool.Postal.ViewModels
             Items.AddRange(list.Select(t => new ItemModel
             {
                 ItemId = t.ItemId,
-                ItemName = t.ItemName
+                ItemName = t.ItemName,
+                NpkPath = t.NpkPath,
+                FrameNo = t.FrameNo
             }));
         }
 
@@ -299,7 +360,9 @@ namespace AY.DNF.GMTool.Postal.ViewModels
             Items.AddRange(list.Select(t => new ItemModel
             {
                 ItemId = t.ItemId,
-                ItemName = t.ItemName
+                ItemName = t.ItemName,
+                NpkPath = t.NpkPath,
+                FrameNo = t.FrameNo
             }));
         }
 
@@ -370,6 +433,88 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         {
             var b = await new PostalService().DeleteAll();
             Msg = $"删除全服邮件{(b ? "成功" : "失败")}";
+        }
+
+        #region ImagePacks2相关
+
+        void PreLoadImagePacks()
+        {
+            if (string.IsNullOrWhiteSpace(ImagePacksPath)) return;
+
+            Task.Run(() =>
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Msg = "正在预加载NPK文件，请稍后使用...";
+                });
+                var files = Directory.GetFiles(ImagePacksPath, "sprite_item*");
+
+                foreach (var file in files)
+                {
+                    var npk = new NpkFile(file);
+                    _npkIndexes.AddRange(npk.NpkFiles);
+                }
+
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Msg = "预加载NPK文件完成";
+                });
+            });
+        }
+
+        #endregion
+
+        void GetBitMap()
+        {
+            if (SelectedItem == null)
+            {
+                BitMap = null;
+                return;
+            }
+
+            var arr = SelectedItem.NpkPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
+            var imgName = arr[arr.Length - 1];
+            var imgFile = _npkIndexes.FirstOrDefault(t => t.Name.ToLower() == $"sprite/{SelectedItem.NpkPath}".ToLower());
+            if (imgFile == null)
+            {
+                BitMap = null;
+                return;
+            }
+            if (imgFile.Images.Count() < SelectedItem.FrameNo)
+            {
+                BitMap = null;
+                return;
+            }
+            var img = imgFile.Images[(int)SelectedItem.FrameNo];
+            if (img.VectorIndex != null)
+            {
+                img = imgFile.Images[(int)img.VectorIndex];
+            }
+
+            var imgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ImagePacks");
+            if (!Directory.Exists(imgPath))
+                Directory.CreateDirectory(imgPath);
+            imgPath = Path.Combine(imgPath, $"{SelectedItem.ItemId}.png");
+            if (File.Exists(imgPath))
+            {
+                BitMap = new BitmapImage();
+                BitMap.BeginInit();
+                BitMap.UriSource = new Uri(imgPath);
+                BitMap.EndInit();
+                return;
+            }
+
+            var size = new Size((int)img.Width, (int)img.Height);
+            var bits = (ColorBits)Enum.Parse(typeof(ColorBits), img.ColorBytes[0].ToString());
+            var data = img.ImageBytes;
+            if (img.IsZib)
+                data = SharpZipHelper.SharpZipLibDecompress(data);
+            using var bitmap = Bitmaps.FromArray(data, size, bits);
+            bitmap.Save(imgPath);
+            BitMap = new BitmapImage();
+            BitMap.BeginInit();
+            BitMap.UriSource = new Uri(imgPath);
+            BitMap.EndInit();
         }
     }
 }

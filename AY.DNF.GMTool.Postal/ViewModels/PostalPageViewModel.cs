@@ -453,6 +453,7 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 foreach (var file in files)
                 {
                     var npk = new NpkFile(file);
+                    if (npk == null || npk.NpkFiles.Count <= 0) continue;
                     _npkIndexes.AddRange(npk.NpkFiles);
                 }
 

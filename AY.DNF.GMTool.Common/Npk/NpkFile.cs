@@ -16,9 +16,10 @@ namespace AY.DNF.GMTool.Common.Npk
 
         public NpkFile(string filePath)
         {
-            using var fs = new FileStream(filePath, FileMode.Open);
+            using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             var fileBytes = new byte[fs.Length];
             fs.Read(fileBytes, 0, fileBytes.Length);
+            fs.Close();
 
             var startIndex = 0;
             var flagBytes = new byte[16];

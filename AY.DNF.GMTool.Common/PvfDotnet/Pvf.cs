@@ -41,7 +41,7 @@ namespace pvfLoaderXinyu
         public PvfFile(string file)//本构造方法使用后需dispose释放内存，构造过程请放到线程中异步调用。
         {
             //打开文件
-            fs = new FileStream(file, FileMode.Open);
+            fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
             //读取pvf文件头结构体到header变量
             header = (PvfHeader)Util.ReadFileAsType(fs, typeof(PvfHeader));
             ////获取文件索引列表字节总大小

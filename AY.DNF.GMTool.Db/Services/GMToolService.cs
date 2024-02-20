@@ -113,6 +113,7 @@ namespace AY.DNF.GMTool.Db.Services
                               ItemName = t.ItemName,
                               NpkPath = t.NpkPath,
                               FrameNo = t.FrameNo,
+                              Desc = t.Description
                           }).ToListAsync();
         }
 

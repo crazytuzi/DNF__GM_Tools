@@ -14,5 +14,10 @@ namespace AY.DNF.GMTool.Db.DbModels.GMTool
         public string ItemName { get; set; }
         public string NpkPath { get; set; }
         public uint FrameNo { get; set; }
+
+        /// <summary>
+        /// 装备描述
+        /// </summary>
+        public string Description { get; set; }
     }
 }

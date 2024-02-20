@@ -351,6 +351,8 @@ namespace AY.DNF.GMTool.ViewModels
         /// </summary>
         void DoDisconnectCommand()
         {
+            DbFrameworkScope.Disconnect();
+
             OpenEnabled = true;
             ConnectedForEnabled = false;
             _timeTaskCancelTokenSource.Cancel();

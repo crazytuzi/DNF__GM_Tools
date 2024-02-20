@@ -68,6 +68,10 @@ namespace AY.DNF.GMTool.Common.Npk
                     Name = DecodeName(nameBytes).Trim()
                 };
                 nkpIndex.ParserImg(imgDataBytes);
+                if (nkpIndex == null)
+                {
+                    var a = 123;
+                }
                 NpkFiles.Add(nkpIndex);
             }
         }

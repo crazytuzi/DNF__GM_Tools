@@ -2,6 +2,7 @@
 using SqlSugar;
 using System;
 using System.IO;
+using System.Linq;
 using TiaoTiaoCode.NLogger;
 
 namespace AY.DNF.GMTool.Db
@@ -127,12 +128,69 @@ namespace AY.DNF.GMTool.Db
                     _gmToolDb.CodeFirst.InitTables(typeof(Quests));
 
                 _gmToolDb.Ado.CheckConnection();
+
+                CheckCharacInfoVIPColumn();
+
                 return true;
             }
             catch (Exception ex)
             {
                 TiaoTiaoNLogger.LogDebug(ex.Message);
                 return false;
+            }
+        }
+
+        public static void Disconnect()
+        {
+            DTaiwan.Close();
+            TaiwanCain.Close();
+            TaiwanBilling.Close();
+            TaiwanCain2nd.Close();
+            GMToolDb.Close();
+        }
+
+        /// <summary>
+        /// 检查是否有VIP字段，有的库版本没有
+        /// 没有VIP字段的自动补充
+        /// </summary>
+        static void CheckCharacInfoVIPColumn()
+        {
+            var cols = TaiwanCain.DbMaintenance.GetColumnInfosByTableName("charac_info");
+            if (cols != null && cols.Count > 0)
+            {
+
+                var b = cols.Any(t => t.DbColumnName.ToUpper() == "VIP");
+                if (b) return;
+
+                TaiwanCain.DbMaintenance.AddColumn(
+                    "charac_info",
+                    new DbColumnInfo
+                    {
+                        DbColumnName = "VIP",
+                        DataType = "varchar",
+                        IsNullable = false,
+                        Length = 255,
+                    }
+                    );
+            }
+
+            cols = DTaiwan.DbMaintenance.GetColumnInfosByTableName("accounts");
+            if (cols != null && cols.Count > 0)
+            {
+
+                var b = cols.Any(t => t.DbColumnName.ToUpper() == "VIP");
+                if (b) return;
+
+                DTaiwan.DbMaintenance.AddColumn(
+                    "accounts",
+                    new DbColumnInfo
+                    {
+                        DbColumnName = "VIP",
+                        DataType = "varchar",
+                        IsNullable = false,
+                        Length = 255,
+                    }
+                    );
             }
         }
     }

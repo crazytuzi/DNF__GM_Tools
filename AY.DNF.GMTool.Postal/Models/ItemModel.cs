@@ -17,5 +17,6 @@
 
         public string? NpkPath { get; set; }
         public uint FrameNo { get; set; }
+        public string? Desc { get; set; }
     }
 }

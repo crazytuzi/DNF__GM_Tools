@@ -20,6 +20,11 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
 {
     class PvfPageViewModel : BindableBase
     {
+        Dictionary<string, string> _dicRarity = new()
+        {
+            {"0", "白装"},{"1","蓝装"},{"2","紫装"},{"3","粉装"},{"4","史诗"},{"5","勇者"},{"6","传说"},{"7","神话"}
+        };
+
         #region 属性
 
         private string? _pvfPath;
@@ -177,7 +182,7 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
 
             DispatcherInfos(() => DungeonLogs.Insert(0, "准备加载数据..."));
 
-            var arrDungeon = dungeonContent.Split("\n", System.StringSplitOptions.RemoveEmptyEntries);
+            var arrDungeon = dungeonContent.Split("\n", System.StringSplitOptions.RemoveEmptyEntries).Where(t => !t.StartsWith("#")).ToArray();
 
             var total = arrDungeon.Length;
 
@@ -253,12 +258,15 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                         no = uint.Parse(iconMark[1]);
                 }
 
+                var desc = EquipDetail(eduInfos);
+
                 list.Add(new Equipments
                 {
                     ItemId = id,
                     ItemName = ChineseConverter.Convert(name, ChineseConversionDirection.TraditionalToSimplified),
                     NpkPath = npkPath,
                     FrameNo = no,
+                    Description = desc,
                 });
 
                 DispatcherInfos(() => EquipmentCount = $"{(i + 1)}/{total}");
@@ -269,6 +277,148 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
             new GMToolService().WriteEquipData(list);
 
             DispatcherInfos(() => EquipmentLogs.Insert(0, "完成..."));
+        }
+
+        string EquipDetail(List<string> eduInfos)
+        {
+            string MakeDetailStr(string title, Func<string> func, string ex = "")
+            {
+                var enter = "\r\n";
+                try
+                {
+                    return $"{title}\t{func()}\t{ex}{enter}";
+                }
+                catch
+                {
+                    return $"{title}\t获取异常{enter}";
+                }
+            }
+
+            var detail = string.Empty;
+
+            var grades = GetPvfPart(eduInfos, "[grade]");
+            if (grades.Count > 0)
+                detail += MakeDetailStr("掉落等级", () => grades[0]);
+
+            var rarities = GetPvfPart(eduInfos, "[rarity]");
+            if (rarities.Count > 0)
+                detail += MakeDetailStr("装备类型", () => _dicRarity[rarities[0]]);
+
+            var usableJobs = GetPvfPart(eduInfos, "[usable job]");
+            if (usableJobs.Count > 0)
+                detail += MakeDetailStr(
+                    "可用职业",
+                    () => usableJobs.Aggregate(string.Empty, (x, y) => x += $"{y.Replace("`", "").Replace("[", "").Replace("]", "")},").TrimEnd(','),
+                    "(因游戏版本不同，这个项不做翻译)"
+                    );
+
+            var minLevs = GetPvfPart(eduInfos, "[minimum level]");
+            if (minLevs.Count > 0)
+                detail += MakeDetailStr("穿戴最小等级", () => minLevs[0]);
+
+            var epds = GetPvfPart(eduInfos, "[equipment physical defense]");
+            if (epds.Count > 0)
+                detail += MakeDetailStr(
+                    "物理防御力",
+                    () =>
+                    {
+                        var arr = epds[0].Split("\t", StringSplitOptions.RemoveEmptyEntries);
+                        return $"{arr[1]}~{arr[0]}";
+                    },
+                    "(因游戏版本不同，这个项不做翻译)"
+                    );
+
+            var pa = GetPvfPart(eduInfos, "[physical attack]");
+            if (pa.Count > 0)
+                detail += MakeDetailStr("力量", () => pa[0], "左右");
+
+            var ma = GetPvfPart(eduInfos, "[magical attack]");
+            if (ma.Count > 0)
+                detail += MakeDetailStr("智力", () => ma[0], "左右");
+
+            var pd = GetPvfPart(eduInfos, "[physical defense]");
+            if (pd.Count > 0)
+                detail += MakeDetailStr("体力", () => pd[0], "左右");
+
+            var md = GetPvfPart(eduInfos, "[magical defense]");
+            if (md.Count > 0)
+                detail += MakeDetailStr("精神", () => md[0], "左右");
+
+            var aes = GetPvfPart(eduInfos, "[anti evil]");
+            if (aes.Count > 0)
+                detail += MakeDetailStr("抗魔值", () => aes[0]);
+
+            var hrs = GetPvfPart(eduInfos, "[HP regen speed]");
+            if (hrs.Count > 0)
+                detail += MakeDetailStr("每分钟恢复", () => (int.Parse(hrs[0]) * 3).ToString(), "HP");
+
+            var mrs = GetPvfPart(eduInfos, "[MP regen speed]");
+            if (mrs.Count > 0)
+                detail += MakeDetailStr("每分钟恢复", () => (int.Parse(mrs[0]) * 3).ToString(), "MP");
+
+            var hr = GetPvfPart(eduInfos, "[hit recovery]");
+            if (hr.Count > 0)
+                detail += MakeDetailStr("硬直", () => hr[0]);
+
+            var epa = GetPvfPart(eduInfos, "[equipment physical attack]");
+            if (epa.Count > 0)
+                detail += MakeDetailStr(
+                    "装备物理攻击",
+                    () =>
+                    {
+                        var arr = epa[0].Split("\t", StringSplitOptions.RemoveEmptyEntries);
+                        return $"{arr[1]}~{arr[0]}";
+                    },
+                    "(范围内随机，与品质有关)"
+                    );
+
+            var ema = GetPvfPart(eduInfos, "[equipment magical attack]");
+            if (ema.Count > 0)
+                detail += MakeDetailStr(
+                   "装备魔法攻击",
+                   () =>
+                   {
+                       var arr = ema[0].Split("\t", StringSplitOptions.RemoveEmptyEntries);
+                       return $"{arr[1]}~{arr[0]}";
+                   },
+                   "(范围内随机，与品质有关)"
+                   );
+
+            var sa = GetPvfPart(eduInfos, "[separate attack]");
+            if (sa.Count > 0)
+                detail += MakeDetailStr(
+                  "独立攻击",
+                  () =>
+                  {
+                      var arr = sa[0].Split("\t", StringSplitOptions.RemoveEmptyEntries);
+                      return $"{arr[1]}~{arr[0]}";
+                  },
+                  "(范围内随机，与品质有关)"
+                  );
+
+            var pch = GetPvfPart(eduInfos, "[physical critical hit]");
+            if (pch.Count > 0)
+                detail += MakeDetailStr("物理暴击率", () => pch[0]);
+
+            var mch = GetPvfPart(eduInfos, "[magical critical hit]");
+            if (mch.Count > 0)
+                detail += MakeDetailStr("魔法暴击率", () => mch[0]);
+
+            var sl = GetPvfPart(eduInfos, "[skill levelup]");
+            if (sl.Count > 0)
+                detail += MakeDetailStr(
+                    "提升技能",
+                    () => $"{sl[0].Replace("`", "")}-{sl.Count / 2}({sl.Where(t => !t.StartsWith("`")).Aggregate(string.Empty, (x, y) => x += $"{y.Split("\t", StringSplitOptions.RemoveEmptyEntries)[1]},").TrimEnd(',')})项",
+                    "(暂不完善)"
+                    );
+            var explain = GetPvfPart(eduInfos, "[basic explain]");
+            if (explain.Count > 0)
+                detail += MakeDetailStr(
+                    "简要说明",
+                    () => explain.Aggregate(string.Empty, (x, y) => x += $"{y.Replace("`", "").Replace("%%", "%")}")
+                    );
+
+            return detail.TrimEnd('\r', '\n');
         }
 
         /// <summary>
@@ -303,15 +453,18 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
                 var stackableEdu = pvf.GetPvfFileByPath($"stackable/{path}", Encoding.UTF8);
                 if (string.IsNullOrWhiteSpace(stackableEdu)) continue;
                 var eduInfos = stackableEdu.Split("\r\n", StringSplitOptions.RemoveEmptyEntries).Where(t => !t.StartsWith("#")).ToList();
-                var index = eduInfos.IndexOf("[name]");
-                var name = eduInfos[index + 1].Replace("`", "");
+
+                var names = GetPvfPart(eduInfos, "[name]");
+                if (names.Count <= 0) continue;
+                var name = names[0].Replace("`", "");
 
                 var iconMark = GetPvfPart(eduInfos, "[icon]");
                 if (iconMark.Count <= 0)
                     iconMark = GetPvfPart(eduInfos, "[icon mark]");
+
                 var npkPath = string.Empty;
                 var no = 0u;
-                if (iconMark.Count > 0)
+                if (iconMark != null && iconMark.Count > 0)
                 {
                     npkPath = iconMark[0].Replace("`", "");
                     no = uint.Parse(iconMark[1]);
@@ -682,6 +835,8 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
         {
             var list = new List<string>();
 
+            if (orgStrs == null || orgStrs.Count <= 0) return list;
+
             var index = orgStrs.IndexOf(elementName);
             if (index < 0) return list;
 
@@ -691,7 +846,7 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
 
                 var data = orgStrs[index + i];
                 if (!data.StartsWith(endJugdeStr))
-                    list.Add(data);
+                    list.Add(data.Trim());
                 else
                     break;
             }

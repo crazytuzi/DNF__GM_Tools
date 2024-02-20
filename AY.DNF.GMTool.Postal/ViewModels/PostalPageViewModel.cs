@@ -201,7 +201,6 @@ namespace AY.DNF.GMTool.Postal.ViewModels
             }
         }
 
-
         private BitmapImage? _bitMap;
         /// <summary>
         /// 道具/装备图片
@@ -213,6 +212,26 @@ namespace AY.DNF.GMTool.Postal.ViewModels
             {
                 SetProperty(ref _bitMap, value);
             }
+        }
+
+        private bool _detailIsOpen = false;
+        /// <summary>
+        /// 是否显示详情
+        /// </summary>
+        public bool DetailIsOpen
+        {
+            get { return _detailIsOpen; }
+            set { SetProperty(ref _detailIsOpen, value); }
+        }
+
+        private string? _detailInfo;
+        /// <summary>
+        /// 物品详情
+        /// </summary>
+        public string? DetailInfo
+        {
+            get { return _detailInfo; }
+            set { SetProperty(ref _detailInfo, value); }
         }
 
 
@@ -264,6 +283,10 @@ namespace AY.DNF.GMTool.Postal.ViewModels
         /// 删除全服邮件
         /// </summary>
         public ICommand DeleteAllCommand => _deleteAllCommand ??= new DelegateCommand(DoDeleteAllCommand);
+
+        ICommand? _detailCloseCommand;
+
+        public ICommand DetailCloseCommand => _detailCloseCommand ??= new DelegateCommand(() => DetailIsOpen = false);
 
         #endregion
 
@@ -363,7 +386,8 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 ItemId = t.ItemId,
                 ItemName = t.ItemName,
                 NpkPath = t.NpkPath,
-                FrameNo = t.FrameNo
+                FrameNo = t.FrameNo,
+                Desc = t.Desc
             }));
         }
 
@@ -474,9 +498,22 @@ namespace AY.DNF.GMTool.Postal.ViewModels
                 return;
             }
 
-            var arr = SelectedItem.NpkPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
+            if (!string.IsNullOrWhiteSpace(SelectedItem.Desc))
+            {
+                DetailIsOpen = true;
+                DetailInfo = SelectedItem.Desc;
+            }
+
+            var npkPath = SelectedItem.NpkPath;
+            if (string.IsNullOrEmpty(npkPath))
+            {
+                BitMap = null;
+                return;
+            }
+
+            var arr = npkPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
             var imgName = arr[arr.Length - 1];
-            var imgFile = _npkIndexes.FirstOrDefault(t => t.Name.ToLower() == $"sprite/{SelectedItem.NpkPath}".ToLower());
+            var imgFile = _npkIndexes.FirstOrDefault(t => t.Name.ToLower() == $"sprite/{npkPath}".ToLower());
             if (imgFile == null)
             {
                 BitMap = null;

@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TiaoTiaoCode.NLogger;
 
 namespace AY.DNF.GMTool.Pvf.ViewModels
 {
@@ -35,6 +36,14 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
         {
             get { return _pvfPath; }
             set { SetProperty(ref _pvfPath, value); }
+        }
+
+        private Visibility _isInAnalysis = Visibility.Hidden;
+
+        public Visibility IsInAnalysis
+        {
+            get { return _isInAnalysis; }
+            set { SetProperty(ref _isInAnalysis, value); }
         }
 
         #endregion
@@ -158,12 +167,16 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
 
             Task.Run(() =>
             {
+                IsInAnalysis = Visibility.Visible;
+
                 using var pvf = new PvfFile(PvfPath);
                 AnalysisDungeons(pvf);
                 AnalysisEquipments(pvf);
                 AnalysisStackables(pvf);
                 AnalysisJob(pvf);
                 AnalysisQuest(pvf);
+
+                IsInAnalysis = Visibility.Hidden;
             });
         }
 
@@ -445,40 +458,47 @@ namespace AY.DNF.GMTool.Pvf.ViewModels
 
             for (var i = 0; i < total; i++)
             {
-                var item = itemArr[i];
-                var arr = item.Split("\t", StringSplitOptions.RemoveEmptyEntries);
-                if (arr.Length < 1) continue;
-                var id = arr[0];
-                var path = arr[1].Replace("`", "");
-                var stackableEdu = pvf.GetPvfFileByPath($"stackable/{path}", Encoding.UTF8);
-                if (string.IsNullOrWhiteSpace(stackableEdu)) continue;
-                var eduInfos = stackableEdu.Split("\r\n", StringSplitOptions.RemoveEmptyEntries).Where(t => !t.StartsWith("#")).ToList();
-
-                var names = GetPvfPart(eduInfos, "[name]");
-                if (names.Count <= 0) continue;
-                var name = names[0].Replace("`", "");
-
-                var iconMark = GetPvfPart(eduInfos, "[icon]");
-                if (iconMark.Count <= 0)
-                    iconMark = GetPvfPart(eduInfos, "[icon mark]");
-
-                var npkPath = string.Empty;
-                var no = 0u;
-                if (iconMark != null && iconMark.Count > 0)
+                try
                 {
-                    npkPath = iconMark[0].Replace("`", "");
-                    no = uint.Parse(iconMark[1]);
+                    var item = itemArr[i];
+                    var arr = item.Split("\t", StringSplitOptions.RemoveEmptyEntries);
+                    if (arr.Length < 1) continue;
+                    var id = arr[0];
+                    var path = arr[1].Replace("`", "");
+                    var stackableEdu = pvf.GetPvfFileByPath($"stackable/{path}", Encoding.UTF8);
+                    if (string.IsNullOrWhiteSpace(stackableEdu)) continue;
+                    var eduInfos = stackableEdu.Split("\r\n", StringSplitOptions.RemoveEmptyEntries).Where(t => !t.StartsWith("#")).ToList();
+
+                    var names = GetPvfPart(eduInfos, "[name]");
+                    if (names.Count <= 0) continue;
+                    var name = names[0].Replace("`", "");
+
+                    var iconMark = GetPvfPart(eduInfos, "[icon]");
+                    if (iconMark.Count <= 0)
+                        iconMark = GetPvfPart(eduInfos, "[icon mark]");
+
+                    var npkPath = string.Empty;
+                    var no = 0u;
+                    if (iconMark != null && iconMark.Count > 0)
+                    {
+                        npkPath = iconMark[0].Replace("`", "");
+                        no = uint.Parse(iconMark[1]);
+                    }
+
+                    list.Add(new Stackables
+                    {
+                        ItemId = id,
+                        ItemName = ChineseConverter.Convert(name, ChineseConversionDirection.TraditionalToSimplified),
+                        NpkPath = npkPath,
+                        FrameNo = no
+                    });
+
+                    DispatcherInfos(() => StackableCount = $"{(i + 1)}/{total}");
                 }
-
-                list.Add(new Stackables
+                catch (Exception ex)
                 {
-                    ItemId = id,
-                    ItemName = ChineseConverter.Convert(name, ChineseConversionDirection.TraditionalToSimplified),
-                    NpkPath = npkPath,
-                    FrameNo = no
-                });
-
-                DispatcherInfos(() => StackableCount = $"{(i + 1)}/{total}");
+                    TiaoTiaoNLogger.LogError($"道具解析异常：{ex.Message}", ex);
+                }
             }
 
             DispatcherInfos(() => StackableLogs.Insert(0, "写入数据..."));

@@ -50,6 +50,12 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
+                <Image
+                    Width="32"
+                    Height="32"
+                    Margin="3"
+                    HorizontalAlignment="Left"
+                    Source="{Binding BitMap, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Margin="3"
                     HorizontalAlignment="Right"
